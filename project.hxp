@@ -161,7 +161,6 @@ class Project extends HXProject
 		configureHaxelibs();
 		configureAssets();
 		configureIcons();
-		setupMobileThings();
 
 		if (isAndroid() && !isDebug())
 		{
