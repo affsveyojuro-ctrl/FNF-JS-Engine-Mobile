@@ -6,6 +6,9 @@ import haxe.io.Path;
 import lime.app.Application;
 import shaders.RGBPalette.RGBShaderReference;
 
+#if cpp
+@:cppFileCode('#include <thread>')
+#end
 class CoolUtil
 {
 	public static var defaultDifficulties:Array<String> = ['Easy', 'Normal', 'Hard'];
@@ -592,5 +595,15 @@ class CoolUtil
 		#else
 		trace('$title - $message');
 		#end
+	}
+
+	#if cpp
+	@:functionCode('
+		return std::thread::hardware_concurrency();
+	')
+	#end
+	public static function getCPUThreadsCount():Int
+	{
+		return 1;
 	}
 }
