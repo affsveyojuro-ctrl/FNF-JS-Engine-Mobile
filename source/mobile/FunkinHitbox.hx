@@ -34,63 +34,62 @@ class FunkinHitbox extends Hitbox {
 		if (ClientPrefs.mobileExtraKeys != 0 && MobileConfig.hitboxModes.get(Custom).hints != null)
 			currentHint = MobileConfig.hitboxModes.get(Custom).hints;
 
-			for (buttonData in currentHint)
-			{
-				var buttonName:String = buttonData.button;
-				var buttonIDs:Array<String> = buttonData.buttonIDs;
-				var buttonUniqueID:Int = buttonData.buttonUniqueID;
-				var buttonX:Float = buttonData.x;
-				var buttonY:Float = buttonData.y;
-				var buttonWidth:Int = buttonData.width;
-				var buttonHeight:Int = buttonData.height;
-				var buttonColor = buttonData.color;
-				var buttonReturn = buttonData.returnKey;
-				var location = ClientPrefs.hitboxLocation;
-				var addButton:Bool = false;
-				if (buttonData.buttonUniqueID == null) buttonUniqueID = -1; // -1 means not setted.
+		for (buttonData in currentHint)
+		{
+			var buttonName:String = buttonData.button;
+			var buttonIDs:Array<String> = buttonData.buttonIDs;
+			var buttonUniqueID:Int = buttonData.buttonUniqueID;
+			var buttonX:Float = buttonData.x;
+			var buttonY:Float = buttonData.y;
+			var buttonWidth:Int = buttonData.width;
+			var buttonHeight:Int = buttonData.height;
+			var buttonColor = buttonData.color;
+			var buttonReturn = buttonData.returnKey;
+			var location = ClientPrefs.hitboxLocation;
+			var addButton:Bool = false;
+			if (buttonData.buttonUniqueID == null) buttonUniqueID = -1; // -1 means not setted.
 
-				switch (location) {
-					case 'Top':
-						if (buttonData.topX != null) buttonX = buttonData.topX;
-						if (buttonData.topY != null) buttonY = buttonData.topY;
-						if (buttonData.topWidth != null) buttonWidth = buttonData.topWidth;
-						if (buttonData.topHeight != null) buttonHeight = buttonData.topHeight;
-						if (buttonData.topColor != null) buttonColor = buttonData.topColor;
-						if (buttonData.topReturnKey != null) buttonReturn = buttonData.topReturnKey;
-					case 'Middle':
-						if (buttonData.middleX != null) buttonX = buttonData.middleX;
-						if (buttonData.middleY != null) buttonY = buttonData.middleY;
-						if (buttonData.middleWidth != null) buttonWidth = buttonData.middleWidth;
-						if (buttonData.middleHeight != null) buttonHeight = buttonData.middleHeight;
-						if (buttonData.middleColor != null) buttonColor = buttonData.middleColor;
-						if (buttonData.middleReturnKey != null) buttonReturn = buttonData.middleReturnKey;
-					case 'Bottom':
-						if (buttonData.bottomX != null) buttonX = buttonData.bottomX;
-						if (buttonData.bottomY != null) buttonY = buttonData.bottomY;
-						if (buttonData.bottomWidth != null) buttonWidth = buttonData.bottomWidth;
-						if (buttonData.bottomHeight != null) buttonHeight = buttonData.bottomHeight;
-						if (buttonData.bottomColor != null) buttonColor = buttonData.bottomColor;
-						if (buttonData.bottomReturnKey != null) buttonReturn = buttonData.bottomReturnKey;
-				}
-
-				if (ClientPrefs.mobileExtraKeys == 0 && buttonData.extraKeyMode == 0 ||
-				   ClientPrefs.mobileExtraKeys == 1 && buttonData.extraKeyMode == 1 ||
-				   ClientPrefs.mobileExtraKeys == 2 && buttonData.extraKeyMode == 2 ||
-				   ClientPrefs.mobileExtraKeys == 3 && buttonData.extraKeyMode == 3 ||
-				   ClientPrefs.mobileExtraKeys == 4 && buttonData.extraKeyMode == 4 ||
-				   buttonData.extraKeyMode == null)
-				{
-					addButton = true;
-				}
-
-				for (i in 1...5) {
-					var buttonString = 'buttonExtra${i}';
-					if (buttonData.button == buttonString && buttonReturn == null)
-						buttonReturn = ClientPrefs.mobileExtraKeyReturns[i-1];
-				}
-				if (addButton)
-					addHint(buttonName, buttonIDs, buttonUniqueID, buttonX, buttonY, buttonWidth, buttonHeight, Util.colorFromString(buttonColor), buttonReturn);
+			switch (location) {
+				case 'Top':
+					if (buttonData.topX != null) buttonX = buttonData.topX;
+					if (buttonData.topY != null) buttonY = buttonData.topY;
+					if (buttonData.topWidth != null) buttonWidth = buttonData.topWidth;
+					if (buttonData.topHeight != null) buttonHeight = buttonData.topHeight;
+					if (buttonData.topColor != null) buttonColor = buttonData.topColor;
+					if (buttonData.topReturnKey != null) buttonReturn = buttonData.topReturnKey;
+				case 'Middle':
+					if (buttonData.middleX != null) buttonX = buttonData.middleX;
+					if (buttonData.middleY != null) buttonY = buttonData.middleY;
+					if (buttonData.middleWidth != null) buttonWidth = buttonData.middleWidth;
+					if (buttonData.middleHeight != null) buttonHeight = buttonData.middleHeight;
+					if (buttonData.middleColor != null) buttonColor = buttonData.middleColor;
+					if (buttonData.middleReturnKey != null) buttonReturn = buttonData.middleReturnKey;
+				case 'Bottom':
+					if (buttonData.bottomX != null) buttonX = buttonData.bottomX;
+					if (buttonData.bottomY != null) buttonY = buttonData.bottomY;
+					if (buttonData.bottomWidth != null) buttonWidth = buttonData.bottomWidth;
+					if (buttonData.bottomHeight != null) buttonHeight = buttonData.bottomHeight;
+					if (buttonData.bottomColor != null) buttonColor = buttonData.bottomColor;
+					if (buttonData.bottomReturnKey != null) buttonReturn = buttonData.bottomReturnKey;
 			}
+
+			if (ClientPrefs.mobileExtraKeys == 0 && buttonData.extraKeyMode == 0 ||
+			   ClientPrefs.mobileExtraKeys == 1 && buttonData.extraKeyMode == 1 ||
+			   ClientPrefs.mobileExtraKeys == 2 && buttonData.extraKeyMode == 2 ||
+			   ClientPrefs.mobileExtraKeys == 3 && buttonData.extraKeyMode == 3 ||
+			   ClientPrefs.mobileExtraKeys == 4 && buttonData.extraKeyMode == 4 ||
+			   buttonData.extraKeyMode == null)
+			{
+				addButton = true;
+			}
+
+			for (i in 1...5) {
+				var buttonString = 'buttonExtra${i}';
+				if (buttonData.button == buttonString && buttonReturn == null)
+					buttonReturn = ClientPrefs.mobileExtraKeyReturns[i-1];
+			}
+			if (addButton)
+				addHint(buttonName, buttonIDs, buttonUniqueID, buttonX, buttonY, buttonWidth, buttonHeight, Util.colorFromString(buttonColor), buttonReturn);
 		}
 
 		scrollFactor.set();
