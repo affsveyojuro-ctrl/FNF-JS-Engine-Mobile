@@ -6,7 +6,7 @@ import flixel.input.keyboard.FlxKey;
 
 class ClientPrefs { //default settings if it can't find a save file containing your current settings
 	/* Mobile */
-	#if android public var storageType:String = "EXTERNAL_DATA"; #end
+	#if android public static var storageType:String = "EXTERNAL_DATA"; #end
 	public static var mobileExtraKeys:Int = 2;
 	public static var hitboxhint:Bool = false;
 	public static var hitboxtype:String = 'Gradient';

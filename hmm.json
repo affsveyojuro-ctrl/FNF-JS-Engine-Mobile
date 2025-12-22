@@ -120,6 +120,13 @@
       "name": "hxgamemode",
       "type": "haxelib",
       "version": null
+    },
+    {
+      "name": "mobile-controls",
+      "type": "git",
+      "dir": null,
+      "ref": "main",
+      "url": "https://github.com/Prohack101010/mobile-controls-dev"
     }
   ]
 }

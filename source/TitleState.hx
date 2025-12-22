@@ -128,6 +128,17 @@ class TitleState extends MusicBeatState
       }
       persistentUpdate = true;
       persistentDraw = true;
+      MobileConfig.init('MobileControls', CoolUtil.getSavePath(), 'assets/mobile/',
+        [
+          'MobilePad/DPadModes',
+          'MobilePad/ActionModes',
+          'Hitbox/HitboxModes',
+        ], [
+          DPAD,
+          ACTION,
+          HITBOX
+        ]
+      );
     }
 
     if (FlxG.save.data.weekCompleted != null)

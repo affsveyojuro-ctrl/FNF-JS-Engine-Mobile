@@ -61,15 +61,15 @@ import haxe.Json;
 import mobile.*;
 #end
 #if android
-import extension.androidtools.callback.CallBack as AndroidCallBack;
-import extension.androidtools.content.Context as AndroidContext;
-import extension.androidtools.widget.Toast as AndroidToast;
-import extension.androidtools.os.Environment as AndroidEnvironment;
-import extension.androidtools.Permissions as AndroidPermissions;
-import extension.androidtools.Settings as AndroidSettings;
-import extension.androidtools.Tools as AndroidTools;
-import extension.androidtools.os.Build.VERSION as AndroidVersion;
-import extension.androidtools.os.Build.VERSION_CODES as AndroidVersionCode;
+import android.callback.CallBack as AndroidCallBack;
+import android.content.Context as AndroidContext;
+import android.widget.Toast as AndroidToast;
+import android.os.Environment as AndroidEnvironment;
+import android.Permissions as AndroidPermissions;
+import android.Settings as AndroidSettings;
+import android.Tools as AndroidTools;
+import android.os.Build.VERSION as AndroidVersion;
+import android.os.Build.VERSION_CODES as AndroidVersionCode;
 #end
 
 // utils
