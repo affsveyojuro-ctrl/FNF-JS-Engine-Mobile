@@ -454,7 +454,7 @@ class Project extends HXProject
 		addHaxelib('grig.audio');
 		addHaxelib('funkin.vis');
 		addHaxelib('flxanimate'); // Texture atlas rendering
-		addHaxelib('hxnativefiledialog');
+		if (!isMobile()) addHaxelib('hxnativefiledialog');
 		addHaxelib('tjson');
 
 		if (MOBILE_CONTROLS_ALLOWED.isEnabled(this))
