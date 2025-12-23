@@ -111,16 +111,6 @@ class StorageUtil
 		#end
 		return daPath;
 	}
-	public static function getExternalStorageDirectory():String
-	{
-		#if android
-		return currentExternalStorageDirectory;
-		#elseif ios
-		return LimeSystem.documentsDirectory;
-		#else
-		return Sys.getCwd();
-		#end
-	}
 
 	public static function requestPermissions():Void
 	{
@@ -203,6 +193,16 @@ class StorageUtil
 				trace('$fileName couldn\'t be saved. (${e.message})');
 	}
 	#end
+	public static function getExternalStorageDirectory():String
+	{
+		#if android
+		return currentExternalStorageDirectory;
+		#elseif ios
+		return LimeSystem.documentsDirectory;
+		#else
+		return Sys.getCwd();
+		#end
+	}
 
 	public static function copySpesificFileFromAssets(filePathInAssets:String, copyTo:String, ?changeable:Bool)
 	{
