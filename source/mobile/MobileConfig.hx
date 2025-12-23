@@ -117,7 +117,7 @@ class MobileConfig {
 				var str:String;
 				#if mobile_controls_file_support
 				if (FileSystem.exists(file))
-					str = FileSystem.getText(file);
+					str = File.getContent(file);
 				else #end
 					str = Assets.getText(file);
 
