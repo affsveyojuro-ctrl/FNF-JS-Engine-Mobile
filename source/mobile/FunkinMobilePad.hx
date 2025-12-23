@@ -1,4 +1,4 @@
-package mobile.objects;
+package mobile;
 
 import mobile.MobilePad;
 import flixel.graphics.frames.FlxTileFrames;
@@ -34,7 +34,7 @@ class FunkinMobilePad extends MobilePad {
 
 		button.immovable = true;
 		button.solid = button.moves = false;
-		button.antialiasing = ClientPrefs.data.antialiasing;
+		button.antialiasing = ClientPrefs.antialiasing;
 		button.tag = framePath.toUpperCase();
 
 		if (ColorS != -1) button.color = ColorS;

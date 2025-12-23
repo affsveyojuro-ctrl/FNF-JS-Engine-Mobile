@@ -30,7 +30,7 @@ class MobileControlManager {
 	public function makeMobilePad(DPad:String, Action:String)
 	{
 		if (mobilePad != null) removeMobilePad();
-		mobilePad = new FunkinMobilePad(DPad, Action, ClientPrefs.data.mobilePadAlpha);
+		mobilePad = new FunkinMobilePad(DPad, Action, ClientPrefs.mobilePadAlpha);
 	}
 
 	public function addMobilePad(DPad:String, Action:String)

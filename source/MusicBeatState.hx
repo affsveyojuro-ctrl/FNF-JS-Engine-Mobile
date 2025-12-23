@@ -46,6 +46,9 @@ class MusicBeatState extends FlxUIState
 	
 	// this is just because FlxUIState has arguments in it's constructor
 	public function new() {
+		#if MOBILE_CONTROLS_ALLOWED
+		createMobileManager();
+		#end
 		super();
 	}
 
@@ -53,20 +56,13 @@ class MusicBeatState extends FlxUIState
 	public var mobileManager:MobileControlManager;
 	override function destroy() {
 		super.destroy();
-		#if MOBILE_CONTROLS_ALLOWED
-		if (mobileManager != null) {
-			mobileManager.destroy();
-		}
-		#end
+		if (mobileManager != null) mobileManager.destroy();
 	}
 	private function createMobileManager() {
 		if (mobileManager == null) mobileManager = new MobileControlManager(this);
 	}
 	#end
 	override function create() {
-		#if MOBILE_CONTROLS_ALLOWED
-		createMobileManager();
-		#end
 		camBeat = FlxG.camera;
 		var skip:Bool = FlxTransitionableState.skipNextTransOut;
 		super.create();

@@ -5,9 +5,33 @@ import flixel.FlxBasic;
 
 class MusicBeatSubstate extends FlxSubState
 {
+	public static var instance:MusicBeatSubstate;
+	#if MOBILE_CONTROLS_ALLOWED
+	public var mobileManager:MobileControlManager;
+	override function destroy() {
+		super.destroy();
+		#if MOBILE_CONTROLS_ALLOWED
+		if (mobileManager != null) {
+			mobileManager.destroy();
+		}
+		#end
+	}
+	private function createMobileManager() {
+		if (mobileManager == null) mobileManager = new MobileControlManager(this);
+	}
+	#end
 	public function new()
 	{
+		controls.isInSubstate = true;
+		instance = this;
+		#if MOBILE_CONTROLS_ALLOWED
+		createMobileManager();
+		#end
 		super();
+	}
+	override function destroy() {
+		super.destroy();
+		instance = null;
 	}
 
 	private var lastBeat:Float = 0;
