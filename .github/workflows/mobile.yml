@@ -50,7 +50,7 @@ jobs:
 
       - name: Compile (Android)
         if: startsWith(matrix.os, 'ubuntu')
-        run: haxelib run lime build android -ONLY_ARM64 -D ${{ inputs.buildFlags }}
+        run: haxelib run lime build android -final -ONLY_ARM64 -D ${{ inputs.buildFlags }}
 
       - name: Compile (iOS)
         if: startsWith(matrix.os, 'macos')
@@ -72,7 +72,7 @@ jobs:
         uses: actions/upload-artifact@main
         with:
           name: androidBuild
-          path: export/release/android/bin/app/build/outputs/apk
+          path: export/*/android/bin/app/build/outputs/apk/*/*.apk
           if-no-files-found: error
 
       - name: Upload Artifact (iOS)
