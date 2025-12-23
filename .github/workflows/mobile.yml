@@ -54,7 +54,7 @@ jobs:
 
       - name: Compile (Android)
         if: startsWith(matrix.os, 'ubuntu')
-        run: haxelib run lime build android -final -D ${{ inputs.buildFlags }}
+        run: haxelib run lime build android -ONLY_ARM64 -final -D ${{ inputs.buildFlags }}
 
       - name: Compile (iOS)
         if: startsWith(matrix.os, 'macos')
