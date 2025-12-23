@@ -1104,6 +1104,7 @@ class PlayState extends MusicBeatState
 		opponentStrums = new FlxTypedGroup<StrumNote>();
 
 		#if MOBILE_CONTROLS_ALLOWED
+		createMobileManager();
 		mobileManager.addHitbox();
 		mobileManager.hitbox?.onButtonDown?.add(onButtonPress);
 		mobileManager.hitbox?.onButtonUp?.add(onButtonRelease);
@@ -3267,7 +3268,7 @@ class PlayState extends MusicBeatState
 		}
 		if(botplayTxt != null && cpuControlled && !ClientPrefs.showcaseMode && !botplayUsed) botplayUsed = true;
 
-		if (controls.PAUSE && startedCountdown && canPause && !heyStopTrying)
+		if ((#if android FlxG.android.justReleased.BACK || #endcontrols.PAUSE) && startedCountdown && canPause && !heyStopTrying)
 		{
 			final ret:Dynamic = callOnLuas('onPause', [], false);
 			if(ret != FunkinLua.Function_Stop)

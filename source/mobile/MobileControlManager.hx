@@ -21,6 +21,41 @@ class MobileControlManager {
 		trace("MobileControlManager initialized.");
 	}
 
+	public function makeMobilePad(DPad:String, Action:String)
+	{
+		if (mobilePad != null) removeMobilePad();
+		mobilePad = new FunkinMobilePad(DPad, Action, ClientPrefs.mobilePadAlpha);
+	}
+
+	public function addMobilePad(DPad:String, Action:String)
+	{
+		makeMobilePad(DPad, Action);
+		currentState.add(mobilePad);
+	}
+
+	public function removeMobilePad():Void
+	{
+		if (mobilePad != null)
+		{
+			currentState.remove(mobilePad);
+			mobilePad = FlxDestroyUtil.destroy(mobilePad);
+		}
+
+		if(mobilePadCam != null)
+		{
+			FlxG.cameras.remove(mobilePadCam);
+			mobilePadCam = FlxDestroyUtil.destroy(mobilePadCam);
+		}
+	}
+
+	public function addMobilePadCamera(defaultDrawTarget:Bool = false):Void
+	{
+		mobilePadCam = new FlxCamera();
+		mobilePadCam.bgColor.alpha = 0;
+		FlxG.cameras.add(mobilePadCam, defaultDrawTarget);
+		mobilePad.cameras = [mobilePadCam];
+	}
+
 	public function makeHitbox(?mode:String, ?hints:Bool) {
 		if (hitbox != null) removeHitbox();
 		hitbox = new FunkinHitbox(mode, hints);
@@ -55,6 +90,7 @@ class MobileControlManager {
 	}
 
 	public function destroy():Void {
+		removeMobilePad();
 		removeHitbox();
 	}
 }

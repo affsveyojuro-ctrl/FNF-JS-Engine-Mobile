@@ -124,6 +124,11 @@ class PauseSubState extends MusicBeatSubstate
 		regenMenu();
 		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 		super.create();
+
+		#if MOBILE_CONTROLS_ALLOWED
+		mobileManager.addMobilePad('FULL', 'A_B');
+		mobileManager.addMobilePadCamera();
+		#end
 	}
 
 	var holdTime:Float = 0;

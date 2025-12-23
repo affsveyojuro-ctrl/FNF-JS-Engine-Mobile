@@ -7,8 +7,11 @@ import flixel.input.keyboard.FlxKey;
 class ClientPrefs { //default settings if it can't find a save file containing your current settings
 	/* Mobile */
 	#if android public static var storageType:String = "EXTERNAL_DATA"; #end
+	#if mobile public static var wideScreen:Bool = false; #end
 	#if MOBILE_CONTROLS_ALLOWED
 	public static var mobileExtraKeys:Int = 2;
+	public static var hitboxalpha:Float = 0.7;
+	public static var mobilePadAlpha:Float = 0.6;
 	public static var hitboxhint:Bool = false;
 	public static var hitboxtype:String = 'Gradient';
 	public static var hitboxLocation:String = 'Bottom';

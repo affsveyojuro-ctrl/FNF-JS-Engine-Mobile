@@ -205,6 +205,11 @@ class MainMenuState extends MusicBeatState
 		tipTextStartScrolling();
 
 		super.create();
+
+		#if MOBILE_CONTROLS_ALLOWED
+		mobileManager.addMobilePad('UP_DOWN', 'A_B_E');
+		mobileManager.addMobilePadCamera();
+		#end
 	}
 
 	var selectedSomethin:Bool = false;

@@ -221,6 +221,11 @@ class FreeplayState extends MusicBeatState
 		FlxG.mouse.visible = true;
 
 		super.create();
+
+		#if MOBILE_CONTROLS_ALLOWED
+		mobileManager.addMobilePad('FULL', 'A_B_C_X_Y_Z');
+		mobileManager.addMobilePadCamera();
+		#end
 	}
 
 	function checkForSongsThatMatch(?start:String = '')
@@ -397,11 +402,11 @@ class FreeplayState extends MusicBeatState
 		var upP = controls.UI_UP_P;
 		var downP = controls.UI_DOWN_P;
 		var accepted = controls.ACCEPT;
-		var space = FlxG.keys.justPressed.SPACE;
-		var ctrl = FlxG.keys.justPressed.CONTROL;
+		var space = FlxG.keys.justPressed.SPACE #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonJustPressed('X') #end;
+		var ctrl = FlxG.keys.justPressed.CONTROL #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonJustPressed('C') #end;
 
 		var shiftMult:Int = 1;
-		if (FlxG.keys.pressed.SHIFT) shiftMult = 3;
+		if (FlxG.keys.pressed.SHIFT #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonPressed('Z') #end) shiftMult = 3;
 
 		if (!songSearchText.hasFocus)
 		{
@@ -662,7 +667,7 @@ class FreeplayState extends MusicBeatState
 					}
 				}
 			}
-			else if (controls.RESET && !player.playingMusic) {
+			else if ((controls.RESET #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonJustPressed('Y') #end) && !player.playingMusic) {
 				persistentUpdate = false;
 				openSubState(new ResetScoreSubState(songs[curSelected].songName, curDifficulty, songs[curSelected].songCharacter));
 				FlxG.sound.play(Paths.sound('scrollMenu'));

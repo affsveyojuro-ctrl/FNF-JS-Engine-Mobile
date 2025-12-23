@@ -36,7 +36,6 @@ class MobileConfig {
 					readDirectoryPart1(mobileFolderPath + i, actionModes, ACTION);
 					#if MODS_ALLOWED
 					for (folder in directoriesWithFile(Paths.getPreloadPath(), 'mobile/MobilePad/')) {
-						trace('called');
 						readDirectoryPart1(Path.join([folder, 'ActionModes']), actionModes, ACTION);
 					}
 					#end
@@ -44,7 +43,6 @@ class MobileConfig {
 					readDirectoryPart1(mobileFolderPath + i, dpadModes, DPAD);
 					#if MODS_ALLOWED
 					for (folder in directoriesWithFile(Paths.getPreloadPath(), 'mobile/MobilePad/')) {
-						trace('called');
 						readDirectoryPart1(Path.join([folder, 'DPadModes']), dpadModes, DPAD);
 					}
 					#end
@@ -52,12 +50,14 @@ class MobileConfig {
 					readDirectoryPart1(mobileFolderPath + i, hitboxModes, HITBOX);
 					#if MODS_ALLOWED
 					for (folder in directoriesWithFile(Paths.getPreloadPath(), 'mobile/Hitbox/')) {
-						trace('called');
 						readDirectoryPart1(Path.join([folder, 'HitboxModes']), hitboxModes, HITBOX);
 					}
 					#end
 			}
 		}
+		trace(actionModes);
+		trace(hitboxModes);
+		trace(dpadModes);
 	}
 
 	static function directoriesWithFile(path:String, fileToFind:String, mods:Bool = true)
@@ -95,7 +95,6 @@ class MobileConfig {
 
 	static function readDirectoryPart1(folder:String, map:Dynamic, mode:ButtonsModes)
 	{
-		trace('' + folder);
 		folder = folder.contains(':') ? folder.split(':')[1] : folder;
 
 		#if mobile_controls_file_support if (FileSystem.exists(folder)) #end

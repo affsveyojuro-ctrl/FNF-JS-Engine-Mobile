@@ -51,10 +51,21 @@ class MusicBeatState extends FlxUIState
 
 	#if MOBILE_CONTROLS_ALLOWED
 	public var mobileManager:MobileControlManager;
+	override function destroy() {
+		super.destroy();
+		#if MOBILE_CONTROLS_ALLOWED
+		if (mobileManager != null) {
+			mobileManager.destroy();
+		}
+		#end
+	}
+	private function createMobileManager() {
+		if (mobileManager == null) mobileManager = new MobileControlManager(this);
+	}
 	#end
 	override function create() {
 		#if MOBILE_CONTROLS_ALLOWED
-		mobileManager = new MobileControlManager(this);
+		createMobileManager();
 		#end
 		camBeat = FlxG.camera;
 		var skip:Bool = FlxTransitionableState.skipNextTransOut;

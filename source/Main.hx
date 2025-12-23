@@ -128,6 +128,7 @@ class Main extends Sprite {
 		#end
 
 		FlxG.autoPause = false;
+		#if android FlxG.android.preventDefaultKeys = [BACK]; #end
 
 		#if (linux || mac)
 		var icon = Image.fromFile("icon.png");
