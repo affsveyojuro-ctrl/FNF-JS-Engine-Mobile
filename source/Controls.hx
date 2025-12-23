@@ -260,7 +260,7 @@ class Controls extends FlxActionSet
 	public var BACK(get, never):Bool;
 
 	inline function get_BACK()
-		return _back.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadJustPressed(['B') #end;
+		return _back.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadJustPressed(['B']) #end;
 
 	public var PAUSE(get, never):Bool;
 
