@@ -125,6 +125,10 @@ class OptionsState extends MusicBeatState
 		ClientPrefs.saveSettings();
 
 		super.create();
+
+		#if MOBILE_CONTROLS_ALLOWED
+		mobileManager.addMobilePad('UP_DOWN', 'A_B_E');
+		#end
 	}
 
 	override function closeSubState() {

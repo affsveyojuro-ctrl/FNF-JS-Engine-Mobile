@@ -131,6 +131,7 @@ class GameOverSubstate extends MusicBeatSubstate
 
 		#if MOBILE_CONTROLS_ALLOWED
 		mobileManager.addMobilePad('NONE', 'A_B');
+		mobileManager.addMobilePadCamera();
 		#end
 	}
 
