@@ -28,10 +28,10 @@ class MobileInputHandler extends FlxTypedSpriteGroup<MobileButton>
 	}
 
 	public function buttonPressed(button:Dynamic):Bool
-		return checkButtonsState(((Std.isOfType(button, Array) || Std.isOfType(button, Array<String>)) ? button : [button], PRESSED);
+		return checkButtonsState(((Std.isOfType(button, Array) || Std.isOfType(button, Array<String>)) ? button : [button]), PRESSED);
 
 	public function buttonJustPressed(button:Dynamic):Bool
-		return checkButtonsState(((Std.isOfType(button, Array) || Std.isOfType(button, Array<String>)) ? button : [button], JUST_PRESSED);
+		return checkButtonsState(((Std.isOfType(button, Array) || Std.isOfType(button, Array<String>)) ? button : [button]), JUST_PRESSED);
 
 	public function buttonJustReleased(button:Dynamic):Bool
 		return checkButtonsState(((Std.isOfType(button, Array) || Std.isOfType(button, Array<String>)) ? button : [button]), JUST_RELEASED);
