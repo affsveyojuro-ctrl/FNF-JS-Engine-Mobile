@@ -771,54 +771,66 @@ class Controls extends FlxActionSet
 
 	private function mobilePadPressed(keys:Array<String>):Bool
 	{
+		trace('called');
 		if (keys != null && requestedInstance.mobileManager.mobilePad != null)
 			if (requestedInstance.mobileManager.mobilePad.buttonPressed(keys) == true)
 				return true;
+		trace('called');
 
 		return false;
 	}
 
 	private function mobilePadJustPressed(keys:Array<String>):Bool
 	{
+		trace('called');
 		if (keys != null && requestedInstance.mobileManager.mobilePad != null)
 			if (requestedInstance.mobileManager.mobilePad.buttonJustPressed(keys) == true)
 				return true;
+		trace('called');
 
 		return false;
 	}
 
 	private function mobilePadJustReleased(keys:Array<String>):Bool
 	{
+		trace('called');
 		if (keys != null && requestedInstance.mobileManager.mobilePad != null)
 			if (requestedInstance.mobileManager.mobilePad.buttonJustReleased(keys) == true)
 				return true;
+		trace('called');
 
 		return false;
 	}
 
 	private function hitboxPressed(keys:Array<String>):Bool
 	{
+		trace('called');
 		if (keys != null && requestedHitbox != null)
 			if (requestedHitbox.buttonPressed(keys) == true)
 				return true;
+		trace('called');
 
 		return false;
 	}
 
 	private function hitboxJustPressed(keys:Array<String>):Bool
 	{
+		trace('called');
 		if (keys != null && requestedHitbox != null)
 			if (requestedHitbox.buttonJustPressed(keys) == true)
 				return true;
+		trace('called');
 
 		return false;
 	}
 
 	private function hitboxJustReleased(keys:Array<String>):Bool
 	{
+		trace('called');
 		if (keys != null && requestedHitbox != null)
 			if (requestedHitbox.buttonJustReleased(keys) == true)
 				return true;
+		trace('called');
 
 		return false;
 	}
@@ -826,6 +838,7 @@ class Controls extends FlxActionSet
 	@:noCompletion
 	private function get_requestedInstance():Dynamic
 	{
+		trace('called');
 		if (isInSubstate)
 			return MusicBeatSubstate.instance;
 		else
@@ -835,12 +848,14 @@ class Controls extends FlxActionSet
 	@:noCompletion
 	private function get_requestedHitbox():FunkinHitbox
 	{
+		trace('called');
 		return requestedInstance.mobileManager.hitbox;
 	}
 
 	@:noCompletion
 	private function get_mobileControls():Bool
 	{
+		trace('called');
 		if (ClientPrefs.mobilePadAlpha >= 0.1)
 			return true;
 		else
