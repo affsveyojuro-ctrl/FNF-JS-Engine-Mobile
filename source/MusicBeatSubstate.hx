@@ -8,36 +8,22 @@ class MusicBeatSubstate extends FlxSubState
 	public static var instance:MusicBeatSubstate;
 	#if MOBILE_CONTROLS_ALLOWED
 	public var mobileManager:MobileControlManager;
-	private function createMobileManager() {
-		if (mobileManager == null) mobileManager = new MobileControlManager(this);
-	}
 	#end
 	public function new()
 	{
-		trace('called');
 		instance = this;
-		trace('called');
-		super();
-		trace('called');
 		#if MOBILE_CONTROLS_ALLOWED
-		try {
-			if (controls != null) controls.isInSubstate = true;
-		} catch(e:Dynamic) {}
-		trace('called');
-		createMobileManager();
-		trace('called');
+		//controls.isInSubstate = true; //fuck you psych
+		mobileManager = new MobileControlManager(this);
 		#end
+		super();
 	}
 	override function destroy() {
+		instance = null;
 		#if MOBILE_CONTROLS_ALLOWED
-		trace('called');
 		if (mobileManager != null) mobileManager.destroy();
-		trace('called');
 		#end
 		super.destroy();
-		trace('called');
-		instance = null;
-		trace('called');
 	}
 
 	private var lastBeat:Float = 0;

@@ -1103,8 +1103,9 @@ class PlayState extends MusicBeatState
 		playerStrums = new FlxTypedGroup<StrumNote>();
 		opponentStrums = new FlxTypedGroup<StrumNote>();
 
+		super.create();
+
 		#if MOBILE_CONTROLS_ALLOWED
-		createMobileManager();
 		mobileManager.addHitbox();
 		mobileManager.hitbox?.onButtonDown?.add(onButtonPress);
 		mobileManager.hitbox?.onButtonUp?.add(onButtonRelease);
@@ -1507,7 +1508,6 @@ class PlayState extends MusicBeatState
 
 		startCallback();
 
-		super.create();
 		Paths.clearUnusedMemory();
 
 		startingTime = haxe.Timer.stamp();

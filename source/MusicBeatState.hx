@@ -46,54 +46,35 @@ class MusicBeatState extends FlxUIState
 	
 	// this is just because FlxUIState has arguments in it's constructor
 	public function new() {
-		trace('called');
-		#if MOBILE_CONTROLS_ALLOWED
-		createMobileManager();
-		#end
-		trace('called');
 		super();
-		trace('called');
+		#if MOBILE_CONTROLS_ALLOWED
+		mobileManager = new MobileControlManager(this);
+		#end
 	}
 
 	#if MOBILE_CONTROLS_ALLOWED
 	public var mobileManager:MobileControlManager;
 	override function destroy() {
-		trace('called');
-		super.destroy();
-		trace('called');
 		if (mobileManager != null) mobileManager.destroy();
-		trace('called');
-	}
-	private function createMobileManager() {
-		trace('called');
-		if (mobileManager == null) mobileManager = new MobileControlManager(this);
-		trace('called');
+		super.destroy();
 	}
 	#end
 	override function create() {
-		trace('called');
 		camBeat = FlxG.camera;
 		var skip:Bool = FlxTransitionableState.skipNextTransOut;
-		trace('called');
 		super.create();
-		trace('called');
 
 		if(!_psychCameraInitialized && !Main.isPlayState()) initPsychCamera();
-		trace('called');
 
 		if(!skip) {
 			openSubState(new CustomFadeTransition(0.7, true));
 		}
-		trace('called');
 		FlxTransitionableState.skipNextTransOut = false;
-		trace('called');
 
 		try {windowNamePrefix = Assets.getText(Paths.txt("windowTitleBase", "preload"));}
 		catch(e) {}
-		trace('called');
 
 		Application.current.window.title = windowNamePrefix + windowNameSuffix + windowNameSuffix2;
-		trace('called');
 	}
 
 	public function initPsychCamera():PsychCamera
@@ -107,13 +88,10 @@ class MusicBeatState extends FlxUIState
 
 	override function update(elapsed:Float)
 	{
-		trace('called');
 		oldStep = curStep;
-		trace('called');
 
 		updateCurStep();
 		updateBeat();
-		trace('called');
 
 		if (oldStep != curStep && curStep > 0)
 		{
@@ -127,21 +105,16 @@ class MusicBeatState extends FlxUIState
 					rollbackSection();
 			}
 		}
-		trace('called');
 
 		if(FlxG.save.data != null) FlxG.save.data.fullscreen = FlxG.fullscreen;
-		trace('called');
 
 		FlxG.autoPause = ClientPrefs.autoPause;
-		trace('called');
 
 		stagesFunc(function(stage:BaseStage) {
 			stage.update(elapsed);
 		});
-		trace('called');
 
 		super.update(elapsed);
-		trace('called');
 	}
 
 	private function updateSection():Void
