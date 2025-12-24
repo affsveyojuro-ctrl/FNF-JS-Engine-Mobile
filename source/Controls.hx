@@ -125,42 +125,42 @@ class Controls extends FlxActionSet
 	public var UI_UP(get, never):Bool;
 
 	inline function get_UI_UP()
-		return _ui_up.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadJustPressed(['UP']) #end;
+		return _ui_up.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadPressed(['UP']) #end;
 
 	public var UI_LEFT(get, never):Bool;
 
 	inline function get_UI_LEFT()
-		return _ui_left.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadJustPressed(['LEFT']) #end;
+		return _ui_left.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadPressed(['LEFT']) #end;
 
 	public var UI_RIGHT(get, never):Bool;
 
 	inline function get_UI_RIGHT()
-		return _ui_right.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadJustPressed(['RIGHT']) #end;
+		return _ui_right.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadPressed(['RIGHT']) #end;
 
 	public var UI_DOWN(get, never):Bool;
 
 	inline function get_UI_DOWN()
-		return _ui_down.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadJustPressed(['DOWN']) #end;
+		return _ui_down.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadPressed(['DOWN']) #end;
 
 	public var UI_UP_P(get, never):Bool;
 
 	inline function get_UI_UP_P()
-		return _ui_upP.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadPressed(['UP']) #end;
+		return _ui_upP.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadJustPressed(['UP']) #end;
 
 	public var UI_LEFT_P(get, never):Bool;
 
 	inline function get_UI_LEFT_P()
-		return _ui_leftP.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadPressed(['LEFT']) #end;
+		return _ui_leftP.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadJustPressed(['LEFT']) #end;
 
 	public var UI_RIGHT_P(get, never):Bool;
 
 	inline function get_UI_RIGHT_P()
-		return _ui_rightP.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadPressed(['RIGHT']) #end;
+		return _ui_rightP.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadJustPressed(['RIGHT']) #end;
 
 	public var UI_DOWN_P(get, never):Bool;
 
 	inline function get_UI_DOWN_P()
-		return _ui_downP.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadPressed(['DOWN']) #end;
+		return _ui_downP.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadJustPressed(['DOWN']) #end;
 
 	public var UI_UP_R(get, never):Bool;
 
@@ -185,42 +185,42 @@ class Controls extends FlxActionSet
 	public var NOTE_UP(get, never):Bool;
 
 	inline function get_NOTE_UP()
-		return _note_up.check() #if MOBILE_CONTROLS_ALLOWED || hitboxJustPressed(['NOTE_UP']) #end;
+		return _note_up.check() #if MOBILE_CONTROLS_ALLOWED || hitboxPressed(['NOTE_UP']) #end;
 
 	public var NOTE_LEFT(get, never):Bool;
 
 	inline function get_NOTE_LEFT()
-		return _note_left.check() #if MOBILE_CONTROLS_ALLOWED || hitboxJustPressed(['NOTE_LEFT']) #end;
+		return _note_left.check() #if MOBILE_CONTROLS_ALLOWED || hitboxPressed(['NOTE_LEFT']) #end;
 
 	public var NOTE_RIGHT(get, never):Bool;
 
 	inline function get_NOTE_RIGHT()
-		return _note_right.check() #if MOBILE_CONTROLS_ALLOWED || hitboxJustPressed(['NOTE_RIGHT']) #end;
+		return _note_right.check() #if MOBILE_CONTROLS_ALLOWED || hitboxPressed(['NOTE_RIGHT']) #end;
 
 	public var NOTE_DOWN(get, never):Bool;
 
 	inline function get_NOTE_DOWN()
-		return _note_down.check() #if MOBILE_CONTROLS_ALLOWED || hitboxJustPressed(['NOTE_DOWN']) #end;
+		return _note_down.check() #if MOBILE_CONTROLS_ALLOWED || hitboxPressed(['NOTE_DOWN']) #end;
 
 	public var NOTE_UP_P(get, never):Bool;
 
 	inline function get_NOTE_UP_P()
-		return _note_upP.check() #if MOBILE_CONTROLS_ALLOWED || hitboxPressed(['NOTE_UP']) #end;
+		return _note_upP.check() #if MOBILE_CONTROLS_ALLOWED || hitboxJustPressed(['NOTE_UP']) #end;
 
 	public var NOTE_LEFT_P(get, never):Bool;
 
 	inline function get_NOTE_LEFT_P()
-		return _note_leftP.check() #if MOBILE_CONTROLS_ALLOWED || hitboxPressed(['NOTE_LEFT']) #end;
+		return _note_leftP.check() #if MOBILE_CONTROLS_ALLOWED || hitboxJustPressed(['NOTE_LEFT']) #end;
 
 	public var NOTE_RIGHT_P(get, never):Bool;
 
 	inline function get_NOTE_RIGHT_P()
-		return _note_rightP.check() #if MOBILE_CONTROLS_ALLOWED || hitboxPressed(['NOTE_RIGHT']) #end;
+		return _note_rightP.check() #if MOBILE_CONTROLS_ALLOWED || hitboxJustPressed(['NOTE_RIGHT']) #end;
 
 	public var NOTE_DOWN_P(get, never):Bool;
 
 	inline function get_NOTE_DOWN_P()
-		return _note_downP.check() #if MOBILE_CONTROLS_ALLOWED || hitboxPressed(['NOTE_DOWN']) #end;
+		return _note_downP.check() #if MOBILE_CONTROLS_ALLOWED || hitboxJustPressed(['NOTE_DOWN']) #end;
 
 	public var NOTE_UP_R(get, never):Bool;
 
@@ -260,7 +260,7 @@ class Controls extends FlxActionSet
 	public var BACK(get, never):Bool;
 
 	inline function get_BACK()
-		return _back.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadPressed(['B']) #end;
+		return _back.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadJustPressed(['B']) #end;
 
 	public var PAUSE(get, never):Bool;
 
@@ -826,13 +826,8 @@ class Controls extends FlxActionSet
 	@:noCompletion
 	private function get_requestedInstance():Dynamic
 	{
-		if (isInSubstate) {
-			//Simple subSubState Fix
-			if (MusicBeatSubstate.getSubSubState() != null)
-				return MusicBeatSubstate.getSubSubState();
-			else
-				return MusicBeatSubstate.instance;
-		}
+		if (isInSubstate)
+			return MusicBeatSubstate.instance;
 		else
 			return MusicBeatState.getState();
 	}

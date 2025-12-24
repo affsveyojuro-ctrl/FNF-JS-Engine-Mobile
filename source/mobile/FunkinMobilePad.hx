@@ -42,8 +42,6 @@ class FunkinMobilePad extends MobilePad {
 	}
 
 	public function new(DPad:String, Action:String, globalAlpha:Float = 0.7) {
-		trace('called');
 		super(DPad, Action, globalAlpha);
-		trace('called');
 	}
 }

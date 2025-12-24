@@ -126,7 +126,7 @@ class PauseSubState extends MusicBeatSubstate
 		super.create();
 
 		#if MOBILE_CONTROLS_ALLOWED
-		mobileManager.addMobilePad('FULL', 'A_B');
+		mobileManager.addMobilePad('FULL', 'A');
 		mobileManager.addMobilePadCamera();
 		#end
 	}
@@ -437,5 +437,16 @@ class PauseSubState extends MusicBeatSubstate
 	function updateSkipTimeText()
 	{
 		skipTimeText.text = FlxStringUtil.formatTime(Math.max(0, Math.floor(curTime / 1000)), false) + ' / ' + FlxStringUtil.formatTime(Math.max(0, Math.floor(FlxG.sound.music.length / 1000)), false);
+	}
+
+	override function closeSubState() {
+		super.closeSubState();
+		instance = this;
+		#if MOBILE_CONTROLS_ALLOWED
+		controls.isInSubstate = false;
+		mobileManager.removeMobilePad();
+		mobileManager.addMobilePad('FULL', 'A');
+		mobileManager.addMobilePadCamera();
+		#end
 	}
 }

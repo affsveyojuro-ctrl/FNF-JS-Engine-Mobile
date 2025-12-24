@@ -21,11 +21,11 @@ class MusicBeatSubstate extends FlxSubState
 		super();
 	}
 	override function destroy() {
-		//instance = null; //setting it null can cause some problems which I want, so removed.
+		instance = null; //setting it null can cause some problems which I want, so removed.
 		#if MOBILE_CONTROLS_ALLOWED
 		if (mobileManager != null) mobileManager.destroy();
 		try {
-			if (getSubSubState() == null) controls.isInSubstate = false;
+			controls.isInSubstate = false;
 		} catch(e:Dynamic) {}
 		#end
 		super.destroy();
