@@ -42,7 +42,7 @@ class MobileOptionsSubState extends BaseOptionsMenu {
 
 		var option:Option = new Option('Extra Controls',
 			'Allow Extra Controls',
-			'extraKeys',
+			'mobileExtraKeys',
 			'int',
 			2);
 		option.scrollSpeed = 1;
@@ -112,7 +112,7 @@ class MobileOptionsSubState extends BaseOptionsMenu {
 
 		#if android
 		option = new Option('Storage Type',
-			'Which folder Psych Online should use?',
+			'Which folder JS Engine should use?',
 			'storageType',
 			'string',
 			'EXTERNAL_DATA',
@@ -120,6 +120,8 @@ class MobileOptionsSubState extends BaseOptionsMenu {
 		);
 		addOption(option);
 		#end
+
+		cameras = [FlxG.cameras.list[FlxG.cameras.list.length-1]];
 		super();
 	}
 

@@ -738,6 +738,7 @@ class NotesSubState extends MusicBeatSubstate
 	override function destroy()
 	{
 		Note.globalRgbShaders = [];
+		super.destroy(); //whf js engine doesn't have this
 	}
 
 	function setShaderColor(value:FlxColor) dataArray[curSelectedNote][curSelectedMode] = value;

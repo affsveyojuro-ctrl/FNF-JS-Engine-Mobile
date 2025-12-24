@@ -21,11 +21,11 @@ class MusicBeatSubstate extends FlxSubState
 		super();
 	}
 	override function destroy() {
-		instance = null;
+		//instance = null; //setting it null can cause some problems which I want, so removed.
 		#if MOBILE_CONTROLS_ALLOWED
 		if (mobileManager != null) mobileManager.destroy();
 		try {
-			controls.isInSubstate = false;
+			if (getSubSubState() == null) controls.isInSubstate = false;
 		} catch(e:Dynamic) {}
 		#end
 		super.destroy();
@@ -83,5 +83,20 @@ class MusicBeatSubstate extends FlxSubState
 	public function beatHit():Void
 	{
 		//do literally nothing dumbass
+	}
+
+	//Gets the second substate (FlxG.state.subState.subState)
+	public static function getSubSubState():MusicBeatSubstate {
+		if (FlxG.state.subState != null) {
+			if (FlxG.state.subState.subState != null) {
+				var curSubState:Dynamic = FlxG.state.subState.subState;
+				var leState:MusicBeatSubstate = curSubState;
+				return leState;
+			}
+			else
+				return null;
+		}
+		else
+			return null;
 	}
 }

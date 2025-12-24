@@ -4956,6 +4956,7 @@ class PlayState extends MusicBeatState
 
 						if (canHit && n.isSustainNote)
 						{
+							trace(n.noteData + ' | ' + holdArray[n.noteData])
 							var released:Bool = !holdArray[n.noteData];
 
 							if (!released)

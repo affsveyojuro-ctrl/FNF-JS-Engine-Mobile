@@ -128,6 +128,7 @@ class OptionsState extends MusicBeatState
 
 		#if MOBILE_CONTROLS_ALLOWED
 		mobileManager.addMobilePad('UP_DOWN', 'A_B_E');
+		mobileManager.addMobilePadCamera();
 		#end
 	}
 
@@ -138,6 +139,7 @@ class OptionsState extends MusicBeatState
 		#if MOBILE_CONTROLS_ALLOWED
 		mobileManager.removeMobilePad();
 		mobileManager.addMobilePad('UP_DOWN', 'A_B_E');
+		mobileManager.addMobilePadCamera();
 		#end
 		persistentUpdate = true;
 	}
@@ -146,7 +148,7 @@ class OptionsState extends MusicBeatState
 		super.update(elapsed);
 
 		#if MOBILE_CONTROLS_ALLOWED
-		if (mobileManager.mobilePad.getButtonFromName('buttonE').justPressed) {
+		if (mobileManager.mobilePad.buttonJustPressed('E')) {
 			mobileManager.removeMobilePad();
 			persistentUpdate = false;
 			openSubState(new mobile.substates.MobileExtraControl());

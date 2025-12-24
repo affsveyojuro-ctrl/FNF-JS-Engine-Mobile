@@ -125,42 +125,42 @@ class Controls extends FlxActionSet
 	public var UI_UP(get, never):Bool;
 
 	inline function get_UI_UP()
-		return _ui_up.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadPressed(['UP']) #end;
+		return _ui_up.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadJustPressed(['UP']) #end;
 
 	public var UI_LEFT(get, never):Bool;
 
 	inline function get_UI_LEFT()
-		return _ui_left.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadPressed(['LEFT']) #end;
+		return _ui_left.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadJustPressed(['LEFT']) #end;
 
 	public var UI_RIGHT(get, never):Bool;
 
 	inline function get_UI_RIGHT()
-		return _ui_right.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadPressed(['RIGHT']) #end;
+		return _ui_right.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadJustPressed(['RIGHT']) #end;
 
 	public var UI_DOWN(get, never):Bool;
 
 	inline function get_UI_DOWN()
-		return _ui_down.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadPressed(['DOWN']) #end;
+		return _ui_down.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadJustPressed(['DOWN']) #end;
 
 	public var UI_UP_P(get, never):Bool;
 
 	inline function get_UI_UP_P()
-		return _ui_upP.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadJustPressed(['UP']) #end;
+		return _ui_upP.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadPressed(['UP']) #end;
 
 	public var UI_LEFT_P(get, never):Bool;
 
 	inline function get_UI_LEFT_P()
-		return _ui_leftP.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadJustPressed(['LEFT']) #end;
+		return _ui_leftP.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadPressed(['LEFT']) #end;
 
 	public var UI_RIGHT_P(get, never):Bool;
 
 	inline function get_UI_RIGHT_P()
-		return _ui_rightP.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadJustPressed(['RIGHT']) #end;
+		return _ui_rightP.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadPressed(['RIGHT']) #end;
 
 	public var UI_DOWN_P(get, never):Bool;
 
 	inline function get_UI_DOWN_P()
-		return _ui_downP.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadJustPressed(['DOWN']) #end;
+		return _ui_downP.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadPressed(['DOWN']) #end;
 
 	public var UI_UP_R(get, never):Bool;
 
@@ -250,17 +250,17 @@ class Controls extends FlxActionSet
 	public var ACCEPT(get, never):Bool;
 
 	inline function get_ACCEPT()
-		return _accept.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadPressed(['A']) #end;
+		return _accept.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadJustPressed(['A']) #end;
 
 	public var ACCEPT_P(get, never):Bool;
 
 	inline function get_ACCEPT_P()
-		return _acceptP.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadJustPressed(['A']) #end;
+		return _acceptP.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadPressed(['A']) #end;
 
 	public var BACK(get, never):Bool;
 
 	inline function get_BACK()
-		return _back.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadJustPressed(['B']) #end;
+		return _back.check() #if MOBILE_CONTROLS_ALLOWED || mobilePadPressed(['B']) #end;
 
 	public var PAUSE(get, never):Bool;
 
@@ -780,9 +780,6 @@ class Controls extends FlxActionSet
 
 	private function mobilePadJustPressed(keys:Array<String>):Bool
 	{
-		trace('' + requestedInstance.mobileManager);
-		if (requestedInstance.mobileManager != null) trace('' + requestedInstance.mobileManager.mobilePad);
-
 		if (keys != null && requestedInstance.mobileManager?.mobilePad != null)
 			if (requestedInstance.mobileManager.mobilePad.buttonJustPressed(keys) == true)
 				return true;
@@ -829,8 +826,13 @@ class Controls extends FlxActionSet
 	@:noCompletion
 	private function get_requestedInstance():Dynamic
 	{
-		if (isInSubstate)
-			return MusicBeatSubstate.instance;
+		if (isInSubstate) {
+			//Simple subSubState Fix
+			if (MusicBeatSubstate.getSubSubState() != null)
+				return MusicBeatSubstate.getSubSubState();
+			else
+				return MusicBeatSubstate.instance;
+		}
 		else
 			return MusicBeatState.getState();
 	}
@@ -838,14 +840,12 @@ class Controls extends FlxActionSet
 	@:noCompletion
 	private function get_requestedHitbox():FunkinHitbox
 	{
-		trace('called');
 		return requestedInstance.mobileManager.hitbox;
 	}
 
 	@:noCompletion
 	private function get_mobileControls():Bool
 	{
-		trace('called');
 		if (ClientPrefs.mobilePadAlpha >= 0.1)
 			return true;
 		else
