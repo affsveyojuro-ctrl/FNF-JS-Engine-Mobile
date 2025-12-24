@@ -14,19 +14,28 @@ class MusicBeatSubstate extends FlxSubState
 	#end
 	public function new()
 	{
+		trace('called');
 		instance = this;
+		trace('called');
+		super();
+		trace('called');
 		#if MOBILE_CONTROLS_ALLOWED
 		controls.isInSubstate = true;
+		trace('called');
 		createMobileManager();
+		trace('called');
 		#end
-		super();
 	}
 	override function destroy() {
 		#if MOBILE_CONTROLS_ALLOWED
+		trace('called');
 		if (mobileManager != null) mobileManager.destroy();
+		trace('called');
 		#end
 		super.destroy();
+		trace('called');
 		instance = null;
+		trace('called');
 	}
 
 	private var lastBeat:Float = 0;

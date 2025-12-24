@@ -72,7 +72,7 @@ jobs:
         uses: actions/upload-artifact@main
         with:
           name: androidBuild
-          path: build/*/android/bin/app/build/outputs/apk/*/*.apk
+          path: build/release/android/bin/app/build/outputs/apk/release/*.apk
           if-no-files-found: error
 
       - name: Upload Artifact (iOS)
