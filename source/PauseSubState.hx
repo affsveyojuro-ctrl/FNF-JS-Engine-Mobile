@@ -439,11 +439,9 @@ class PauseSubState extends MusicBeatSubstate
 		skipTimeText.text = FlxStringUtil.formatTime(Math.max(0, Math.floor(curTime / 1000)), false) + ' / ' + FlxStringUtil.formatTime(Math.max(0, Math.floor(FlxG.sound.music.length / 1000)), false);
 	}
 
-	override function closeSubState() {
-		super.closeSubState();
+	public static function giveAccessBackToPauseState() {
 		MusicBeatSubstate.instance = this;
 		#if MOBILE_CONTROLS_ALLOWED
-		controls.isInSubstate = true;
 		mobileManager.removeMobilePad();
 		mobileManager.addMobilePad('FULL', 'A');
 		mobileManager.addMobilePadCamera();

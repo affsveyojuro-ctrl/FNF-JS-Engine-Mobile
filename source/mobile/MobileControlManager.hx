@@ -15,6 +15,8 @@ class MobileControlManager {
 
 	public var mobilePad:FunkinMobilePad;
 	public var mobilePadCam:FlxCamera;
+	public var joyStickCam:FlxCamera;
+	public var joyStick:JoyStick;
 	public var hitboxCam:FlxCamera;
 	public var hitbox:FunkinHitbox;
 
@@ -28,7 +30,7 @@ class MobileControlManager {
 	public function makeMobilePad(DPad:String, Action:String)
 	{
 		if (mobilePad != null) removeMobilePad();
-		mobilePad = new FunkinMobilePad(DPad, Action);
+		mobilePad = new FunkinMobilePad(DPad, Action, ClientPrefs.mobilePadAlpha);
 	}
 
 	public function addMobilePad(DPad:String, Action:String)
@@ -93,8 +95,43 @@ class MobileControlManager {
 		hitbox.cameras = [hitboxCam];
 	}
 
+	public function makeJoyStick(?stickPath:String, x:Float, y:Float, radius:Float = 0, ease:Float = 0.25, size:Float = 1):Void
+	{
+		if (joyStick != null) removeJoyStick();
+		joyStick = new JoyStick(stickPath, x, y, radius, ease, size);
+	}
+
+	public function addJoyStick(?stickPath:String, x:Float, y:Float, radius:Float = 0, ease:Float = 0.25, size:Float = 1):Void
+	{
+		makeJoyStick(stickPath, x, y, radius, ease, size);
+		currentState.add(joyStick);
+	}
+
+	public function removeJoyStick():Void
+	{
+		if (joyStick != null)
+		{
+			currentState.remove(joyStick);
+			joyStick = FlxDestroyUtil.destroy(joyStick);
+		}
+
+		if(joyStickCam != null)
+		{
+			FlxG.cameras.remove(joyStickCam);
+			joyStickCam = FlxDestroyUtil.destroy(joyStickCam);
+		}
+	}
+
+	public function addJoyStickCamera(defaultDrawTarget:Bool = false):Void {
+		joyStickCam = new FlxCamera();
+		joyStickCam.bgColor.alpha = 0;
+		FlxG.cameras.add(joyStickCam, defaultDrawTarget);
+		joyStick.cameras = [joyStickCam];
+	}
+
 	public function destroy():Void {
 		removeMobilePad();
 		removeHitbox();
+		removeJoyStick();
 	}
 }

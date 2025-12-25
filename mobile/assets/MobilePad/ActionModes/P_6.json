@@ -3,18 +3,18 @@
     {
       "button": "buttonP",
       "buttonIDs": ["P"],
-      "graphic": "online_pause",
+      "graphic": "p",
       "x": 1156,
       "y": 2,
       "color": "0xE5DE00"
     },
     {
-      "button": "buttonT",
-      "buttonIDs": ["T"],
-      "graphic": "online_emote",
+      "button": "button6",
+      "buttonIDs": ["SIX"],
+      "graphic": "6",
       "x": 1032,
       "y": 2,
-      "color": "0xA7D2FF"
+      "color": "0x34bfd1"
     }
   ]
 }

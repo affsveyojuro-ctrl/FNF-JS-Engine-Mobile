@@ -145,7 +145,8 @@ class CharacterEditorState extends MusicBeatState
 		camFollow.screenCenter();
 		add(camFollow);
 
-		var tipText:FlxText = new FlxText(FlxG.width - 300, FlxG.height - 24, 300, "Press F1 for Help", 20);
+		var buttonF1:String = #if MOBILE_CONTROLS_ALLOWED 'F' #else 'F1' #end;
+		var tipText:FlxText = new FlxText(FlxG.width - 300, FlxG.height - 24, 300, 'Press $buttonF1 for Help', 20);
 		tipText.cameras = [camHUD];
 		tipText.setFormat(null, 16, FlxColor.WHITE, RIGHT, OUTLINE_FAST, FlxColor.BLACK);
 		tipText.borderColor = FlxColor.BLACK;
@@ -1425,7 +1426,7 @@ class CharacterEditorState extends MusicBeatState
 
 				for (i in 0...controlArray.length) {
 					if(controlArray[i]) {
-						var holdShift = FlxG.keys.pressed.SHIFT;
+						var holdShift = FlxG.keys.pressed.SHIFT #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonPressed('C') #end;
 						var multiplier = 1;
 						if (holdShift)
 							multiplier = 10;

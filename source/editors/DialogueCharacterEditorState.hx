@@ -15,29 +15,15 @@ import openfl.events.Event;
 import openfl.events.IOErrorEvent;
 import openfl.net.FileReference;
 
-#if sys
-#end
-
-
 class DialogueCharacterEditorState extends MusicBeatState
 {
 	var box:FlxSprite;
 	var daText:TypedAlphabet = null;
 	var music:EditingMusic;
 
-	private static var TIP_TEXT_MAIN:String = 'JKLI - Move camera (Hold Shift to move 4x faster)
-	\nQ/E - Zoom out/in
-	\nR - Reset Camera
-	\nH - Toggle Speech Bubble
-	\nSpace - Reset text';
+	private static var TIP_TEXT_MAIN:String;
+	private static var TIP_TEXT_OFFSET:String;
 
-	private static var TIP_TEXT_OFFSET:String = 'JKLI - Move camera (Hold Shift to move 4x faster)
-	\nQ/E - Zoom out/in
-	\nR - Reset Camera
-	\nH - Toggle Ghosts
-	\nWASD - Move Looping animation offset (Red)
-	\nArrow Keys - Move Idle/Finished animation offset (Blue)
-	\nHold Shift to move offsets 10x faster';
 	var tipText:FlxText;
 	var offsetLoopText:FlxText;
 	var offsetIdleText:FlxText;
@@ -104,6 +90,36 @@ class DialogueCharacterEditorState extends MusicBeatState
 		box.updateHitbox();
 		hudGroup.add(box);
 
+		#if MOBILE_CONTROLS_ALLOWED
+		TIP_TEXT_MAIN =
+			'\nX - Reset Camera
+			\nY - Toggle Speech Bubble
+			\nA - Reset text';
+
+		TIP_TEXT_OFFSET =
+			'\nX - Reset Camera
+			\nY - Toggle Ghosts
+			\nTop Arrow Keys - Move Looping animation offset (Red)
+			\nBottom Arrow Keys - Move Idle/Finished animation offset (Blue)
+			\nHold Z to move offsets 10x faster';
+		#else
+		TIP_TEXT_MAIN =
+			'JKLI - Move camera (Hold Shift to move 4x faster)
+			\nQ/E - Zoom out/in
+			\nR - Reset Camera
+			\nH - Toggle Speech Bubble
+			\nSpace - Reset text';
+
+		TIP_TEXT_OFFSET =
+			'JKLI - Move camera (Hold Shift to move 4x faster)
+			\nQ/E - Zoom out/in
+			\nR - Reset Camera
+			\nH - Toggle Ghosts
+			\nWASD - Move Looping animation offset (Red)
+			\nArrow Keys - Move Idle/Finished animation offset (Blue)
+			\nHold Shift to move offsets 10x faster';
+		#end
+
 		tipText = new FlxText(10, 10, FlxG.width - 20, TIP_TEXT_MAIN, 8);
 		tipText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		tipText.cameras = [camHUD];
@@ -142,6 +158,11 @@ class DialogueCharacterEditorState extends MusicBeatState
 		addEditorBox();
 		FlxG.mouse.visible = true;
 		updateCharTypeBox();
+
+		#if MOBILE_CONTROLS_ALLOWED
+		mobileManager.addMobilePad('DIALOGUE_PORTRAIT', 'DIALOGUE_PORTRAIT');
+		mobileManager.addMobilePadCamera();
+		#end
 
 		super.create();
 	}
@@ -516,7 +537,7 @@ class DialogueCharacterEditorState extends MusicBeatState
 			FlxG.sound.muteKeys = TitleState.muteKeys;
 			FlxG.sound.volumeDownKeys = TitleState.volumeDownKeys;
 			FlxG.sound.volumeUpKeys = TitleState.volumeUpKeys;
-			if(FlxG.keys.justPressed.SPACE && UI_mainbox.selected_tab_id == 'Character') {
+			if((#if MOBILE_CONTROLS_ALLOWED mobileManager.mobilePad.buttonJustPressed('A') || #end FlxG.keys.justPressed.SPACE) && UI_mainbox.selected_tab_id == 'Character') {
 				character.playAnim(character.jsonFile.animations[curAnim].anim);
 				daText.resetDialogue();
 				updateTextBox();
@@ -525,7 +546,7 @@ class DialogueCharacterEditorState extends MusicBeatState
 			//lots of Ifs lol get trolled
 			var offsetAdd:Int = 1;
 			var speed:Float = 300;
-			if(FlxG.keys.pressed.SHIFT) {
+			if(#if MOBILE_CONTROLS_ALLOWED mobileManager.mobilePad.buttonPressed('Z') || #end FlxG.keys.pressed.SHIFT) {
 				speed = 1200;
 				offsetAdd = 10;
 			}
@@ -548,16 +569,16 @@ class DialogueCharacterEditorState extends MusicBeatState
 				var moved:Bool = false;
 				var animShit:DialogueAnimArray = character.dialogueAnimations.get(curSelectedAnim);
 				var controlArrayLoop:Array<Bool> = [
-					FlxG.keys.justPressed.A,
-					FlxG.keys.justPressed.W,
-					FlxG.keys.justPressed.D,
-					FlxG.keys.justPressed.S
+					FlxG.keys.justPressed.A #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonJustPressed('LEFT2') #end,
+					FlxG.keys.justPressed.W #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonJustPressed('UP2') #end,
+					FlxG.keys.justPressed.D #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonJustPressed('RIGHT2') #end,
+					FlxG.keys.justPressed.S #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonJustPressed('DOWN2') #end
 				];
 				var controlArrayIdle:Array<Bool> = [
-					FlxG.keys.justPressed.LEFT,
-					FlxG.keys.justPressed.UP,
-					FlxG.keys.justPressed.RIGHT,
-					FlxG.keys.justPressed.DOWN
+					FlxG.keys.justPressed.LEFT #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonJustPressed('LEFT') #end,
+					FlxG.keys.justPressed.UP #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonJustPressed('UP') #end,
+					FlxG.keys.justPressed.RIGHT #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonJustPressed('RIGHT') #end,
+					FlxG.keys.justPressed.DOWN #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonJustPressed('DOWN') #end
 				];
 
 				for (i in 0...controlArrayLoop.length) {
@@ -587,7 +608,7 @@ class DialogueCharacterEditorState extends MusicBeatState
 				camGame.zoom += elapsed * camGame.zoom;
 				if(camGame.zoom > 1) camGame.zoom = 1;
 			}
-			if(FlxG.keys.justPressed.H) {
+			if(FlxG.keys.justPressed.H #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonJustPressed('Y') #end) {
 				if(UI_mainbox.selected_tab_id == 'Animations') {
 					currentGhosts++;
 					if(currentGhosts > 2) currentGhosts = 0;
@@ -600,7 +621,7 @@ class DialogueCharacterEditorState extends MusicBeatState
 					hudGroup.visible = !hudGroup.visible;
 				}
 			}
-			if(FlxG.keys.justPressed.R) {
+			if(FlxG.keys.justPressed.R #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonJustPressed('X') #end) {
 				camGame.zoom = 1;
 				mainGroup.setPosition(0, 0);
 				hudGroup.visible = true;
@@ -671,7 +692,7 @@ class DialogueCharacterEditorState extends MusicBeatState
 				}
 			}
 
-			if(FlxG.keys.justPressed.ESCAPE) {
+			if(FlxG.keys.justPressed.ESCAPE #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonJustPressed('B') #end) {
 				FlxG.switchState(editors.MasterEditorMenu.new);
 				FlxG.sound.playMusic(Paths.music('freakyMenu-' + ClientPrefs.daMenuMusic), 1);
 				transitioning = true;

@@ -149,8 +149,9 @@ class EditorPlayState extends MusicBeatState
 		botplayTxt.borderSize = 1.25;
 		add(botplayTxt);
 
-		var tipText:FlxText = new FlxText(10, FlxG.height - 44, 0, 'Press ESC to Go Back to Chart Editor\nPress SIX to turn on Botplay', 16);
-		tipText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		var buttonBack:String = #if MOBILE_CONTROLS_ALLOWED 'P' #else 'ESC' #end;
+		var tipText:FlxText = new FlxText(10, FlxG.height - 44, 0, 'Press $buttonBack to Go Back to Chart Editor\nPress SIX to turn on Botplay', 16);
+		tipTextt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		tipText.borderSize = 2;
 		tipText.scrollFactor.set();
 		add(tipText);
@@ -165,6 +166,23 @@ class EditorPlayState extends MusicBeatState
 		Paths.initNote(PlayState.SONG.arrowSkin);
 		Paths.initDefaultSkin(PlayState.SONG.arrowSkin);
 		cachePopUpScore();
+
+		#if MOBILE_CONTROLS_ALLOWED
+		mobileManager.addMobilePad('NONE', 'P_6');
+		mobileManager.addMobilePadCamera();
+
+		mobileManager.addHitbox(null, ClientPrefs.hitboxhint);
+		mobileManager.addHitboxCamera();
+		mobileManager.hitbox?.onButtonDown?.add(onButtonPress);
+		mobileManager.hitbox?.onButtonUp?.add(onButtonRelease);
+		mobileManager.hitbox.forEachAlive((button) ->
+		{
+			if (mobileManager.mobilePad.getButtonFromName('buttonP') != null)
+				button.deadZones.push(mobileManager.mobilePad.getButtonFromName('buttonP'));
+			if (mobileManager.mobilePad.getButtonFromName('button6') != null)
+				button.deadZones.push(mobileManager.mobilePad.getButtonFromName('button6'));
+		});
+		#end
 
 		super.create();
 	}
@@ -349,14 +367,14 @@ class EditorPlayState extends MusicBeatState
 	public var spawnTime:Float = 2000;
 	public var notesAddedCount:Int = 0;
 	override function update(elapsed:Float) {
-		if (FlxG.keys.justPressed.ESCAPE)
+		if (#if MOBILE_CONTROLS_ALLOWED mobileManager.mobilePad.buttonJustPressed('P') || #end FlxG.keys.justPressed.ESCAPE)
 		{
 			FlxG.sound.music.pause();
 			vocals.pause();
 			opponentVocals.pause();
 			LoadingState.loadAndSwitchState(editors.ChartingState.new);
 		}
-		if (FlxG.keys.justPressed.SIX)
+		if (#if MOBILE_CONTROLS_ALLOWED mobileManager.mobilePad.buttonJustPressed('SIX') || #end FlxG.keys.justPressed.SIX)
 		{
 			cpuControlled = !cpuControlled;
 		}
@@ -472,68 +490,80 @@ class EditorPlayState extends MusicBeatState
 		vocals.play();
 		opponentVocals.play();
 	}
+
 	private function onKeyPress(event:KeyboardEvent):Void
 	{
 		var eventKey:FlxKey = event.keyCode;
 		var key:Int = getKeyFromEvent(eventKey);
-		//trace('Pressed: ' + eventKey);
 
-		if (key > -1 && (FlxG.keys.checkStatus(eventKey, JUST_PRESSED) || ClientPrefs.controllerMode))
+		if (!ClientPrefs.controllerMode){
+			#if debug
+			// Prevents crash specifically on debug without needing to try catch shit
+			@:privateAccess if (!FlxG.keys._keyListMap.exists(eventKey))
+				return;
+			#end
+
+			if (FlxG.keys.checkStatus(eventKey, JUST_PRESSED))
+				keyPressed(key);
+		}
+	}
+
+	//Seperated for easier hitbox handling. -ArkoseLabs
+	private function keyPressed(key:Int):Void
+	{
+		if(generatedMusic)
 		{
-			if(generatedMusic)
-			{
-				//more accurate hit time for the ratings?
-				var lastTime:Float = Conductor.songPosition;
-				Conductor.songPosition = FlxG.sound.music.time;
+			//more accurate hit time for the ratings?
+			var lastTime:Float = Conductor.songPosition;
+			Conductor.songPosition = FlxG.sound.music.time;
 
-				var canMiss:Bool = !ClientPrefs.ghostTapping;
+			var canMiss:Bool = !ClientPrefs.ghostTapping;
 
-				// obtain notes that the player can hit
-				var plrInputNotes:Array<Note> = notes.members.filter(function(n:Note):Bool {
-					var canHit:Bool = n.canBeHit && n.mustPress && !n.tooLate && !n.wasGoodHit && !n.blockHit;
-					// trace('[keyPressed] Note? ${n != null}, noteData=${n.noteData}, strumTime=${n.strumTime}, canHit=$canHit, mustPress=${n.mustPress}, tooLate=${n.tooLate}, wasGoodHit=${n.wasGoodHit}, Conductor=${Conductor.songPosition}');
-					return n != null && canHit && !n.isSustainNote && n.noteData == key;
-				});
-				plrInputNotes.sort(sortHitNotes);
+			// obtain notes that the player can hit
+			var plrInputNotes:Array<Note> = notes.members.filter(function(n:Note):Bool {
+				var canHit:Bool = n.canBeHit && n.mustPress && !n.tooLate && !n.wasGoodHit && !n.blockHit;
+				// trace('[keyPressed] Note? ${n != null}, noteData=${n.noteData}, strumTime=${n.strumTime}, canHit=$canHit, mustPress=${n.mustPress}, tooLate=${n.tooLate}, wasGoodHit=${n.wasGoodHit}, Conductor=${Conductor.songPosition}');
+				return n != null && canHit && !n.isSustainNote && n.noteData == key;
+			});
+			plrInputNotes.sort(sortHitNotes);
 
-				if (plrInputNotes.length != 0) {
-					var funnyNote:Note = plrInputNotes[0]; // front note
+			if (plrInputNotes.length != 0) {
+				var funnyNote:Note = plrInputNotes[0]; // front note
 
-					if (plrInputNotes.length > 1) {
-						var doubleNote:Note = plrInputNotes[1];
+				if (plrInputNotes.length > 1) {
+					var doubleNote:Note = plrInputNotes[1];
 
-						//if the note has the same notedata and doOppStuff indicator as funnynote, then do the check
-						if (doubleNote.noteData == funnyNote.noteData && doubleNote.doOppStuff == funnyNote.doOppStuff) {
-							// if the note has a 0ms distance (is on top of the current note), kill it
-							if (Math.abs(doubleNote.strumTime - funnyNote.strumTime) < 1.0)
-								invalidateNote(doubleNote);
-							else if (doubleNote.strumTime < funnyNote.strumTime)
-							{
-								// replace the note if its ahead of time (or at least ensure "doubleNote" is ahead)
-								funnyNote = doubleNote;
-							}
+					//if the note has the same notedata and doOppStuff indicator as funnynote, then do the check
+					if (doubleNote.noteData == funnyNote.noteData && doubleNote.doOppStuff == funnyNote.doOppStuff) {
+						// if the note has a 0ms distance (is on top of the current note), kill it
+						if (Math.abs(doubleNote.strumTime - funnyNote.strumTime) < 1.0)
+							invalidateNote(doubleNote);
+						else if (doubleNote.strumTime < funnyNote.strumTime)
+						{
+							// replace the note if its ahead of time (or at least ensure "doubleNote" is ahead)
+							funnyNote = doubleNote;
 						}
-						else goodNoteHit(doubleNote); //otherwise, hit doubleNote instead of killing it
 					}
-					goodNoteHit(funnyNote);
-					if (plrInputNotes.length > 2 && ClientPrefs.ezSpam) {
-						for (i in 1...plrInputNotes.length) goodNoteHit(plrInputNotes[i]);
-					}
+					else goodNoteHit(doubleNote); //otherwise, hit doubleNote instead of killing it
 				}
-				else if (canMiss && ClientPrefs.ghostTapping) {
-					noteMiss();
+				goodNoteHit(funnyNote);
+				if (plrInputNotes.length > 2 && ClientPrefs.ezSpam) {
+					for (i in 1...plrInputNotes.length) goodNoteHit(plrInputNotes[i]);
 				}
-
-				//more accurate hit time for the ratings? part 2 (Now that the calculations are done, go back to the time it was before for not causing a note stutter)
-				Conductor.songPosition = lastTime;
+			}
+			else if (canMiss && ClientPrefs.ghostTapping) {
+				noteMiss();
 			}
 
-			var spr:StrumNote = playerStrums.members[key];
-			if(spr != null && spr.animation.curAnim.name != 'confirm')
-			{
-				spr.playAnim('pressed');
-				spr.resetAnim = 0;
-			}
+			//more accurate hit time for the ratings? part 2 (Now that the calculations are done, go back to the time it was before for not causing a note stutter)
+			Conductor.songPosition = lastTime;
+		}
+
+		var spr:StrumNote = playerStrums.members[key];
+		if(spr != null && spr.animation.curAnim.name != 'confirm')
+		{
+			spr.playAnim('pressed');
+			spr.resetAnim = 0;
 		}
 	}
 
@@ -551,16 +581,21 @@ class EditorPlayState extends MusicBeatState
 	{
 		var eventKey:FlxKey = event.keyCode;
 		var key:Int = getKeyFromEvent(eventKey);
-		if(key > -1)
+		// trace('Pressed: ' + eventKey);
+
+		if (!ClientPrefs.controllerMode && key > -1)
+			keyReleased(key);
+	}
+
+	//Seperated for easier hitbox handling. -ArkoseLabs
+	private function keyReleased(key:Int)
+	{
+		var spr:StrumNote = playerStrums.members[key];
+		if (spr != null)
 		{
-			var spr:StrumNote = playerStrums.members[key];
-			if(spr != null)
-			{
-				spr.playAnim('static');
-				spr.resetAnim = 0;
-			}
+			spr.playAnim('static');
+			spr.resetAnim = 0;
 		}
-		//trace('released: ' + controlArray);
 	}
 
 	private function getKeyFromEvent(key:FlxKey):Int
@@ -1063,4 +1098,24 @@ class EditorPlayState extends MusicBeatState
 		}
 		super.destroy();
 	}
+
+	#if MOBILE_CONTROLS_ALLOWED
+	private function onButtonPress(button:MobileButton, ids:Array<String>, unique:Int):Void
+	{
+		if (ids.filter(id -> id.startsWith("NOTE")).length > 0)
+		{
+			var buttonCode:Int = (unique == -1 ? 0 : unique);
+			if (button.justPressed) keyPressed(buttonCode);
+		}
+	}
+
+	private function onButtonRelease(button:MobileButton, ids:Array<String>, unique:Int):Void
+	{
+		if (ids.filter(id -> id.startsWith("NOTE")).length > 0)
+		{
+			var buttonCode:Int = (unique == -1 ? 0 : unique);
+			if(buttonCode > -1) keyReleased(buttonCode);
+		}
+	}
+	#end
 }

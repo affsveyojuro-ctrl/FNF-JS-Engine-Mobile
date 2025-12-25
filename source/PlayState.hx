@@ -1106,7 +1106,7 @@ class PlayState extends MusicBeatState
 		super.create();
 
 		#if MOBILE_CONTROLS_ALLOWED
-		mobileManager.addHitbox();
+		mobileManager.addHitbox(null, ClientPrefs.hitboxhint);
 		mobileManager.addHitboxCamera();
 		mobileManager.hitbox?.onButtonDown?.add(onButtonPress);
 		mobileManager.hitbox?.onButtonUp?.add(onButtonRelease);

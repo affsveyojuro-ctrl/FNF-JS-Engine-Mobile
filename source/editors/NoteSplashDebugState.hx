@@ -27,6 +27,7 @@ class NoteSplashDebugState extends MusicBeatState
 	var curAnimText:FlxText;
 	var savedText:FlxText;
 	var selecArr:Array<Float> = null;
+	var idk:Bool = #if MOBILE_CONTROLS_ALLOWED true #else false #end; // im lazy to remove and add alot so idk
 
 	var missingTextBG:FlxSprite;
 	var missingText:FlxText;
@@ -150,11 +151,21 @@ class NoteSplashDebugState extends MusicBeatState
 		curAnimText.scrollFactor.set();
 		add(curAnimText);
 
-		var text:FlxText = new FlxText(0, 520, FlxG.width,
-			"Press SPACE to Reset animation\n
+		var sillyText:String;
+
+		#if MOBILE_CONTROLS_ALLOWED
+		sillyText = "Press Y to Reset animation\n
+			Press A twice to save to the loaded Note Splash PNG's folder\n
+			Press Top LEFT/RIGHT to change selected note - Arrow Keys to change offset\n
+			C/V - Copy & Paste";
+		#else
+		sillyText = "Press SPACE to Reset animation\n
 			Press ENTER twice to save to the loaded Note Splash PNG's folder\n
 			A/D change selected note - Arrow Keys to change offset (Hold shift for 10x)\n
-			Ctrl + C/V - Copy & Paste", 16);
+			Ctrl + C/V - Copy & Paste";
+		#end
+
+		var text:FlxText = new FlxText(0, 520, FlxG.width, sillyText, 16);
 		text.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		text.scrollFactor.set();
 		add(text);
@@ -178,6 +189,10 @@ class NoteSplashDebugState extends MusicBeatState
 		loadFrames();
 		changeSelection();
 		super.create();
+
+		#if MOBILE_CONTROLS_ALLOWED
+		mobileManager.addMobilePad('NOTE_SPLASH_DEBUG', 'NOTE_SPLASH_DEBUG');
+		#end
 		FlxG.mouse.visible = true;
 	}
 
@@ -200,8 +215,8 @@ class NoteSplashDebugState extends MusicBeatState
 
 		if(!notTyping) return;
 
-		if (FlxG.keys.justPressed.A) changeSelection(-1);
-		else if (FlxG.keys.justPressed.D) changeSelection(1);
+		if (FlxG.keys.justPressed.A #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonJustPressed('UP') #end) changeSelection(-1);
+		else if (FlxG.keys.justPressed.D #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonJustPressed('DOWN') #end) changeSelection(1);
 
 		if(maxAnims < 1) return;
 
@@ -209,13 +224,13 @@ class NoteSplashDebugState extends MusicBeatState
 		{
 			var movex = 0;
 			var movey = 0;
-			if(FlxG.keys.justPressed.LEFT) movex = -1;
-			else if(FlxG.keys.justPressed.RIGHT) movex = 1;
+			if(FlxG.keys.justPressed.LEFT #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonJustPressed('LEFT2') #end) movex = -1;
+			else if(FlxG.keys.justPressed.RIGHT #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonJustPressed('RIGHT2') #end) movex = 1;
 
-			if(FlxG.keys.justPressed.UP) movey = 1;
-			else if(FlxG.keys.justPressed.DOWN) movey = -1;
+			if(FlxG.keys.justPressed.UP #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonJustPressed('UP2') #end) movey = 1;
+			else if(FlxG.keys.justPressed.DOWN #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonJustPressed('DOWN2') #end) movey = -1;
 
-			if(FlxG.keys.pressed.SHIFT)
+			if(FlxG.keys.pressed.SHIFT #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonJustPressed('Z') #end)
 			{
 				movex *= 10;
 				movey *= 10;
@@ -231,16 +246,16 @@ class NoteSplashDebugState extends MusicBeatState
 		}
 
 		// Copy & Paste
-		if(FlxG.keys.pressed.CONTROL)
+		if(FlxG.keys.pressed.CONTROL || idk)
 		{
-			if(FlxG.keys.justPressed.C)
+			if(FlxG.keys.justPressed.C #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonJustPressed('C') #end)
 			{
 				var arr:Array<Float> = selectedArray();
 				if(copiedArray == null) copiedArray = [0, 0];
 				copiedArray[0] = arr[0];
 				copiedArray[1] = arr[1];
 			}
-			else if(FlxG.keys.justPressed.V && copiedArray != null)
+			else if((FlxG.keys.justPressed.V #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonJustPressed('V') #end))
 			{
 				var offs:Array<Float> = selectedArray();
 				offs[0] = copiedArray[0];
@@ -259,9 +274,10 @@ class NoteSplashDebugState extends MusicBeatState
 				savedText.visible = false;
 		}
 
-		if(FlxG.keys.justPressed.ENTER)
+		if(FlxG.keys.justPressed.ENTER #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonJustPressed('A') #end)
 		{
-			savedText.text = 'Press ENTER again to save.';
+			var buttonEnter:String = #if MOBILE_CONTROLS_ALLOWED 'A' #else 'ENTER' #end;
+			savedText.text = 'Press $buttonEnter again to save.';
 			if(pressEnterToSave > 0) //save
 			{
 				saveFile();
@@ -278,15 +294,15 @@ class NoteSplashDebugState extends MusicBeatState
 		}
 
 		// Reset anim & change anim
-		if (FlxG.keys.justPressed.SPACE)
+		if (FlxG.keys.justPressed.SPACE #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonJustPressed('Y') #end)
 			changeAnim();
-		else if (FlxG.keys.justPressed.S) changeAnim(-1);
-		else if (FlxG.keys.justPressed.W) changeAnim(1);
+		else if (FlxG.keys.justPressed.S #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonJustPressed('LEFT') #end) changeAnim(-1);
+		else if (FlxG.keys.justPressed.W #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonJustPressed('RIGHT') #end) changeAnim(1);
 
 		// Force frame
 		var updatedFrame:Bool = false;
-		if(updatedFrame = FlxG.keys.justPressed.Q) forceFrame--;
-		else if(updatedFrame = FlxG.keys.justPressed.E) forceFrame++;
+		if(updatedFrame = FlxG.keys.justPressed.Q #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonJustPressed('X') #end) forceFrame--;
+		else if(updatedFrame = FlxG.keys.justPressed.E #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonJustPressed('E') #end) forceFrame++;
 
 		if(updatedFrame)
 		{

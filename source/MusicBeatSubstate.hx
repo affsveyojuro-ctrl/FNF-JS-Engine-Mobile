@@ -25,7 +25,7 @@ class MusicBeatSubstate extends FlxSubState
 		#if MOBILE_CONTROLS_ALLOWED
 		if (mobileManager != null) mobileManager.destroy();
 		try {
-			controls.isInSubstate = false;
+			if (!GameplayChangersSubstate.inThePauseMenu) controls.isInSubstate = false;
 		} catch(e:Dynamic) {}
 		#end
 		super.destroy();
