@@ -2968,7 +2968,7 @@ class ChartingState extends MusicBeatState
 			}
 
 			if ((FlxG.keys.pressed.W || FlxG.keys.pressed.S)
-				#if MOBILE_CONTROLS_ALLOWED || (mobileManager.mobilePad.buttonPressed('UP') || mobileManager.mobilePad.buttonPressed('DOWN')))
+				#if MOBILE_CONTROLS_ALLOWED || (mobileManager.mobilePad.buttonPressed('UP') || mobileManager.mobilePad.buttonPressed('DOWN')) #end)
 			{
 				if (idleMusic != null && idleMusic.music != null && idleMusicAllow) idleMusic.unpauseMusic(2);
 				resetBuddies();
