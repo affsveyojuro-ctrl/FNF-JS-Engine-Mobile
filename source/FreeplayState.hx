@@ -222,9 +222,8 @@ class FreeplayState extends MusicBeatState
 
 		super.create();
 
-		#if MOBILE_CONTROLS_ALLOWED
+		#if MOBILE_CONTROLS_ALLOWED 
 		mobileManager.addMobilePad('FULL', 'A_B_C_X_Y_Z');
-		mobileManager.addMobilePadCamera();
 		#end
 	}
 
@@ -303,8 +302,12 @@ class FreeplayState extends MusicBeatState
 
 	override function closeSubState() {
 		changeSelection(0, false);
-		persistentUpdate = true;
 		super.closeSubState();
+		#if MOBILE_CONTROLS_ALLOWED
+		mobileManager.removeMobilePad();
+		mobileManager.addMobilePad('FULL', 'A_B_C_X_Y_Z');
+		#end
+		persistentUpdate = true;
 	}
 
 	public function addSong(songName:String, weekNum:Int, songCharacter:String, color:Int)

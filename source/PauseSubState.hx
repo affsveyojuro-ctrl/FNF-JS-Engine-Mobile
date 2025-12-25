@@ -443,7 +443,7 @@ class PauseSubState extends MusicBeatSubstate
 		super.closeSubState();
 		MusicBeatSubstate.instance = this;
 		#if MOBILE_CONTROLS_ALLOWED
-		controls.isInSubstate = false;
+		controls.isInSubstate = true;
 		mobileManager.removeMobilePad();
 		mobileManager.addMobilePad('FULL', 'A');
 		mobileManager.addMobilePadCamera();

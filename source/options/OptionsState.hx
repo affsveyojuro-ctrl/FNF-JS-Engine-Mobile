@@ -133,7 +133,6 @@ class OptionsState extends MusicBeatState
 	}
 
 	override function closeSubState() {
-		persistentUpdate = true;
 		super.closeSubState();
 		ClientPrefs.saveSettings();
 		FlxG.mouse.visible = false;
@@ -142,6 +141,7 @@ class OptionsState extends MusicBeatState
 		mobileManager.addMobilePad('UP_DOWN', 'A_B_E');
 		mobileManager.addMobilePadCamera();
 		#end
+		persistentUpdate = true;
 	}
 
 	override function update(elapsed:Float) {

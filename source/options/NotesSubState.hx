@@ -213,7 +213,6 @@ class NotesSubState extends MusicBeatSubstate
 			FlxG.mouse.visible = false;
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 			close();
-			return;
 		}
 
 		super.update(elapsed);
@@ -738,7 +737,7 @@ class NotesSubState extends MusicBeatSubstate
 	override function destroy()
 	{
 		Note.globalRgbShaders = [];
-		super.destroy(); //whf js engine doesn't have this
+		super.destroy(); //why tf js engine doesn't have this
 	}
 
 	function setShaderColor(value:FlxColor) dataArray[curSelectedNote][curSelectedMode] = value;

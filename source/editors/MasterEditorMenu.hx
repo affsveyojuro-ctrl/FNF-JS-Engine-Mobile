@@ -68,6 +68,11 @@ class MasterEditorMenu extends MusicBeatState
 		FlxG.mouse.visible = false;
 
 		super.create();
+
+		#if MOBILE_CONTROLS_ALLOWED
+		mobileManager.addMobilePad("UP_DOWN", "A_B_LEFT_RIGHT");
+		mobileManager.addMobilePadCamera();
+		#end
 	}
 
 	override function update(elapsed:Float)
