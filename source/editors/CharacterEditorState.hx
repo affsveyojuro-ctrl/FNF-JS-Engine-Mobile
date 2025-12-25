@@ -25,7 +25,6 @@ import openfl.net.FileReference;
 #if MODS_ALLOWED
 #end
 
-
 /**
 	*DEBUG MODE
  */
@@ -208,24 +207,44 @@ class CharacterEditorState extends MusicBeatState
 		reloadCharacterOptions();
 
 		super.create();
+
+		#if MOBILE_CONTROLS_ALLOWED
+		mobileManager.addMobilePad('FULL', 'CHARACTER_EDITOR');
+		mobileManager.addMobilePadCamera();
+		#end
 	}
 
 	function addHelpScreen()
 	{
-		var str:Array<String> = ["CAMERA",
-		"E/Q - Camera Zoom In/Out",
-		"J/K/L/I - Move Camera",
-		"R - Reset Camera Zoom",
-		"",
-		"CHARACTER",
-		"T - Reset Current Offset",
-		"W/S - Previous/Next Animation",
-		"Space - Replay Animation",
-		"Arrow Keys/Mouse & Right Click - Move Offset",
-		"A/D - Frame Advance (Back/Forward)",
-		"",
-		"OTHER",
-		"Hold Shift - Move Offsets 10x faster and Camera 4x faster"];
+		var str:Array<String>;
+		#if MOBILE_CONTROLS_ALLOWED
+			str = ["CAMERA",
+			"X/Y - Camera Zoom In/Out",
+			"Z - Reset Camera Zoom",
+			"",
+			"CHARACTER",
+			"A - Reset Current Offset",
+			"V/D - Previous/Next Animation",
+			"Arrow Buttons - Move Offset",
+			"",
+			"OTHER",
+			"Hold C - Move Offsets 10x faster and Camera 4x faster"];
+		#else
+			str = ["CAMERA",
+			"E/Q - Camera Zoom In/Out",
+			"J/K/L/I - Move Camera",
+			"R - Reset Camera Zoom",
+			"",
+			"CHARACTER",
+			"T - Reset Current Offset",
+			"W/S - Previous/Next Animation",
+			"Space - Replay Animation",
+			"Arrow Keys/Mouse & Right Click - Move Offset",
+			"A/D - Frame Advance (Back/Forward)",
+			"",
+			"OTHER",
+			"Hold Shift - Move Offsets 10x faster and Camera 4x faster"];
+		#end
 
 		helpBg = new FlxSprite().makeGraphic(1, 1, FlxColor.BLACK);
 		helpBg.scale.set(FlxG.width, FlxG.height);
@@ -1305,7 +1324,7 @@ class CharacterEditorState extends MusicBeatState
 		}
 
 		if(!charDropDown.dropPanel.visible) {
-			if (FlxG.keys.justPressed.ESCAPE) {
+			if (FlxG.keys.justPressed.ESCAPE #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonJustPressed('B') #end) {
 				if(goToPlayState) {
 					FlxG.switchState(PlayState.new);
 				} else {
@@ -1317,24 +1336,24 @@ class CharacterEditorState extends MusicBeatState
 				return;
 			}
 
-			if (FlxG.keys.justPressed.R) {
+			if (FlxG.keys.justPressed.R #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonJustPressed('Z') #end) {
 				FlxG.camera.zoom = 1;
 			}
 
 			var shiftMult:Float = 1;
 			var ctrlMult:Float = 1;
 			var shiftMultBig:Float = 1;
-			if(FlxG.keys.pressed.SHIFT)
+			if(FlxG.keys.pressed.SHIFT #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonPressed('C') #end)
 			{
 				shiftMult = 4;
 				shiftMultBig = 10;
 			}
 
-			if (FlxG.keys.pressed.E && FlxG.camera.zoom < 3) {
+			if (FlxG.keys.pressed.E #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonPressed('X') #end && FlxG.camera.zoom < 3) {
 				FlxG.camera.zoom += elapsed * FlxG.camera.zoom * shiftMult;
 				if(FlxG.camera.zoom > 3) FlxG.camera.zoom = 3;
 			}
-			if (FlxG.keys.pressed.Q && FlxG.camera.zoom > 0.1) {
+			if (FlxG.keys.pressed.Q #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonPressed('Y') #end && FlxG.camera.zoom > 0.1) {
 				FlxG.camera.zoom -= elapsed * FlxG.camera.zoom * shiftMult;
 				if(FlxG.camera.zoom < 0.1) FlxG.camera.zoom = 0.1;
 			}
@@ -1365,8 +1384,8 @@ class CharacterEditorState extends MusicBeatState
 				}
 				else holdingFrameTime = 0;
 
-				if(FlxG.keys.justPressed.W) curAnim--;
-				else if(FlxG.keys.justPressed.S) curAnim++;
+				if(FlxG.keys.justPressed.W #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonJustPressed('V') #end) curAnim--;
+				else if(FlxG.keys.justPressed.S #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonJustPressed('D') #end) curAnim++;
 
 				if (curAnim < 0)
 					curAnim = char.animationsArray.length - 1;
@@ -1374,7 +1393,8 @@ class CharacterEditorState extends MusicBeatState
 				if (curAnim >= char.animationsArray.length)
 					curAnim = 0;
 
-				if (FlxG.keys.justPressed.S || FlxG.keys.justPressed.W || FlxG.keys.justPressed.SPACE)
+				if ((FlxG.keys.justPressed.S #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonJustPressed('D') #end) ||
+					(FlxG.keys.justPressed.W #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonJustPressed('V') #end) || FlxG.keys.justPressed.SPACE)
 				{
 					char.playAnim(animList[curAnim].anim, true);
 					updateText();
@@ -1387,7 +1407,21 @@ class CharacterEditorState extends MusicBeatState
 					updateText();
 				}
 
-				var controlArray:Array<Bool> = [FlxG.keys.justPressed.LEFT, FlxG.keys.justPressed.RIGHT, FlxG.keys.justPressed.UP, FlxG.keys.justPressed.DOWN];
+				#if MOBILE_CONTROLS_ALLOWED
+				var controlArray:Array<Bool> = [
+					#if MOBILE_CONTROLS_ALLOWED mobileManager.mobilePad.buttonJustPressed('LEFT') #end,
+					#if MOBILE_CONTROLS_ALLOWED mobileManager.mobilePad.buttonJustPressed('RIGHT') #end,
+					#if MOBILE_CONTROLS_ALLOWED mobileManager.mobilePad.buttonJustPressed('UP') #end,
+					#if MOBILE_CONTROLS_ALLOWED mobileManager.mobilePad.buttonJustPressed('DOWN') #end
+				];
+				#else
+				var controlArray:Array<Bool> = [
+					FlxG.keys.justPressed.LEFT,
+					FlxG.keys.justPressed.RIGHT,
+					FlxG.keys.justPressed.UP,
+					FlxG.keys.justPressed.DOWN
+				];
+				#end
 
 				for (i in 0...controlArray.length) {
 					if(controlArray[i]) {
@@ -1448,8 +1482,14 @@ class CharacterEditorState extends MusicBeatState
 			frameAdvanceText.color = clr;
 
 			// OTHER CONTROLS
-			if(FlxG.keys.justPressed.F1 || (helpBg.visible && FlxG.keys.justPressed.ESCAPE))
+			if((FlxG.keys.justPressed.F1 #if MOBILE_CONTROLS_ALLOWED || mobileManager.mobilePad.buttonJustPressed('F') #end) || (helpBg.visible && FlxG.keys.justPressed.ESCAPE))
 			{
+				#if MOBILE_CONTROLS_ALLOWED
+				mobileManager.mobilePad.forEachAlive(function(button:mobile.MobileButton){
+					if(button != mobileManager.mobilePad.getButtonFromName('buttonF'))
+						button.visible = !button.visible;
+				});
+				#end
 				helpBg.visible = !helpBg.visible;
 				helpTexts.visible = helpBg.visible;
 			}

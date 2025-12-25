@@ -448,5 +448,6 @@ class PauseSubState extends MusicBeatSubstate
 		mobileManager.addMobilePad('FULL', 'A');
 		mobileManager.addMobilePadCamera();
 		#end
+		persistentUpdate = true;
 	}
 }
