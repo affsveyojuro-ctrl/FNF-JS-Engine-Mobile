@@ -151,7 +151,7 @@ class EditorPlayState extends MusicBeatState
 
 		var buttonBack:String = #if MOBILE_CONTROLS_ALLOWED 'P' #else 'ESC' #end;
 		var tipText:FlxText = new FlxText(10, FlxG.height - 44, 0, 'Press $buttonBack to Go Back to Chart Editor\nPress SIX to turn on Botplay', 16);
-		tipTextt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		tipText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		tipText.borderSize = 2;
 		tipText.scrollFactor.set();
 		add(tipText);
