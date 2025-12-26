@@ -126,7 +126,7 @@ class PauseSubState extends MusicBeatSubstate
 		super.create();
 
 		#if MOBILE_CONTROLS_ALLOWED
-		mobileManager.addMobilePad('FULL_ALTER_2', 'A');
+		mobileManager.addMobilePad(PlayState.chartingMode ? 'FULL_ALTER_2' : 'UP_DOWN', 'A');
 		mobileManager.addMobilePadCamera();
 		#end
 	}
@@ -444,12 +444,11 @@ class PauseSubState extends MusicBeatSubstate
 	override function closeSubState() {
 		super.closeSubState();
 		MusicBeatSubstate.instance = this;
+		persistentUpdate = true;
 		#if MOBILE_CONTROLS_ALLOWED
-		controls.isInSubstate = true;
 		mobileManager.removeMobilePad();
-		mobileManager.addMobilePad('FULL_ALTER_2', 'A');
+		mobileManager.addMobilePad(PlayState.chartingMode ? 'FULL_ALTER_2' : 'UP_DOWN', 'A');
 		mobileManager.addMobilePadCamera();
 		#end
-		persistentUpdate = true;
 	}
 }
