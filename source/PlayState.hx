@@ -6388,7 +6388,7 @@ class PlayState extends MusicBeatState
 	}
 	#end
 
-	public function hardCodedExtraKeyForMobile(keyCount:Int, maniaChanges:Dynamic) {
+	public function hardCodedExtraKeyForMobile(keyCount:Int, maniaChanges:Dynamic, ?swap:Bool) {
 		unspawnNotes = [];
 		while(notes.length > 0) {
 			var daNote = notes.members[0];
@@ -6434,6 +6434,7 @@ class PlayState extends MusicBeatState
 
 					gottaHitNote = ((songNotes[1] < keyCount && !opponentChart)
 						|| (songNotes[1] > keyCount-1 && opponentChart) ? section.mustHitSection : !section.mustHitSection);
+					if (swap) gottaHitNote = !gottaHitNote;
 
 					var swagNote:PreloadedChartNote = {
 						strumTime: daStrumTime,
