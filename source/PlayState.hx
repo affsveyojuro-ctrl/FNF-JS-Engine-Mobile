@@ -1108,16 +1108,7 @@ class PlayState extends MusicBeatState
 		#if MOBILE_CONTROLS_ALLOWED
 		mobileManager.addMobilePad('NONE', 'P');
 		mobileManager.addMobilePadCamera();
-
-		mobileManager.addHitbox(null, ClientPrefs.hitboxhint);
-		mobileManager.addHitboxCamera();
-		mobileManager.hitbox?.onButtonDown?.add(onButtonPress);
-		mobileManager.hitbox?.onButtonUp?.add(onButtonRelease);
-		mobileManager.hitbox.forEachAlive((button) ->
-		{
-			if (mobileManager.mobilePad.getButtonFromName('buttonP') != null)
-				button.deadZones.push(mobileManager.mobilePad.getButtonFromName('buttonP'));
-		});
+		addPlayStateHitbox();
 		#end
 
 		trace ('Loading chart...');
@@ -6304,6 +6295,82 @@ class PlayState extends MusicBeatState
 			if(buttonCode > -1) keyReleased(buttonCode);
 			callOnLuas('onButtonRelease', [buttonCode]);
 		}
+	}
+
+	public var customManagers:Map<String, MobileControlManager> = [];
+	public var lastGettedManager:MobileControlManager;
+	public var lastGettedManagerName:String;
+	public static inline function checkManager(managerName:String):MobileControlManager {
+		if (managerName == null || managerName == '') {
+			instance.lastGettedManagerName = 'default';
+			instance.lastGettedManager = MusicBeatState.getState().mobileManager;
+		}
+		else if (instance.lastGettedManagerName != managerName) {
+			instance.lastGettedManagerName = managerName;
+			instance.lastGettedManager = instance.customManagers.get(managerName);
+		}
+		return instance.lastGettedManager;
+	}
+
+	public function createNewManager(name:String) {
+		var mobileManagerNew = new MobileControlManager(this);
+		customManagers.set(name, mobileManagerNew);
+		if(!variables.exists(name))
+			variables.set(name, mobileManagerNew);
+		if(!variables.exists(name + '_mobilePad'))
+			variables.set(name + '_mobilePad', mobileManagerNew.mobilePad);
+		if(!variables.exists(name + '_hitbox'))
+			variables.set(name + '_hitbox', mobileManagerNew.hitbox);
+		if(!variables.exists(name + '_joyStick'))
+			variables.set(name + '_joyStick', mobileManagerNew.joyStick);
+	}
+
+	public static function checkMPadPress(buttonName:String, type = 'justPressed', ?managerName:String) {
+		var manager = checkManager(managerName);
+
+		var button:MobileButton = null;
+		if (manager.mobilePad != null) button = manager.mobilePad.getButtonFromName(buttonName);
+		if (button != null) return Reflect.getProperty(button, type);
+		return false;
+	}
+
+	//for lua shit
+	public static function checkHBoxPress(button:String, type = 'justPressed', ?managerName:String) {
+		var manager = checkManager(managerName);
+
+		var buttonObject:MobileButton = null;
+		if (manager.hitbox != null) buttonObject = manager.hitbox.getButtonFromName(button);
+		if (buttonObject != null) return Reflect.getProperty(buttonObject, type);
+		return false;
+	}
+
+	//Lua Stuff for Mobile Controls
+	public function reloadPlayStateHitbox(?mode:String)
+	{
+		removePlayStateHitbox();
+		addPlayStateHitbox(mode);
+	}
+
+	public function addPlayStateHitbox(?mode:String)
+	{
+		mobileManager.addHitbox(mode, ClientPrefs.hitboxhint);
+		mobileManager.addHitboxCamera();
+		mobileManager.hitbox?.onButtonDown?.add(onButtonPress);
+		mobileManager.hitbox?.onButtonUp?.add(onButtonRelease);
+		mobileManager.hitbox.forEachAlive((button) ->
+		{
+			if (mobileManager.mobilePad.getButtonFromName('buttonP') != null)
+				button.deadZones.push(mobileManager.mobilePad.getButtonFromName('buttonP'));
+		});
+	}
+
+	public function removePlayStateHitbox()
+	{
+		mobileManager.hitbox.forEachAlive((button) ->
+		{
+			button.deadZones = [];
+		});
+		mobileManager.removeHitbox();
 	}
 	#end
 }
