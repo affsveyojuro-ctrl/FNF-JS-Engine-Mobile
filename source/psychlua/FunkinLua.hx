@@ -3415,6 +3415,39 @@ class FunkinLua {
 						return true;
 			}
 		}
+		if (PlayState.instance.customManagers != null && PlayState.instance.customManagers != []) {
+			for (managerArray in PlayState.instance.customManagers) {
+				var manager:MobileControlManager = managerArray[0];
+				if (!managerArray[1]) continue;
+
+				if (manager.hitbox != null) {
+					var hitbox:FunkinHitbox = manager.hitbox;
+					for (num in 0...hitbox.hints.length+1) {
+						var hitboxButton:Dynamic = hitbox.hints[num];
+						if (key.toUpperCase() == hitboxButton.returnedKey)
+							if (Reflect.getProperty(hitboxButton, type))
+								return true;
+					}
+				}
+
+				if (manager.mobilePad != null) {
+					var mobilePad:FunkinMobilePad = manager.mobilePad;
+					for (num in 0...mobilePad.dpads.length+1) {
+						var mobilePadButton:Dynamic = mobilePad.dpads[num];
+						if (key.toUpperCase() == mobilePadButton.returnedKey)
+							if (Reflect.getProperty(mobilePadButton, type))
+								return true;
+					}
+
+					for (num in 0...mobilePad.actions.length+1) {
+						var mobilePadButton:Dynamic = mobilePad.actions[num];
+						if (key.toUpperCase() == mobilePadButton.returnedKey)
+							if (Reflect.getProperty(mobilePadButton, type))
+								return true;
+					}
+				}
+			}
+		}
 		return false;
 	}
 	#end

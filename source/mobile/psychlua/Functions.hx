@@ -13,9 +13,9 @@ class MobileFunctions
 		var lua:State = funk.lua;
 
 		#if MOBILE_CONTROLS_ALLOWED
-		Convert.addCallback(lua, 'createNewMobileManager', function(name:String):Void
+		Convert.addCallback(lua, 'createNewMobileManager', function(name:String, ?keyDetectionAllowed:Bool):Void
 		{
-			PlayState.instance.createNewManager(name);
+			PlayState.instance.createNewManager(name, keyDetectionAllowed);
 		});
 
 		Convert.addCallback(lua, 'connectControlToNotes', function(?managerName:String, ?control:String):Void

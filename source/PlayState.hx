@@ -1120,7 +1120,8 @@ class PlayState extends MusicBeatState
 		super.create();
 
 		#if MOBILE_CONTROLS_ALLOWED
-		mobileManager.addMobilePad('NONE', 'P');
+		if (spaceVPose) mobileManager.addMobilePad('NONE', 'P_T');
+		else mobileManager.addMobilePad('NONE', 'P');
 		mobileManager.addMobilePadCamera();
 		addPlayStateHitbox();
 		#end
@@ -4978,7 +4979,7 @@ class PlayState extends MusicBeatState
 				}
 			}
 
-			if(ClientPrefs.charsAndBG && FlxG.keys.anyJustPressed(tauntKey) && !char.animation.curAnim.name.endsWith('miss') && char.specialAnim == false && ClientPrefs.spaceVPose){
+			if(ClientPrefs.charsAndBG && (FlxG.keys.anyJustPressed(tauntKey) #if MOBILE_CONTROLS_ALLOWED || mobileButtonPressed('T') #end) && !char.animation.curAnim.name.endsWith('miss') && char.specialAnim == false && ClientPrefs.spaceVPose){
 				if (char.animOffsets.exists('hey'))
 				{
 					char.playAnim('hey', true);
@@ -6311,7 +6312,7 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	public var customManagers:Map<String, MobileControlManager> = [];
+	public var customManagers:Map<String, Array<Dynamic>> = [];
 	public var lastGettedManager:MobileControlManager;
 	public var lastGettedManagerName:String;
 	public static inline function checkManager(managerName:String):MobileControlManager {
@@ -6321,14 +6322,15 @@ class PlayState extends MusicBeatState
 		}
 		else if (instance.lastGettedManagerName != managerName) {
 			instance.lastGettedManagerName = managerName;
-			instance.lastGettedManager = instance.customManagers.get(managerName);
+			instance.lastGettedManager = instance.customManagers.get(managerName)[0];
 		}
 		return instance.lastGettedManager;
 	}
 
-	public function createNewManager(name:String) {
+	public function createNewManager(name:String, keyDetectionAllowed:Bool) {
 		var mobileManagerNew = new MobileControlManager(this);
-		customManagers.set(name, mobileManagerNew);
+		var managerShit:Array<Dynamic> = [mobileManagerNew, keyDetectionAllowed];
+		customManagers.set(name, managerShit);
 		if(!variables.exists(name))
 			variables.set(name, mobileManagerNew);
 		if(!variables.exists(name + '_mobilePad'))
@@ -6370,7 +6372,7 @@ class PlayState extends MusicBeatState
 		mobileManager.addHitbox(mode, ClientPrefs.hitboxhint);
 		mobileManager.addHitboxCamera();
 		connectControlToNotes(null, 'hitbox');
-		addHitboxDeadZone(null, ['buttonP']);
+		addHitboxDeadZone(null, ['buttonP', 'buttonT']);
 	}
 
 	public function addHitboxDeadZone(?managerName:String, deadZoneButtons:Array<String>) {
