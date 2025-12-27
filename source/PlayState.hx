@@ -6391,7 +6391,7 @@ class PlayState extends MusicBeatState
 
 		if (control == 'mobilePad')
 			currentControl = manager.mobilePad;
-		else if {control == 'hitbox')
+		else if (control == 'hitbox')
 			currentControl = manager.hitbox;
 
 		if (control == 'mobilePad' || control == 'hitbox') {
