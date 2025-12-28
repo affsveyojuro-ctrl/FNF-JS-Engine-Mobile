@@ -3389,7 +3389,6 @@ class FunkinLua {
 		}
 
 		//Custom return thing
-		trace('called');
 		if (MusicBeatState.getState().mobileManager.hitbox != null)
 		{
 			var hitbox:FunkinHitbox = MusicBeatState.getState().mobileManager.hitbox;
@@ -3401,27 +3400,30 @@ class FunkinLua {
 			}
 		}
 
-		trace('called');
 		if (MusicBeatState.getState().mobileManager.mobilePad != null) {
-			trace('called');
-			var mobilePad:FunkinMobilePad = MusicBeatState.getState().mobileManager.mobilePad;
-			for (num in 0...mobilePad.buttons[0].length+1) {
+			for (num in 0...MusicBeatState.getState().mobileManager.mobilePad.buttons[0].length+1) {
+				var mobilePadButton:MobileButton = MusicBeatState.getState().mobileManager.mobilePad.buttons[0][num];
 				trace('called');
-				var mobilePadButton:Dynamic = mobilePad.buttons[0][num];
-				trace('called');
-				if (key.toUpperCase() == mobilePadButton.returnedKey)
-					if (Reflect.getProperty(mobilePadButton, type))
+				if (key.toUpperCase() == mobilePadButton.returnedKey) {
+					trace('called');
+					if (Reflect.getProperty(mobilePadButton, type) == true) {
+						trace('called');
 						return true;
+					}
+				}
 				trace('called');
 			}
 			trace('called');
-			for (num in 0...mobilePad.buttons[1].length+1) {
+			for (num in 0...MusicBeatState.getState().mobileManager.mobilePad.buttons[1].length+1) {
 				trace('called');
-				var mobilePadButton:Dynamic = mobilePad.buttons[1][num];
+				var mobilePadButton:MobileButton = MusicBeatState.getState().mobileManager.mobilePad.buttons[1][num];
 				trace('called');
-				if (key.toUpperCase() == mobilePadButton.returnedKey)
-					if (Reflect.getProperty(mobilePadButton, type))
+				if (key.toUpperCase() == mobilePadButton.returnedKey) {
+					if (Reflect.getProperty(mobilePadButton, type) == true) {
+						trace('called');
 						return true;
+					}
+				}
 				trace('called');
 			}
 			trace('called');
@@ -3447,18 +3449,21 @@ class FunkinLua {
 				}
 
 				if (manager.mobilePad != null) {
-					var mobilePad:FunkinMobilePad = manager.mobilePad;
-					for (num in 0...mobilePad.buttons[0].length+1) {
-						var mobilePadButton:Dynamic = mobilePad.buttons[0][num];
-						if (key.toUpperCase() == mobilePadButton.returnedKey)
-							if (Reflect.getProperty(mobilePadButton, type))
+					for (num in 0...manager.mobilePad.buttons[0].length+1) {
+						var mobilePadButton:Dynamic = manager.mobilePad.buttons[0][num];
+						if (key.toUpperCase() == mobilePadButton.returnedKey) {
+							if (Reflect.getProperty(mobilePadButton, type) == true) {
 								return true;
+							}
+						}
 					}
-					for (num in 0...mobilePad.buttons[1].length+1) {
-						var mobilePadButton:Dynamic = mobilePad.buttons[1][num];
-						if (key.toUpperCase() == mobilePadButton.returnedKey)
-							if (Reflect.getProperty(mobilePadButton, type))
+					for (num in 0...manager.mobilePad.buttons[1].length+1) {
+						var mobilePadButton:Dynamic = manager.mobilePad.buttons[1][num];
+						if (key.toUpperCase() == mobilePadButton.returnedKey) {
+							if (Reflect.getProperty(mobilePadButton, type) == true) {
 								return true;
+							}
+						}
 					}
 				}
 			}
