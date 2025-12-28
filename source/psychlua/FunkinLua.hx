@@ -3394,17 +3394,19 @@ class FunkinLua {
 			var hitbox:FunkinHitbox = MusicBeatState.getState().mobileManager.hitbox;
 			for (num in 0...hitbox.hints.length+1) {
 				var hitboxButton:Dynamic = hitbox.hints[num];
-				if (key.toUpperCase() == hitboxButton.returnedKey)
+				if (key.toUpperCase() == Reflect.field(hitboxButton, 'returnedKey'))
 					if (Reflect.getProperty(hitboxButton, type))
 						return true;
 			}
 		}
 
 		if (MusicBeatState.getState().mobileManager.mobilePad != null) {
-			for (num in 0...MusicBeatState.getState().mobileManager.mobilePad.buttons[0].length+1) {
-				var mobilePadButton:MobileButton = MusicBeatState.getState().mobileManager.mobilePad.buttons[0][num];
+			public var mobilePadDPad = MusicBeatState.getState().mobileManager.mobilePad.buttons[0];
+			public var mobilePadAction = MusicBeatState.getState().mobileManager.mobilePad.buttons[1];
+			for (num in 0...mobilePadDPad.length+1) {
+				var mobilePadButton:MobileButton = mobilePadDPad[num];
 				trace('called');
-				if (key.toUpperCase() == mobilePadButton.returnedKey) {
+				if (key.toUpperCase() == Reflect.field(mobilePadButton, 'returnedKey')) {
 					trace('called');
 					if (Reflect.getProperty(mobilePadButton, type) == true) {
 						trace('called');
@@ -3414,11 +3416,11 @@ class FunkinLua {
 				trace('called');
 			}
 			trace('called');
-			for (num in 0...MusicBeatState.getState().mobileManager.mobilePad.buttons[1].length+1) {
+			for (num in 0...mobilePadAction.length+1) {
 				trace('called');
-				var mobilePadButton:MobileButton = MusicBeatState.getState().mobileManager.mobilePad.buttons[1][num];
+				var mobilePadButton:MobileButton = mobilePadAction[num];
 				trace('called');
-				if (key.toUpperCase() == mobilePadButton.returnedKey) {
+				if (key.toUpperCase() == Reflect.field(mobilePadButton, 'returnedKey')) {
 					if (Reflect.getProperty(mobilePadButton, type) == true) {
 						trace('called');
 						return true;
