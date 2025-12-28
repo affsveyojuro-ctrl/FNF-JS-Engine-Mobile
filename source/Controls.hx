@@ -768,12 +768,13 @@ class Controls extends FlxActionSet
 	public var isInSubSubstate:Bool = false; // don't worry about this thing is not important
 	public var requestedInstance(get, default):Dynamic; // is set to MusicBeatState or MusicBeatSubstate when the constructor is called
 	public var requestedHitbox(get, default):FunkinHitbox; // for PlayState and EditorPlayState
-	public var mobileControls(get, never):Bool;
+	public var requestedMobilePad(get, default):FunkinMobilePad; //for everything ig
+	public var mobileControls(get, never):Bool; // this is useless for now
 
 	private function mobilePadPressed(keys:Array<String>):Bool
 	{
-		if (keys != null && requestedInstance?.mobileManager?.mobilePad != null)
-			if (requestedInstance.mobileManager.mobilePad.buttonPressed(keys) == true)
+		if (keys != null && requestedMobilePad != null)
+			if (requestedMobilePad.pressed(keys) == true)
 				return true;
 
 		return false;
@@ -781,8 +782,8 @@ class Controls extends FlxActionSet
 
 	private function mobilePadJustPressed(keys:Array<String>):Bool
 	{
-		if (keys != null && requestedInstance?.mobileManager?.mobilePad != null)
-			if (requestedInstance.mobileManager.mobilePad.buttonJustPressed(keys) == true)
+		if (keys != null && requestedMobilePad != null)
+			if (requestedMobilePad.justPressed(keys) == true)
 				return true;
 
 		return false;
@@ -790,8 +791,8 @@ class Controls extends FlxActionSet
 
 	private function mobilePadJustReleased(keys:Array<String>):Bool
 	{
-		if (keys != null && requestedInstance?.mobileManager?.mobilePad != null)
-			if (requestedInstance.mobileManager.mobilePad.buttonJustReleased(keys) == true)
+		if (keys != null && requestedMobilePad != null)
+			if (requestedMobilePad.justReleased(keys) == true)
 				return true;
 
 		return false;
@@ -800,7 +801,7 @@ class Controls extends FlxActionSet
 	private function hitboxPressed(keys:Array<String>):Bool
 	{
 		if (keys != null && requestedHitbox != null)
-			if (requestedHitbox.buttonPressed(keys) == true)
+			if (requestedHitbox.pressed(keys) == true)
 				return true;
 
 		return false;
@@ -809,7 +810,7 @@ class Controls extends FlxActionSet
 	private function hitboxJustPressed(keys:Array<String>):Bool
 	{
 		if (keys != null && requestedHitbox != null)
-			if (requestedHitbox.buttonJustPressed(keys) == true)
+			if (requestedHitbox.justPressed(keys) == true)
 				return true;
 
 		return false;
@@ -818,7 +819,7 @@ class Controls extends FlxActionSet
 	private function hitboxJustReleased(keys:Array<String>):Bool
 	{
 		if (keys != null && requestedHitbox != null)
-			if (requestedHitbox.buttonJustReleased(keys) == true)
+			if (requestedHitbox.justReleased(keys) == true)
 				return true;
 
 		return false;
@@ -837,6 +838,12 @@ class Controls extends FlxActionSet
 
 	@:noCompletion
 	private function get_requestedHitbox():FunkinHitbox
+	{
+		return requestedInstance.mobileManager.hitbox;
+	}
+
+	@:noCompletion
+	private function get_requestedMobilePad():FunkinMobilePad
 	{
 		return requestedInstance.mobileManager.hitbox;
 	}

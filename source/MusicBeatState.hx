@@ -56,13 +56,13 @@ class MusicBeatState extends FlxUIState
 	public var mobileManager:MobileControlManager;
 	//makes code less messy & easier to write
 	public inline function mobileButtonJustPressed(buttons:Dynamic):Bool {
-		return mobileManager.mobilePad.buttonJustPressed(buttons);
+		return mobileManager.mobilePad.justPressed(buttons);
 	}
 	public inline function mobileButtonPressed(buttons:Dynamic):Bool {
-		return mobileManager.mobilePad.buttonPressed(buttons);
+		return mobileManager.mobilePad.pressed(buttons);
 	}
 	public inline function mobileButtonReleased(buttons:Dynamic):Bool {
-		return mobileManager.mobilePad.buttonJustReleased(buttons);
+		return mobileManager.mobilePad.justReleased(buttons);
 	}
 	override function destroy() {
 		if (mobileManager != null) mobileManager.destroy();
