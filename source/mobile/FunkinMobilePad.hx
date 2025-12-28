@@ -83,7 +83,7 @@ class FunkinMobilePad extends MobilePad {
 					var buttonColor = buttonData.color;
 					var buttonX:Float = buttonData.x;
 					var buttonY:Float = buttonData.y;
-					var buttonReturn:Float = buttonData.returnKey;
+					var buttonReturn:String = buttonData.returnKey;
 
 					addButtonCustom(buttonName, buttonIDs, buttonUniqueID, buttonX, buttonY, buttonGraphic, buttonScale, Util.colorFromString(buttonColor), 'DPad', buttonReturn);
 				}
