@@ -3389,14 +3389,19 @@ class FunkinLua {
 		}
 
 		//Custom return thing
+		trace('called');
 		var hitbox:FunkinHitbox = MusicBeatState.getState().mobileManager.hitbox;
 		if (hitbox != null)
+		{
 			for (num in 0...hitbox.hints.length+1) {
 				var hitboxButton:Dynamic = hitbox.hints[num];
 				if (key.toUpperCase() == hitboxButton.returnedKey)
 					if (Reflect.getProperty(hitboxButton, type))
 						return true;
 			}
+		}
+
+		trace('called');
 
 		var mobilePad:FunkinMobilePad = MusicBeatState.getState().mobileManager.mobilePad;
 		if (mobilePad != null) {
@@ -3424,12 +3429,14 @@ class FunkinLua {
 
 				var hitbox:FunkinHitbox = manager.hitbox;
 				if (hitbox != null)
+				{
 					for (num in 0...hitbox.hints.length+1) {
 						var hitboxButton:Dynamic = hitbox.hints[num];
 						if (key.toUpperCase() == hitboxButton.returnedKey)
 							if (Reflect.getProperty(hitboxButton, type))
 								return true;
 					}
+				}
 
 				var mobilePad:FunkinMobilePad = manager.mobilePad;
 				if (mobilePad != null) {
