@@ -3413,10 +3413,14 @@ class FunkinLua {
 						return true;
 			}
 		}
-		if (PlayState.instance.customManagers != null && PlayState.instance.customManagers != []) {
+		trace('called');
+		if (PlayState.instance.customManagers != null && PlayState.instance.customManagers.keys().hasNext()) {
+			trace('called');
 			for (managerArray in PlayState.instance.customManagers) {
+				trace('called:$managerArray');
 				var manager:MobileControlManager = managerArray[0];
-				if (!managerArray[1]) continue;
+				if (managerArray[1] == false) continue;
+				trace('called:${managerArray[1]}');
 
 				var hitbox:FunkinHitbox = manager.hitbox;
 				if (hitbox != null)

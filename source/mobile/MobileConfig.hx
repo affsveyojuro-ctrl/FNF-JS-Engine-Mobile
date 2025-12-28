@@ -168,24 +168,11 @@ typedef MobileButtonsData =
 typedef CustomHitboxData =
 {
 	hints:Array<HitboxData>, //support old jsons
-	//Shitty but works (as said, if it works don't touch)
 	none:Array<HitboxData>,
 	single:Array<HitboxData>,
 	double:Array<HitboxData>,
 	triple:Array<HitboxData>,
 	quad:Array<HitboxData>,
-	mania1:Array<HitboxData>,
-	mania2:Array<HitboxData>,
-	mania3:Array<HitboxData>,
-	mania4:Array<HitboxData>,
-	mania5:Array<HitboxData>,
-	mania6:Array<HitboxData>,
-	mania7:Array<HitboxData>,
-	mania8:Array<HitboxData>,
-	mania9:Array<HitboxData>,
-	mania20:Array<HitboxData>,
-	mania55:Array<HitboxData>,
-	test:Array<HitboxData>
 }
 
 typedef HitboxData =
@@ -224,7 +211,7 @@ typedef HitboxData =
 	bottomHeight:Dynamic,
 	bottomColor:String,
 	bottomReturnKey:String,
-	bottomExtraKeyMode:Null<Int>
+	bottomExtraKeyMode:Null<Int>,
 }
 
 typedef ButtonsData =
@@ -236,7 +223,6 @@ typedef ButtonsData =
 	x:Float, // the button's X position on screen.
 	y:Float, // the button's Y position on screen.
 	color:String, // the button color, default color is white.
-	bg:String, // the button background for MobilePad, default background is `bg`.
 	scale:Null<Float>, // the button scale, default scale is 1.
-	returnKey:String // the button return, default return is nothing (please don't add custom return if you don't need).
+	returnKey:String, // the button return, default return is nothing (please don't add custom return if you don't need).
 }
