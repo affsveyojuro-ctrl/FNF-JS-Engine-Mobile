@@ -3422,17 +3422,21 @@ class FunkinLua {
 		}
 		return false;
 	}
-	inline public function checkMobilePadPress(mobilePad:FunkinMobilePad, button:Int, arrayNum:Int, key:String, type:String) {
+	inline public static function checkMobilePadPress(mobilePad:FunkinMobilePad, button:Int, arrayNum:Int, key:String, type:String) {
 		var mobilePadButton:Dynamic = mobilePad.buttons[button][arrayNum];
 		if (key.toUpperCase() == mobilePadButton.returnedKey)
 			if (Reflect.getProperty(mobilePadButton, type))
 				return true;
+
+		return false;
 	}
-	inline public function checkHitboxPress(hitbox:FunkinHitbox, arrayNum:Int, key:String, type:String) {
+	inline public static function checkHitboxPress(hitbox:FunkinHitbox, arrayNum:Int, key:String, type:String) {
 		var hitboxButton:Dynamic = hitbox.hints[arrayNum];
 		if (key.toUpperCase() == hitboxButton.returnedKey)
 			if (Reflect.getProperty(hitboxButton, type))
 				return true;
+
+		return false;
 	}
 	#end
 }
