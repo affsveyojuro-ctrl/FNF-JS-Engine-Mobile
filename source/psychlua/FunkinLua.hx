@@ -3420,13 +3420,13 @@ class FunkinLua {
 		return false;
 	}
 	public static function checkMobilePadPress(mobilePad:MobileButton, key:String, type:String) {
-		if (key.toUpperCase() == Reflect.field(hitboxButton, 'returnedKey'))
+		if (key.toUpperCase() == Reflect.field(mobilePad, 'returnedKey'))
 			if (Reflect.getProperty(mobilePad, type))
 				return true;
 		return false;
 	}
 	public static function checkHitboxPress(hitbox:MobileButton, key:String, type:String) {
-		if (key.toUpperCase() == Reflect.field(hitboxButton, 'returnedKey'))
+		if (key.toUpperCase() == Reflect.field(hitbox, 'returnedKey'))
 			if (Reflect.getProperty(hitbox, type))
 				return true;
 		return false;
