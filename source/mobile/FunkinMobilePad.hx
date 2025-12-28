@@ -47,7 +47,7 @@ class FunkinMobilePad extends MobilePad {
 		button.name = name;
 		button.uniqueID = uniqueID;
 		button.IDs = IDs;
-		button.returnKey = returnKey;
+		button.returnedKey = returnKey;
 		button.onDown.callback = () -> onButtonDown.dispatch(button, IDs, uniqueID);
 		button.onOut.callback = button.onUp.callback = () -> onButtonUp.dispatch(button, IDs, uniqueID);
 

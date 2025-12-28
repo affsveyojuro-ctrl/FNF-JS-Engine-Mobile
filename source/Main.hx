@@ -39,6 +39,7 @@ class Main extends Sprite {
 	};
 
 	public static var fpsVar:FPSCounter;
+	public static var instance:Main;
 
 	public static final superDangerMode:Bool = Sys.args().contains("-troll");
 
@@ -72,6 +73,7 @@ class Main extends Sprite {
 		Sys.setCwd(StorageUtil.getStorageDirectory());
 		#end
 		CrashHandler.init();
+		instance = this;
 		#if (cpp && windows)
 		untyped __cpp__("
 				SetProcessDPIAware(); // allows for more crisp visuals

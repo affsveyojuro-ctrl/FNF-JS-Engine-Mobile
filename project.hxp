@@ -562,7 +562,6 @@ class Project extends HXProject
 			addAsset("mobile/storageModes.txt", "mobile/storageModes.txt", "default", shouldEmbed);
 		info("Mobile Controls and storage assets included.");
 		}
-
 		if (isLinux() && !isDebug())
 			addAsset("gamemode.ini");
 	}
@@ -656,7 +655,7 @@ class Project extends HXProject
 	{
 		return this.targetFlags.exists("nodejs");
 	}
-	
+
 	inline function isCPP():Bool
 	{
 		return this.targetFlags.exists("cpp");
