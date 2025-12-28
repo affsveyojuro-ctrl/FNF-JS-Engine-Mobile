@@ -3392,84 +3392,43 @@ class FunkinLua {
 		if (MusicBeatState.getState().mobileManager.hitbox != null)
 		{
 			var hitbox:FunkinHitbox = MusicBeatState.getState().mobileManager.hitbox;
-			for (num in 0...hitbox.hints.length+1) {
-				var hitboxButton:Dynamic = hitbox.hints[num];
-				if (key.toUpperCase() == Reflect.field(hitboxButton, 'returnedKey'))
-					if (Reflect.getProperty(hitboxButton, type))
-						return true;
-			}
+			for (num in 0...hitbox.hints.length+1) if (checkHitboxPress(hitbox.hints[num], key, type)) return true;
 		}
 
 		if (MusicBeatState.getState().mobileManager.mobilePad != null) {
 			var mobilePadDPad = MusicBeatState.getState().mobileManager.mobilePad.buttons[0];
 			var mobilePadAction = MusicBeatState.getState().mobileManager.mobilePad.buttons[1];
-			for (num in 0...mobilePadDPad.length+1) {
-				var mobilePadButton:MobileButton = mobilePadDPad[num];
-				trace('called');
-				if (key.toUpperCase() == Reflect.field(mobilePadButton, 'returnedKey')) {
-					trace('called');
-					if (Reflect.getProperty(mobilePadButton, type) == true) {
-						trace('called');
-						return true;
-					}
-				}
-				trace('called');
-			}
-			trace('called');
-			for (num in 0...mobilePadAction.length+1) {
-				trace('called');
-				var mobilePadButton:MobileButton = mobilePadAction[num];
-				trace('called');
-				if (key.toUpperCase() == Reflect.field(mobilePadButton, 'returnedKey')) {
-					if (Reflect.getProperty(mobilePadButton, type) == true) {
-						trace('called');
-						return true;
-					}
-				}
-				trace('called');
-			}
-			trace('called');
+			for (num in 0...mobilePadDPad.length+1) if (checkMobilePadPress(mobilePadDPad[num], key, type) == true) return true;
+			for (num in 0...mobilePadAction.length+1) if (checkMobilePadPress(mobilePadAction[num], key, type) == true) return true;
 		}
-		trace('called');
 		if (PlayState.instance.customManagers != null && PlayState.instance.customManagers.keys().hasNext()) {
-			trace('called');
 			for (managerArray in PlayState.instance.customManagers) {
-				trace('called:$managerArray');
 				var manager:MobileControlManager = managerArray[0];
 				if (managerArray[1] == false) continue;
-				trace('called:${managerArray[1]}');
 
 				if (manager.hitbox != null)
-				{
-					var hitbox:FunkinHitbox = manager.hitbox;
-					for (num in 0...hitbox.hints.length+1) {
-						var hitboxButton:Dynamic = hitbox.hints[num];
-						if (key.toUpperCase() == hitboxButton.returnedKey)
-							if (Reflect.getProperty(hitboxButton, type))
-								return true;
-					}
-				}
+					for (num in 0...manager.hitbox.hints.length+1) if (checkHitboxPress(manager.hitbox.hints[num], key, type)) return true;
 
 				if (manager.mobilePad != null) {
-					for (num in 0...manager.mobilePad.buttons[0].length+1) {
-						var mobilePadButton:Dynamic = manager.mobilePad.buttons[0][num];
-						if (key.toUpperCase() == mobilePadButton.returnedKey) {
-							if (Reflect.getProperty(mobilePadButton, type) == true) {
-								return true;
-							}
-						}
-					}
-					for (num in 0...manager.mobilePad.buttons[1].length+1) {
-						var mobilePadButton:Dynamic = manager.mobilePad.buttons[1][num];
-						if (key.toUpperCase() == mobilePadButton.returnedKey) {
-							if (Reflect.getProperty(mobilePadButton, type) == true) {
-								return true;
-							}
-						}
-					}
+					var mobilePadDPad = manager.mobilePad.buttons[0];
+					var mobilePadAction = manager.mobilePad.buttons[1];
+					for (num in 0...mobilePadDPad.length+1) if (checkMobilePadPress(mobilePadDPad[num], key, type) == true) return true;
+					for (num in 0...mobilePadAction.length+1) if (checkMobilePadPress(mobilePadAction[num], key, type) == true) return true;
 				}
 			}
 		}
+		return false;
+	}
+	public static function checkMobilePadPress(mobilePad:FunkinMobilePad, key:String, type:String) {
+		if (key.toUpperCase() == Reflect.field(hitboxButton, 'returnedKey'))
+			if (Reflect.getProperty(mobilePad, type))
+				return true;
+		return false;
+	}
+	public static function checkHitboxPress(hitbox:FunkinHitbox, key:String, type:String) {
+		if (key.toUpperCase() == Reflect.field(hitboxButton, 'returnedKey'))
+			if (Reflect.getProperty(hitbox, type))
+				return true;
 		return false;
 	}
 	#end
