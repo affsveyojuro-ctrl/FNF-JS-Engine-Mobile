@@ -3390,9 +3390,9 @@ class FunkinLua {
 
 		//Custom return thing
 		trace('called');
-		var hitbox:FunkinHitbox = MusicBeatState.getState().mobileManager.hitbox;
-		if (hitbox != null)
+		if (MusicBeatState.getState().mobileManager.hitbox != null)
 		{
+			var hitbox:FunkinHitbox = MusicBeatState.getState().mobileManager.hitbox;
 			for (num in 0...hitbox.hints.length+1) {
 				var hitboxButton:Dynamic = hitbox.hints[num];
 				if (key.toUpperCase() == hitboxButton.returnedKey)
@@ -3403,8 +3403,8 @@ class FunkinLua {
 
 		trace('called');
 
-		var mobilePad:FunkinMobilePad = MusicBeatState.getState().mobileManager.mobilePad;
-		if (mobilePad != null) {
+		if (MusicBeatState.getState().mobileManager.mobilePad != null) {
+			var mobilePad:FunkinMobilePad = MusicBeatState.getState().mobileManager.mobilePad;
 			for (num in 0...mobilePad.buttons[0].length+1) {
 				var mobilePadButton:Dynamic = mobilePad.buttons[0][num];
 				if (key.toUpperCase() == mobilePadButton.returnedKey)
@@ -3427,9 +3427,9 @@ class FunkinLua {
 				if (managerArray[1] == false) continue;
 				trace('called:${managerArray[1]}');
 
-				var hitbox:FunkinHitbox = manager.hitbox;
-				if (hitbox != null)
+				if (manager.hitbox != null)
 				{
+					var hitbox:FunkinHitbox = manager.hitbox;
 					for (num in 0...hitbox.hints.length+1) {
 						var hitboxButton:Dynamic = hitbox.hints[num];
 						if (key.toUpperCase() == hitboxButton.returnedKey)
@@ -3438,8 +3438,8 @@ class FunkinLua {
 					}
 				}
 
-				var mobilePad:FunkinMobilePad = manager.mobilePad;
-				if (mobilePad != null) {
+				if (manager.mobilePad != null) {
+					var mobilePad:FunkinMobilePad = manager.mobilePad;
 					for (num in 0...mobilePad.buttons[0].length+1) {
 						var mobilePadButton:Dynamic = mobilePad.buttons[0][num];
 						if (key.toUpperCase() == mobilePadButton.returnedKey)
