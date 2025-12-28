@@ -41,13 +41,12 @@ class FunkinMobilePad extends MobilePad {
 		return button;
 	}
 
-	public function addButtonCustom(name:String, IDs:Array<String>, ?uniqueID:Int = -1, X:Float, Y:Float, Graphic:String, ?Scale:Float = 1.0, ?Color:Int = 0xFFFFFF, indexType:String = 'DPad', ?returnKey:String) {
+	public function addButtonCustom(name:String, IDs:Array<String>, ?uniqueID:Int = -1, X:Float, Y:Float, Graphic:String, ?Scale:Float = 1.0, ?Color:Int = 0xFFFFFF, indexType:String = 'DPad', ?retKey:String) {
 		var button:MobileButton = new MobileButton(0, 0);
 		button = createVirtualButton(X, Y, Graphic, Scale, Color);
 		button.name = name;
 		button.uniqueID = uniqueID;
 		button.IDs = IDs;
-		button.returnedKey = returnKey;
 		button.onDown.callback = () -> onButtonDown.dispatch(button, IDs, uniqueID);
 		button.onOut.callback = button.onUp.callback = () -> onButtonUp.dispatch(button, IDs, uniqueID);
 
@@ -62,53 +61,51 @@ class FunkinMobilePad extends MobilePad {
 				buttonIndexFromName.set(name, countedActionIndex);
 				countedActionIndex++;
 		}
+		if (retKey != null) button.returnedKey = retKey;
 	}
 
-	public function new(?DPad:String, ?Action:String, ?globalAlpha:Float = 0.7, ?disableCreation:Bool) {
-		if (!disableCreation)
+	public function new(?DPad:String = 'NONE', ?Action:String = 'NONE', ?globalAlpha:Float = 0.7) {
+		if (DPad != "NONE")
 		{
-			if (DPad != "NONE")
+			if (!MobileConfig.dpadModes.exists(DPad))
+				throw 'The mobilePad dpadMode "$DPad" doesn\'t exists.';
+
+			for (buttonData in MobileConfig.dpadModes.get(DPad).buttons)
 			{
-				if (!MobileConfig.dpadModes.exists(DPad))
-					throw 'The mobilePad dpadMode "$DPad" doesn\'t exists.';
+				if (buttonData.scale == null) buttonData.scale = 1.0;
+				var buttonName:String = buttonData.button;
+				var buttonIDs:Array<String> = buttonData.buttonIDs;
+				var buttonUniqueID:Int = (buttonData.buttonUniqueID != null ? buttonData.buttonUniqueID : -1);
+				var buttonGraphic:String = buttonData.graphic;
+				var buttonScale:Float = buttonData.scale;
+				var buttonColor = buttonData.color;
+				var buttonX:Float = buttonData.x;
+				var buttonY:Float = buttonData.y;
+				var buttonReturn:String = buttonData.returnKey;
 
-				for (buttonData in MobileConfig.dpadModes.get(DPad).buttons)
-				{
-					if (buttonData.scale == null) buttonData.scale = 1.0;
-					var buttonName:String = buttonData.button;
-					var buttonIDs:Array<String> = buttonData.buttonIDs;
-					var buttonUniqueID:Int = (buttonData.buttonUniqueID != null ? buttonData.buttonUniqueID : -1);
-					var buttonGraphic:String = buttonData.graphic;
-					var buttonScale:Float = buttonData.scale;
-					var buttonColor = buttonData.color;
-					var buttonX:Float = buttonData.x;
-					var buttonY:Float = buttonData.y;
-					var buttonReturn:String = buttonData.returnKey;
-
-					addButtonCustom(buttonName, buttonIDs, buttonUniqueID, buttonX, buttonY, buttonGraphic, buttonScale, Util.colorFromString(buttonColor), 'DPad', buttonReturn);
-				}
+				addButtonCustom(buttonName, buttonIDs, buttonUniqueID, buttonX, buttonY, buttonGraphic, buttonScale, Util.colorFromString(buttonColor), 'DPad', buttonReturn);
 			}
+		}
 
-			if (Action != "NONE")
+		if (Action != "NONE")
+		{
+			if (!MobileConfig.actionModes.exists(Action))
+				throw 'The mobilePad actionMode "$Action" doesn\'t exists.';
+
+			for (buttonData in MobileConfig.actionModes.get(Action).buttons)
 			{
-				if (!MobileConfig.actionModes.exists(Action))
-					throw 'The mobilePad actionMode "$Action" doesn\'t exists.';
+				if (buttonData.scale == null) buttonData.scale = 1.0;
+				var buttonName:String = buttonData.button;
+				var buttonIDs:Array<String> = buttonData.buttonIDs;
+				var buttonUniqueID:Int = (buttonData.buttonUniqueID != null ? buttonData.buttonUniqueID : -1);
+				var buttonGraphic:String = buttonData.graphic;
+				var buttonColor = buttonData.color;
+				var buttonScale:Float = buttonData.scale;
+				var buttonX:Float = buttonData.x;
+				var buttonY:Float = buttonData.y;
+				var buttonReturn:String = buttonData.returnKey;
 
-				for (buttonData in MobileConfig.actionModes.get(Action).buttons)
-				{
-					if (buttonData.scale == null) buttonData.scale = 1.0;
-					var buttonName:String = buttonData.button;
-					var buttonIDs:Array<String> = buttonData.buttonIDs;
-					var buttonUniqueID:Int = (buttonData.buttonUniqueID != null ? buttonData.buttonUniqueID : -1);
-					var buttonGraphic:String = buttonData.graphic;
-					var buttonColor = buttonData.color;
-					var buttonScale:Float = buttonData.scale;
-					var buttonX:Float = buttonData.x;
-					var buttonY:Float = buttonData.y;
-					var buttonReturn:String = buttonData.returnKey;
-
-					addButtonCustom(buttonName, buttonIDs, buttonUniqueID, buttonX, buttonY, buttonGraphic, buttonScale, Util.colorFromString(buttonColor), 'Action', buttonReturn);
-				}
+				addButtonCustom(buttonName, buttonIDs, buttonUniqueID, buttonX, buttonY, buttonGraphic, buttonScale, Util.colorFromString(buttonColor), 'Action', buttonReturn);
 			}
 		}
 
