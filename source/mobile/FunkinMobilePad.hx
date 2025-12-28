@@ -41,7 +41,7 @@ class FunkinMobilePad extends MobilePad {
 		return button;
 	}
 
-	public override function addButton(name:String, IDs:Array<String>, ?uniqueID:Int = -1, X:Float, Y:Float, Graphic:String, ?Scale:Float = 1.0, ?Color:Int = 0xFFFFFF, indexType:String = 'DPad', ?returnKey:String) {
+	public function addButtonCustom(name:String, IDs:Array<String>, ?uniqueID:Int = -1, X:Float, Y:Float, Graphic:String, ?Scale:Float = 1.0, ?Color:Int = 0xFFFFFF, indexType:String = 'DPad', ?returnKey:String) {
 		var button:MobileButton = new MobileButton(0, 0);
 		button = createVirtualButton(X, Y, Graphic, Scale, Color);
 		button.name = name;
@@ -85,7 +85,7 @@ class FunkinMobilePad extends MobilePad {
 					var buttonY:Float = buttonData.y;
 					var buttonReturn:Float = buttonData.returnKey;
 
-					addButton(buttonName, buttonIDs, buttonUniqueID, buttonX, buttonY, buttonGraphic, buttonScale, Util.colorFromString(buttonColor), 'DPad', buttonReturn);
+					addButtonCustom(buttonName, buttonIDs, buttonUniqueID, buttonX, buttonY, buttonGraphic, buttonScale, Util.colorFromString(buttonColor), 'DPad', buttonReturn);
 				}
 			}
 
@@ -105,9 +105,9 @@ class FunkinMobilePad extends MobilePad {
 					var buttonScale:Float = buttonData.scale;
 					var buttonX:Float = buttonData.x;
 					var buttonY:Float = buttonData.y;
-					var buttonReturn:Float = buttonData.returnKey;
+					var buttonReturn:String = buttonData.returnKey;
 
-					addButton(buttonName, buttonIDs, buttonUniqueID, buttonX, buttonY, buttonGraphic, buttonScale, Util.colorFromString(buttonColor), 'Action', buttonReturn);
+					addButtonCustom(buttonName, buttonIDs, buttonUniqueID, buttonX, buttonY, buttonGraphic, buttonScale, Util.colorFromString(buttonColor), 'Action', buttonReturn);
 				}
 			}
 		}

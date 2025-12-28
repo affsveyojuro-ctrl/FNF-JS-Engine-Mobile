@@ -237,5 +237,6 @@ typedef ButtonsData =
 	y:Float, // the button's Y position on screen.
 	color:String, // the button color, default color is white.
 	bg:String, // the button background for MobilePad, default background is `bg`.
-	scale:Null<Float> // the button scale, default scale is 1.
+	scale:Null<Float>, // the button scale, default scale is 1.
+	returnKey:String // the button return, default return is nothing (please don't add custom return if you don't need).
 }
