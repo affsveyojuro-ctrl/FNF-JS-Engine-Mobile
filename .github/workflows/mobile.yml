@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-15] ##macos-15
+        os: [ubuntu-latest, macos-26] ##macos-15
     steps:
       - name: Checkout
         uses: actions/checkout@main
@@ -31,6 +31,7 @@ jobs:
       - name: Setup Android NDK
         uses: nttld/setup-ndk@main
         id: setup-ndk
+        if: startsWith(matrix.os, 'ubuntu')
         with:
           ndk-version: r27c
           add-to-path: false
@@ -54,7 +55,7 @@ jobs:
 
       - name: Compile (iOS)
         if: startsWith(matrix.os, 'macos')
-        run: haxelib run lime build ios -nosign -final -D ${{ inputs.buildFlags }}
+        run: haxelib run lime build ios -nosign -D ${{ inputs.buildFlags }}
 
       - name: Make Ipa
         if: startsWith(matrix.os, 'macos')
