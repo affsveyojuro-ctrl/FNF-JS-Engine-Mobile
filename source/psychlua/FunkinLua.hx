@@ -3398,8 +3398,8 @@ class FunkinLua {
 		if (MusicBeatState.getState().mobileManager.mobilePad != null) {
 			var mobilePadDPad = MusicBeatState.getState().mobileManager.mobilePad.buttons[0];
 			var mobilePadAction = MusicBeatState.getState().mobileManager.mobilePad.buttons[1];
-			for (num in 0...mobilePadDPad.length+1) if (checkMobilePadPress(mobilePadDPad[num], key, type) == true) return true;
-			for (num in 0...mobilePadAction.length+1) if (checkMobilePadPress(mobilePadAction[num], key, type) == true) return true;
+			for (num in 0...mobilePadDPad.length+1) if (checkMobilePadPress(mobilePadDPad[num], key, type)) return true;
+			for (num in 0...mobilePadAction.length+1) if (checkMobilePadPress(mobilePadAction[num], key, type)) return true;
 		}
 		if (PlayState.instance.customManagers != null && PlayState.instance.customManagers.keys().hasNext()) {
 			for (managerArray in PlayState.instance.customManagers) {
@@ -3412,8 +3412,8 @@ class FunkinLua {
 				if (manager.mobilePad != null) {
 					var mobilePadDPad = manager.mobilePad.buttons[0];
 					var mobilePadAction = manager.mobilePad.buttons[1];
-					for (num in 0...mobilePadDPad.length+1) if (checkMobilePadPress(mobilePadDPad[num], key, type) == true) return true;
-					for (num in 0...mobilePadAction.length+1) if (checkMobilePadPress(mobilePadAction[num], key, type) == true) return true;
+					for (num in 0...mobilePadDPad.length+1) if (checkMobilePadPress(mobilePadDPad[num], key, type)) return true;
+					for (num in 0...mobilePadAction.length+1) if (checkMobilePadPress(mobilePadAction[num], key, type)) return true;
 				}
 			}
 		}
