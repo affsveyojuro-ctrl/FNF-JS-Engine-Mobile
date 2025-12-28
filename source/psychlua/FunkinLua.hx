@@ -3402,21 +3402,29 @@ class FunkinLua {
 		}
 
 		trace('called');
-
 		if (MusicBeatState.getState().mobileManager.mobilePad != null) {
+			trace('called');
 			var mobilePad:FunkinMobilePad = MusicBeatState.getState().mobileManager.mobilePad;
 			for (num in 0...mobilePad.buttons[0].length+1) {
+				trace('called');
 				var mobilePadButton:Dynamic = mobilePad.buttons[0][num];
+				trace('called');
 				if (key.toUpperCase() == mobilePadButton.returnedKey)
 					if (Reflect.getProperty(mobilePadButton, type))
 						return true;
+				trace('called');
 			}
+			trace('called');
 			for (num in 0...mobilePad.buttons[1].length+1) {
+				trace('called');
 				var mobilePadButton:Dynamic = mobilePad.buttons[1][num];
+				trace('called');
 				if (key.toUpperCase() == mobilePadButton.returnedKey)
 					if (Reflect.getProperty(mobilePadButton, type))
 						return true;
+				trace('called');
 			}
+			trace('called');
 		}
 		trace('called');
 		if (PlayState.instance.customManagers != null && PlayState.instance.customManagers.keys().hasNext()) {
