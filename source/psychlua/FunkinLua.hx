@@ -3401,8 +3401,8 @@ class FunkinLua {
 		}
 
 		if (MusicBeatState.getState().mobileManager.mobilePad != null) {
-			public var mobilePadDPad = MusicBeatState.getState().mobileManager.mobilePad.buttons[0];
-			public var mobilePadAction = MusicBeatState.getState().mobileManager.mobilePad.buttons[1];
+			var mobilePadDPad = MusicBeatState.getState().mobileManager.mobilePad.buttons[0];
+			var mobilePadAction = MusicBeatState.getState().mobileManager.mobilePad.buttons[1];
 			for (num in 0...mobilePadDPad.length+1) {
 				var mobilePadButton:MobileButton = mobilePadDPad[num];
 				trace('called');
