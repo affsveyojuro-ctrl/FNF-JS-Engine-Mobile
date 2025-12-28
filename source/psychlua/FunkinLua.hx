@@ -3391,15 +3391,27 @@ class FunkinLua {
 		//Custom return thing
 		var hitbox:FunkinHitbox = MusicBeatState.getState().mobileManager.hitbox;
 		if (hitbox != null)
-			for (num in 0...hitbox.hints.length+1)
-				checkHitboxPress(hitbox, num, key, type);
+			for (num in 0...hitbox.hints.length+1) {
+				var hitboxButton:Dynamic = hitbox.hints[num];
+				if (key.toUpperCase() == hitboxButton.returnedKey)
+					if (Reflect.getProperty(hitboxButton, type))
+						return true;
+			}
 
 		var mobilePad:FunkinMobilePad = MusicBeatState.getState().mobileManager.mobilePad;
 		if (mobilePad != null) {
-			for (num in 0...mobilePad.buttons[0].length+1)
-				checkMobilePadPress(mobilePad, 0, num, key, type);
-			for (num in 0...mobilePad.buttons[1].length+1)
-				checkMobilePadPress(mobilePad, 1, num, key, type);
+			for (num in 0...mobilePad.buttons[0].length+1) {
+				var mobilePadButton:Dynamic = mobilePad.buttons[0][num];
+				if (key.toUpperCase() == mobilePadButton.returnedKey)
+					if (Reflect.getProperty(mobilePadButton, type))
+						return true;
+			}
+			for (num in 0...mobilePad.buttons[1].length+1) {
+				var mobilePadButton:Dynamic = mobilePad.buttons[1][num];
+				if (key.toUpperCase() == mobilePadButton.returnedKey)
+					if (Reflect.getProperty(mobilePadButton, type))
+						return true;
+			}
 		}
 		if (PlayState.instance.customManagers != null && PlayState.instance.customManagers != []) {
 			for (managerArray in PlayState.instance.customManagers) {
@@ -3408,34 +3420,30 @@ class FunkinLua {
 
 				var hitbox:FunkinHitbox = manager.hitbox;
 				if (hitbox != null)
-					for (num in 0...hitbox.hints.length+1)
-						checkHitboxPress(hitbox, num, key, type);
+					for (num in 0...hitbox.hints.length+1) {
+						var hitboxButton:Dynamic = hitbox.hints[num];
+						if (key.toUpperCase() == hitboxButton.returnedKey)
+							if (Reflect.getProperty(hitboxButton, type))
+								return true;
+					}
 
 				var mobilePad:FunkinMobilePad = manager.mobilePad;
 				if (mobilePad != null) {
-					for (num in 0...mobilePad.buttons[0].length+1)
-						checkMobilePadPress(mobilePad, 0, num, key, type);
-					for (num in 0...mobilePad.buttons[1].length+1)
-						checkMobilePadPress(mobilePad, 1, num, key, type);
+					for (num in 0...mobilePad.buttons[0].length+1) {
+						var mobilePadButton:Dynamic = mobilePad.buttons[0][num];
+						if (key.toUpperCase() == mobilePadButton.returnedKey)
+							if (Reflect.getProperty(mobilePadButton, type))
+								return true;
+					}
+					for (num in 0...mobilePad.buttons[1].length+1) {
+						var mobilePadButton:Dynamic = mobilePad.buttons[1][num];
+						if (key.toUpperCase() == mobilePadButton.returnedKey)
+							if (Reflect.getProperty(mobilePadButton, type))
+								return true;
+					}
 				}
 			}
 		}
-		return false;
-	}
-	inline public static function checkMobilePadPress(mobilePad:FunkinMobilePad, button:Int, arrayNum:Int, key:String, type:String) {
-		var mobilePadButton:Dynamic = mobilePad.buttons[button][arrayNum];
-		if (key.toUpperCase() == mobilePadButton.returnedKey)
-			if (Reflect.getProperty(mobilePadButton, type))
-				return true;
-
-		return false;
-	}
-	inline public static function checkHitboxPress(hitbox:FunkinHitbox, arrayNum:Int, key:String, type:String) {
-		var hitboxButton:Dynamic = hitbox.hints[arrayNum];
-		if (key.toUpperCase() == hitboxButton.returnedKey)
-			if (Reflect.getProperty(hitboxButton, type))
-				return true;
-
 		return false;
 	}
 	#end
