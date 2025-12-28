@@ -1488,7 +1488,7 @@ class CharacterEditorState extends MusicBeatState
 			{
 				#if MOBILE_CONTROLS_ALLOWED
 				mobileManager.mobilePad.forEachAlive(function(button:mobile.MobileButton){
-					if(button != mobileManager.mobilePad.getButtonFromName('buttonF'))
+					if(button != mobileManager.mobilePad.getButton('buttonF'))
 						button.visible = !button.visible;
 				});
 				#end

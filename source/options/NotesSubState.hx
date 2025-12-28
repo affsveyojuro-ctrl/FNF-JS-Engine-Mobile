@@ -175,9 +175,9 @@ class NotesSubState extends MusicBeatSubstate
 
 		#if MOBILE_CONTROLS_ALLOWED
 		mobileManager.addMobilePad('NONE', 'B_C');
-		mobileManager.mobilePad.getButtonFromName('buttonB').x = FlxG.width - 132;
-		mobileManager.mobilePad.getButtonFromName('buttonC').x = 0;
-		mobileManager.mobilePad.getButtonFromName('buttonC').y = FlxG.height - 135;
+		mobileManager.mobilePad.getButton('buttonB').x = FlxG.width - 132;
+		mobileManager.mobilePad.getButton('buttonC').x = 0;
+		mobileManager.mobilePad.getButton('buttonC').y = FlxG.height - 135;
 		#end
 	}
 
@@ -189,9 +189,9 @@ class NotesSubState extends MusicBeatSubstate
 		#if MOBILE_CONTROLS_ALLOWED
 		mobileManager.addMobilePad('NONE', 'B_C');
 		mobileManager.addMobilePadCamera();
-		mobileManager.mobilePad.getButtonFromName('buttonB').x = FlxG.width - 132;
-		mobileManager.mobilePad.getButtonFromName('buttonC').x = 0;
-		mobileManager.mobilePad.getButtonFromName('buttonC').y = FlxG.height - 135;
+		mobileManager.mobilePad.getButton('buttonB').x = FlxG.width - 132;
+		mobileManager.mobilePad.getButton('buttonC').x = 0;
+		mobileManager.mobilePad.getButton('buttonC').y = FlxG.height - 135;
 		#end
 	}
 

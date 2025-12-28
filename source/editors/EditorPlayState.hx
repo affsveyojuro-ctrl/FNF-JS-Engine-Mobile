@@ -179,10 +179,10 @@ class EditorPlayState extends MusicBeatState
 		mobileManager.hitbox?.onButtonUp?.add(onButtonRelease);
 		mobileManager.hitbox.forEachAlive((button) ->
 		{
-			if (mobileManager.mobilePad.getButtonFromName('buttonP') != null)
-				button.deadZones.push(mobileManager.mobilePad.getButtonFromName('buttonP'));
-			if (mobileManager.mobilePad.getButtonFromName('button6') != null)
-				button.deadZones.push(mobileManager.mobilePad.getButtonFromName('button6'));
+			if (mobileManager.mobilePad.getButton('buttonP') != null)
+				button.deadZones.push(mobileManager.mobilePad.getButton('buttonP'));
+			if (mobileManager.mobilePad.getButton('button6') != null)
+				button.deadZones.push(mobileManager.mobilePad.getButton('button6'));
 		});
 		#end
 	}

@@ -6345,7 +6345,7 @@ class PlayState extends MusicBeatState
 		var manager = checkManager(managerName);
 
 		var button:MobileButton = null;
-		if (manager.mobilePad != null) button = manager.mobilePad.getButtonFromName(buttonName);
+		if (manager.mobilePad != null) button = manager.mobilePad.getButton(buttonName);
 		if (button != null) return Reflect.getProperty(button, type);
 		return false;
 	}
@@ -6355,7 +6355,7 @@ class PlayState extends MusicBeatState
 		var manager = checkManager(managerName);
 
 		var buttonObject:MobileButton = null;
-		if (manager.hitbox != null) buttonObject = manager.hitbox.getButtonFromName(button);
+		if (manager.hitbox != null) buttonObject = manager.hitbox.getButton(button);
 		if (buttonObject != null) return Reflect.getProperty(buttonObject, type);
 		return false;
 	}
@@ -6380,8 +6380,8 @@ class PlayState extends MusicBeatState
 		manager.hitbox.forEachAlive((button) ->
 		{
 			for (deadButton in deadZoneButtons) {
-				if (manager.mobilePad.getButtonFromName(deadButton) != null)
-					button.deadZones.push(manager.mobilePad.getButtonFromName(deadButton));
+				if (manager.mobilePad.getButton(deadButton) != null)
+					button.deadZones.push(manager.mobilePad.getButton(deadButton));
 			}
 		});
 	}

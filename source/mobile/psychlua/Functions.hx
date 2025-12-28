@@ -50,17 +50,17 @@ class MobileFunctions
 
 		Convert.addCallback(lua, 'joyStickPressed', function(?managerName:String, ?position:String):Bool
 		{
-			return PlayState.checkManager(managerName).joyStick.joyStickPressed(position);
+			return PlayState.checkManager(managerName).joyStick.pressed(position);
 		});
 
 		Convert.addCallback(lua, 'joyStickJustPressed', function(?managerName:String, ?position:String):Bool
 		{
-			return PlayState.checkManager(managerName).joyStick.joyStickJustPressed(position);
+			return PlayState.checkManager(managerName).joyStick.justPressed(position);
 		});
 
 		Convert.addCallback(lua, 'joyStickJustReleased', function(?managerName:String, ?position:String):Bool
 		{
-			return PlayState.checkManager(managerName).joyStick.joyStickJustReleased(position);
+			return PlayState.checkManager(managerName).joyStick.justReleased(position);
 		});
 
 		//Hitbox
