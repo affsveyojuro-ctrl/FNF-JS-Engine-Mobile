@@ -845,7 +845,7 @@ class Controls extends FlxActionSet
 	@:noCompletion
 	private function get_requestedMobilePad():FunkinMobilePad
 	{
-		return requestedInstance.mobileManager.hitbox;
+		return requestedInstance.mobileManager.mobilePad;
 	}
 
 	@:noCompletion

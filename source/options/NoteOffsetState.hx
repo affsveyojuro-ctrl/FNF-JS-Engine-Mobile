@@ -463,10 +463,7 @@ class NoteOffsetState extends MusicBeatState
 			mobileManager.addMobilePad('FULL', 'A_B_C');
 			mobileManager.addMobilePadCamera();
 		}
-		if(controls.mobileControls)
-			str2 = '(Press A to Switch)';
-		else
-			str2 = '(Press Accept to Switch)';
+		str2 = '(Press A to Switch)';
 		changeModeText.text = '< ${str.toUpperCase()} ${str2.toUpperCase()} >';
 		#else
 		if(onComboMenu)
