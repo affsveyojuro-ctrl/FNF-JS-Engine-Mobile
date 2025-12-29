@@ -1,7 +1,7 @@
 package debug.mem;
 
 import debug.Memory;
-#if cpp
+#if (cpp && !ios)
 import cpp.SizeT;
 
 /**
@@ -9,13 +9,8 @@ import cpp.SizeT;
  * Original C code by David Robert Nadeau
  * @see https://web.archive.org/web/20190716205300/http://nadeausoftware.com/articles/2012/07/c_c_tip_how_get_process_resident_set_size_physical_memory_use
  */
-#if ios
-@:buildXml('<include name="../../../../../source/debug/mem/build.xml" />')
-@:include("memory.h")
-#else
 @:buildXml('<include name="../../../../source/debug/mem/build.xml" />')
 @:include("memory.h")
-#end
 extern class GetTotalMemory
 {
 	@:native("getPeakRSS")
@@ -37,7 +32,7 @@ class GetTotalMemory
 	public static function getPeakRSS():Float
 	{
 		// might not be the smartest move?
-		var memPeak:Float;
+		var memPeak:Float = 0.0;
 
 		if (getCurrentRSS() > memPeak)
 			memPeak = getCurrentRSS();

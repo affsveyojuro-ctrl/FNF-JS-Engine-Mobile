@@ -252,7 +252,6 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 	var holdValue:Float = 0;
 	override function update(elapsed:Float)
 	{
-		super.update(elapsed);
 		if (controls.UI_UP_P)
 		{
 			changeSelection(-1);
@@ -264,7 +263,6 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 
 		if (controls.BACK) {
 			close();
-			//controls.isInSubSubstate = false;
 			ClientPrefs.saveSettings();
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 		}
@@ -439,6 +437,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		if(nextAccept > 0) {
 			nextAccept -= 1;
 		}
+		super.update(elapsed);
 	}
 
 	function updateTextFrom(option:GameplayOption) {
