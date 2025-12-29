@@ -3,6 +3,9 @@ name: Mobile Release
 on:
   workflow_dispatch:
     inputs:
+      tag_name:
+        description: "Release tag (e.g. `v0.13.3 or bugfix`)"
+        required: true
       prerelease:
         description: 'Mark as a pre-release? (true/false)'
         default: 'false'
@@ -12,7 +15,7 @@ permissions:
   contents: write
 
 env:
-  TAG_NAME: nightly-${{ github.run_number }}
+  TAG_NAME: ${{ github.event.inputs.tag_name }}
 
 jobs:
   create-nightly-tag:
