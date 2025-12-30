@@ -40,6 +40,8 @@ jobs:
         run: |
           haxelib install hmm --quiet
           haxelib run hmm install --quiet
+          haxelib remove openfl --quiet
+          haxelib install openfl 9.3.3 --quiet
 
       - name: Configure Android
         if: startsWith(matrix.os, 'ubuntu')
