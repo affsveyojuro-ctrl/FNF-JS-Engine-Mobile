@@ -1,7 +1,7 @@
 package;
 
 import flixel.graphics.frames.FlxFrame.FlxFrameAngle;
-import flixel.system.FlxAssets.FlxShader;
+import backend.FlxFixedShader;
 import shaders.RGBPalette.RGBShaderReference;
 import shaders.RGBPalette;
 
@@ -152,7 +152,7 @@ class PixelSplashShaderRef {
 	}
 }
 
-class PixelSplashShader extends FlxShader
+class PixelSplashShader extends FlxFixedShader
 {
 	@:glFragmentHeader('
 		#pragma header

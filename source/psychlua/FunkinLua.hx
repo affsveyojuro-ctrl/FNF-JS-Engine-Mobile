@@ -7,7 +7,7 @@ import Type.ValueType;
 import flixel.FlxBasic;
 import flixel.addons.effects.FlxTrail;
 import flixel.input.keyboard.FlxKey;
-import flixel.system.FlxAssets.FlxShader;
+import backend.FlxFixedShader;
 import openfl.Lib;
 import openfl.display.BitmapData;
 import openfl.display.BlendMode;
