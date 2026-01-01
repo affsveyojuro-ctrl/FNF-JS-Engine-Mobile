@@ -10,12 +10,12 @@ class ClientPrefs { //default settings if it can't find a save file containing y
 	#if mobile public static var wideScreen:Bool = false; #end
 	#if MOBILE_CONTROLS_ALLOWED
 	public static var mobileExtraKeys:Int = 2;
-	public static var hitboxalpha:Float = 0.7;
+	public static var hitboxAlpha:Float = 0.7;
 	public static var mobilePadAlpha:Float = 0.6;
-	public static var hitboxhint:Bool = false;
-	public static var hitboxtype:String = 'Gradient';
+	public static var hitboxHint:Bool = false;
+	public static var hitboxType:String = 'Gradient';
 	public static var hitboxLocation:String = 'Bottom';
-	public static var hitboxmode:String = 'Normal (New)';
+	public static var hitboxMode:String = 'Normal (New)';
 	public static var mobileExtraKeyReturns:Array<String> = ['SHIFT', 'SPACE', 'Q', 'E'];
 	#end
 

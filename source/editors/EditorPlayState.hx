@@ -173,7 +173,7 @@ class EditorPlayState extends MusicBeatState
 		mobileManager.addMobilePad('NONE', 'P_6');
 		mobileManager.addMobilePadCamera();
 
-		mobileManager.addHitbox(null, ClientPrefs.hitboxhint);
+		mobileManager.addHitbox(null, ClientPrefs.hitboxHint);
 		mobileManager.addHitboxCamera();
 		mobileManager.hitbox?.onButtonDown?.add(onButtonPress);
 		mobileManager.hitbox?.onButtonUp?.add(onButtonRelease);

@@ -4979,17 +4979,19 @@ class PlayState extends MusicBeatState
 				}
 			}
 
-			if(ClientPrefs.charsAndBG && (FlxG.keys.anyJustPressed(tauntKey) #if MOBILE_CONTROLS_ALLOWED || mobileButtonPressed('T') #end) && !char.animation.curAnim.name.endsWith('miss') && char.specialAnim == false && ClientPrefs.spaceVPose){
-				if (char.animOffsets.exists('hey'))
-				{
-					char.playAnim('hey', true);
-					char.specialAnim = true;
-					char.heyTimer = 0.59;
-					FlxG.sound.play(Paths.sound('hey'));
-					trace("HEY!!");
+			try {
+				if(ClientPrefs.charsAndBG && (FlxG.keys.anyJustPressed(tauntKey) #if MOBILE_CONTROLS_ALLOWED || mobileButtonPressed('T') #end) && !char.animation.curAnim.name.endsWith('miss') && char.specialAnim == false && ClientPrefs.spaceVPose){
+					if (char.animOffsets.exists('hey'))
+					{
+						char.playAnim('hey', true);
+						char.specialAnim = true;
+						char.heyTimer = 0.59;
+						FlxG.sound.play(Paths.sound('hey'));
+						trace("HEY!!");
+					}
+					else trace ('Character doesnt have a hey animation!');
 				}
-				else trace ('Character doesnt have a hey animation!');
-			}
+			} catch(e:Dynamic) {}
 
 			if (!holdArray.contains(true) || endingSong) {
 				if (ClientPrefs.charsAndBG) playerDance();
@@ -6369,7 +6371,7 @@ class PlayState extends MusicBeatState
 
 	public function addPlayStateHitbox(?mode:String)
 	{
-		mobileManager.addHitbox(mode, ClientPrefs.hitboxhint);
+		mobileManager.addHitbox(mode, ClientPrefs.hitboxHint);
 		mobileManager.addHitboxCamera();
 		connectControlToNotes(null, 'hitbox');
 		addHitboxDeadZone(null, ['buttonP', 'buttonT']);

@@ -15,7 +15,7 @@ class FunkinHitbox extends Hitbox {
 		currentMode = mode; //use this there.
 		this.showHints = showHints;
 
-		var Custom:String = mode != null ? mode : ClientPrefs.hitboxmode;
+		var Custom:String = mode != null ? mode : ClientPrefs.hitboxMode;
 		if (!MobileConfig.hitboxModes.exists(Custom))
 			throw 'The ${Custom} Hitbox File doesn\'t exists.';
 
@@ -102,7 +102,7 @@ class FunkinHitbox extends Hitbox {
 		var guh:Float = globalAlpha;
 		var shape:Shape = new Shape();
 		shape.graphics.beginFill(Color);
-		switch (ClientPrefs.hitboxtype) {
+		switch (ClientPrefs.hitboxType) {
 			case "No Gradient":
 				var matrix:Matrix = new Matrix();
 				matrix.createGradientBox(Width, Height, 0, 0, 0);
