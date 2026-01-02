@@ -137,7 +137,6 @@ class AchievementsMenuState extends MusicBeatState
 		super.create();
 		#if MOBILE_CONTROLS_ALLOWED
 		mobileManager.addMobilePad("FULL", "A_B_C");
-		mobileManager.addMobilePadCamera();
 		#end
 
 		FlxG.camera.follow(camFollow, null, 9);
@@ -232,12 +231,12 @@ class AchievementsMenuState extends MusicBeatState
 	}
 
 	override function closeSubState() {
-		persistentUpdate = true;
+		super.closeSubState();
 		#if MOBILE_CONTROLS_ALLOWED
 		mobileManager.removeMobilePad();
 		mobileManager.addMobilePad("FULL", "A_B_C");
 		#end
-		super.closeSubState();
+		persistentUpdate = true;
 	}
 
 	public var barTween:FlxTween = null;

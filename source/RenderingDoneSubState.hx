@@ -59,7 +59,8 @@ class RenderingDoneSubState extends MusicBeatSubstate {
 		RenderText.screenCenter(X);
 		add(RenderText);
 
-		saveTxt = new FlxText(0, 540, 0, "Press ENTER to continue.\n" + #if windows "You can find your video in assets/gameRenders!" #else "You can find your song to render in 'assets/gameRenders'!\nThe command to render can be found\nin the readme file, also located there!" #end, 124);
+		var buttonEnter:String #if MOBILE_CONTROLS_ALLOWED 'A' #else 'ENTER' #end;
+		saveTxt = new FlxText(0, 540, 0, 'Press $buttonEnter to continue.\n' + #if windows "You can find your video in assets/gameRenders!" #else "You can find your song to render in 'assets/gameRenders'!\nThe command to render can be found\nin the readme file, also located there!" #end, 124);
 		saveTxt.scrollFactor.set();
 		saveTxt.setFormat(Paths.font("vcr.ttf"), 30, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		saveTxt.updateHitbox();
@@ -71,6 +72,11 @@ class RenderingDoneSubState extends MusicBeatSubstate {
 		FlxTween.tween(background, {alpha: 1}, 0.4, {ease: FlxEase.quartInOut});
 		FlxTween.tween(RenderText, {alpha: 1}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.2});
 		FlxTween.tween(saveTxt, {alpha: 1}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.2});
+
+		#if MOBILE_CONTROLS_ALLOWED
+		mobileManager.addMobilePad("NONE", "A");
+		mobileManager.addMobilePadCamera();
+		#end
 	}
 
 	override function update(elapsed:Float) {
