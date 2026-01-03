@@ -827,39 +827,48 @@ class Controls extends FlxActionSet
 
 	private function scriptedButtonPressed(keys:Array<String>):Bool
 	{
-		var manager = PlayState.checkManager(managerName);
-		if (keys != null && manager != null && manager.hitbox != null)
-			if (manager.hitbox.pressed(keys) == true)
-				return true;
-		if (keys != null && manager != null && manager.mobilePad != null)
-			if (manager.mobile.pressed(keys) == true)
-				return true;
+		if (PlayState.instance != null) {
+			for (key => manager in PlayState.instance.customManagers) {
+				if (keys != null && manager[0] != null && manager[0].hitbox != null)
+					if (manager[0].hitbox.pressed(keys) == true)
+						return true;
+				if (keys != null && manager[0] != null && manager[0].mobilePad != null)
+					if (manager[0].mobilePad.pressed(keys) == true)
+						return true;
+			}
+		}
 
 		return false;
 	}
 
 	private function scriptedButtonJustPressed(keys:Array<String>):Bool
 	{
-		var manager = PlayState.checkManager(managerName);
-		if (keys != null && manager != null && manager.hitbox != null)
-			if (manager.hitbox.justPressed(keys) == true)
-				return true;
-		if (keys != null && manager != null && manager.mobilePad != null)
-			if (manager.mobile.justPressed(keys) == true)
-				return true;
+		if (PlayState.instance != null) {
+			for (key => manager in PlayState.instance.customManagers) {
+				if (keys != null && manager[0] != null && manager[0].hitbox != null)
+					if (manager[0].hitbox.justPressed(keys) == true)
+						return true;
+				if (keys != null && manager[0] != null && manager[0].mobilePad != null)
+					if (manager[0].mobilePad.justPressed(keys) == true)
+						return true;
+			}
+		}
 
 		return false;
 	}
 
 	private function scriptedButtonJustReleased(keys:Array<String>):Bool
 	{
-		var manager = PlayState.checkManager(managerName);
-		if (keys != null && manager != null && manager.hitbox != null)
-			if (manager.hitbox.justReleased(keys) == true)
-				return true;
-		if (keys != null && manager != null && manager.mobilePad != null)
-			if (manager.mobile.justReleased(keys) == true)
-				return true;
+		if (PlayState.instance != null) {
+			for (key => manager in PlayState.instance.customManagers) {
+				if (keys != null && manager[0] != null && manager[0].hitbox != null)
+					if (manager[0].hitbox.justReleased(keys) == true)
+						return true;
+				if (keys != null && manager[0] != null && manager[0].mobilePad != null)
+					if (manager[0].mobilePad.justReleased(keys) == true)
+						return true;
+			}
+		}
 
 		return false;
 	}
