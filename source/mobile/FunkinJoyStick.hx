@@ -1,5 +1,25 @@
 package mobile;
 
+import flixel.FlxG;
+import flixel.FlxSprite;
+import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
+import flixel.input.touch.FlxTouch;
+import flixel.math.FlxAngle;
+import flixel.math.FlxPoint;
+import flixel.util.FlxColor;
+import flixel.util.FlxDestroyUtil;
+import flixel.util.FlxSpriteUtil;
+import flixel.graphics.FlxGraphic;
+import flixel.graphics.frames.FlxAtlasFrames;
+import openfl.utils.Assets;
+import openfl.display.BitmapData;
+#if sys
+import sys.io.File;
+import sys.FileSystem;
+#end
+
+using StringTools;
+
 class FunkinJoyStick extends JoyStick {
 	//FNF Asset Stuff
 	override private function loadObjectGraphic(object:FlxSprite, graphic:String, img:String) {
