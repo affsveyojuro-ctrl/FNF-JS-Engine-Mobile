@@ -185,62 +185,62 @@ class Controls extends FlxActionSet
 	public var NOTE_UP(get, never):Bool;
 
 	inline function get_NOTE_UP()
-		return _note_up.check() #if MOBILE_CONTROLS_ALLOWED || hitboxPressed(['NOTE_UP']) || mobilePadPressed(['NOTE_UP']) #end;
+		return _note_up.check() #if MOBILE_CONTROLS_ALLOWED || hitboxPressed(['NOTE_UP']) || scriptedButtonPressed(['NOTE_UP']) #end;
 
 	public var NOTE_LEFT(get, never):Bool;
 
 	inline function get_NOTE_LEFT()
-		return _note_left.check() #if MOBILE_CONTROLS_ALLOWED || hitboxPressed(['NOTE_LEFT']) || mobilePadPressed(['NOTE_LEFT']) #end;
+		return _note_left.check() #if MOBILE_CONTROLS_ALLOWED || hitboxPressed(['NOTE_LEFT']) || scriptedButtonPressed(['NOTE_LEFT']) #end;
 
 	public var NOTE_RIGHT(get, never):Bool;
 
 	inline function get_NOTE_RIGHT()
-		return _note_right.check() #if MOBILE_CONTROLS_ALLOWED || hitboxPressed(['NOTE_RIGHT']) || mobilePadPressed(['NOTE_RIGHT']) #end;
+		return _note_right.check() #if MOBILE_CONTROLS_ALLOWED || hitboxPressed(['NOTE_RIGHT']) || scriptedButtonPressed(['NOTE_RIGHT']) #end;
 
 	public var NOTE_DOWN(get, never):Bool;
 
 	inline function get_NOTE_DOWN()
-		return _note_down.check() #if MOBILE_CONTROLS_ALLOWED || hitboxPressed(['NOTE_DOWN']) || mobilePadPressed(['NOTE_DOWN']) #end;
+		return _note_down.check() #if MOBILE_CONTROLS_ALLOWED || hitboxPressed(['NOTE_DOWN']) || scriptedButtonPressed(['NOTE_DOWN']) #end;
 
 	public var NOTE_UP_P(get, never):Bool;
 
 	inline function get_NOTE_UP_P()
-		return _note_upP.check() #if MOBILE_CONTROLS_ALLOWED || hitboxJustPressed(['NOTE_UP']) || mobilePadJustPressed(['NOTE_UP']) #end;
+		return _note_upP.check() #if MOBILE_CONTROLS_ALLOWED || hitboxJustPressed(['NOTE_UP']) || scriptedButtonJustPressed(['NOTE_UP']) #end;
 
 	public var NOTE_LEFT_P(get, never):Bool;
 
 	inline function get_NOTE_LEFT_P()
-		return _note_leftP.check() #if MOBILE_CONTROLS_ALLOWED || hitboxJustPressed(['NOTE_LEFT']) || mobilePadJustPressed(['NOTE_LEFT']) #end;
+		return _note_leftP.check() #if MOBILE_CONTROLS_ALLOWED || hitboxJustPressed(['NOTE_LEFT']) || scriptedButtonJustPressed(['NOTE_LEFT']) #end;
 
 	public var NOTE_RIGHT_P(get, never):Bool;
 
 	inline function get_NOTE_RIGHT_P()
-		return _note_rightP.check() #if MOBILE_CONTROLS_ALLOWED || hitboxJustPressed(['NOTE_RIGHT']) || mobilePadJustPressed(['NOTE_RIGHT']) #end;
+		return _note_rightP.check() #if MOBILE_CONTROLS_ALLOWED || hitboxJustPressed(['NOTE_RIGHT']) || scriptedButtonJustPressed(['NOTE_RIGHT']) #end;
 
 	public var NOTE_DOWN_P(get, never):Bool;
 
 	inline function get_NOTE_DOWN_P()
-		return _note_downP.check() #if MOBILE_CONTROLS_ALLOWED || hitboxJustPressed(['NOTE_DOWN']) || mobilePadJustPressed(['NOTE_DOWN']) #end;
+		return _note_downP.check() #if MOBILE_CONTROLS_ALLOWED || hitboxJustPressed(['NOTE_DOWN']) || scriptedButtonJustPressed(['NOTE_DOWN']) #end;
 
 	public var NOTE_UP_R(get, never):Bool;
 
 	inline function get_NOTE_UP_R()
-		return _note_upR.check() #if MOBILE_CONTROLS_ALLOWED || hitboxJustReleased(['NOTE_UP']) || mobilePadJustReleased(['NOTE_UP']) #end;
+		return _note_upR.check() #if MOBILE_CONTROLS_ALLOWED || hitboxJustReleased(['NOTE_UP']) || scriptedButtonJustReleased(['NOTE_UP']) #end;
 
 	public var NOTE_LEFT_R(get, never):Bool;
 
 	inline function get_NOTE_LEFT_R()
-		return _note_leftR.check() #if MOBILE_CONTROLS_ALLOWED || hitboxJustReleased(['NOTE_LEFT']) || mobilePadJustReleased(['NOTE_LEFT']) #end;
+		return _note_leftR.check() #if MOBILE_CONTROLS_ALLOWED || hitboxJustReleased(['NOTE_LEFT']) || scriptedButtonJustReleased(['NOTE_LEFT']) #end;
 
 	public var NOTE_RIGHT_R(get, never):Bool;
 
 	inline function get_NOTE_RIGHT_R()
-		return _note_rightR.check() #if MOBILE_CONTROLS_ALLOWED || hitboxJustReleased(['NOTE_RIGHT']) || mobilePadJustReleased(['NOTE_RIGHT']) #end;
+		return _note_rightR.check() #if MOBILE_CONTROLS_ALLOWED || hitboxJustReleased(['NOTE_RIGHT']) || scriptedButtonJustReleased(['NOTE_RIGHT']) #end;
 
 	public var NOTE_DOWN_R(get, never):Bool;
 
 	inline function get_NOTE_DOWN_R()
-		return _note_downR.check() #if MOBILE_CONTROLS_ALLOWED || hitboxJustReleased(['NOTE_DOWN']) || mobilePadJustReleased(['NOTE_DOWN']) #end;
+		return _note_downR.check() #if MOBILE_CONTROLS_ALLOWED || hitboxJustReleased(['NOTE_DOWN']) || scriptedButtonJustReleased(['NOTE_DOWN']) #end;
 
 	public var BOT_ENERGY_P(get, never):Bool;
 
@@ -820,6 +820,45 @@ class Controls extends FlxActionSet
 	{
 		if (keys != null && requestedHitbox != null)
 			if (requestedHitbox.justReleased(keys) == true)
+				return true;
+
+		return false;
+	}
+
+	private function scriptedButtonPressed(keys:Array<String>):Bool
+	{
+		var manager = PlayState.checkManager(managerName);
+		if (keys != null && manager != null && manager.hitbox != null)
+			if (manager.hitbox.pressed(keys) == true)
+				return true;
+		if (keys != null && manager != null && manager.mobilePad != null)
+			if (manager.mobile.pressed(keys) == true)
+				return true;
+
+		return false;
+	}
+
+	private function scriptedButtonJustPressed(keys:Array<String>):Bool
+	{
+		var manager = PlayState.checkManager(managerName);
+		if (keys != null && manager != null && manager.hitbox != null)
+			if (manager.hitbox.justPressed(keys) == true)
+				return true;
+		if (keys != null && manager != null && manager.mobilePad != null)
+			if (manager.mobile.justPressed(keys) == true)
+				return true;
+
+		return false;
+	}
+
+	private function scriptedButtonJustReleased(keys:Array<String>):Bool
+	{
+		var manager = PlayState.checkManager(managerName);
+		if (keys != null && manager != null && manager.hitbox != null)
+			if (manager.hitbox.justReleased(keys) == true)
+				return true;
+		if (keys != null && manager != null && manager.mobilePad != null)
+			if (manager.mobile.justReleased(keys) == true)
 				return true;
 
 		return false;
