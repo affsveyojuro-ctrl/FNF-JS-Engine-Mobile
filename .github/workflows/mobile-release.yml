@@ -65,13 +65,11 @@ jobs:
         uses: actions/download-artifact@main
         with:
           name: iOSBuild
-      - name: Zip For Release
-        run: zip -r JSEngine-iOS.zip JSEngine.ipa
       - name: Upload iOS Build to Release
         uses: svenstaro/upload-release-action@2.5.0
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ env.TAG_NAME }}
-          file: JSEngine-iOS.zip
-          asset_name: FNF-JS-Engine-iOS.zip
+          file: JSEngine.ipa
+          asset_name: FNF-JS-Engine-iOS.ipa
           overwrite: false
