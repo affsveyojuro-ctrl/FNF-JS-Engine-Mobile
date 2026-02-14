@@ -92,7 +92,7 @@ class UpdateState extends MusicBeatState
 
 		getUpdateLink();
 		prepareUpdate();
-		checkAndStartDownload();
+		checkAndStartDownload(online_url);
 	}
 
 	var lastVare:Float = 0;
@@ -195,15 +195,16 @@ class UpdateState extends MusicBeatState
 
 	var httpHandler:Http;
 	var fatalError:Bool = false;
+	var requestFinished:Bool = false;
 
-	public function startDownload()
+	public function startDownload(url:String)
 	{
 			if (fatalError)
 					return;
 
 			trace("starting actual file download via URLLoader...");
 			try {
-					zip.load(new URLRequest(online_url));
+					zip.load(new URLRequest(url));
 			} catch (e:Dynamic) {
 					trace('Failed to initiate URLLoader download: ' + e);
 					Application.current.window.alert('Failed to start the download. Please try again.');
@@ -211,21 +212,50 @@ class UpdateState extends MusicBeatState
 			}
 	}
 
-	public function checkAndStartDownload() {
+	public function checkAndStartDownload(url:String, redirects:Int = 0) {
+			if (fatalError) return;
+
+			if (redirects > 5) {
+		        fatalError = true;
+		        Application.current.window.alert("Too many redirects while trying to download the update.");
+		        FlxG.resetGame();
+		        return;
+		    }
+
 			trace("Checking update URL existence...");
-			var httpCheck = new Http(online_url);
+			var httpCheck = new Http(url);
 
 			httpCheck.onStatus = function(status:Int):Void {
 					trace('HTTP Status for URL check: ' + status);
-					if (status == 200 || status == 302) { // 200 = OK, 302 = Found (but in both cases, the file was found)
+					switch(status) {
+							case 200: // OK
+							requestFinished = true;
 							trace("Update file found. Initiating download...");
-							startDownload(); // Now proceed with the actual download
-					} else if (status == 404) { // HTTP 404 Not Found
-							trace('File not found at URL: ' + online_url);
+							startDownload(url); // Now proceed with the actual download
+
+							case 301, 302, 303, 307, 308: //Redirect codes
+			                var newURL = httpCheck.responseHeaders.get("Location");
+							if (newURL == null) newURL = httpCheck.responseHeaders.get("location"); // lowercase URL if "location" is lowercase
+
+			                if (newURL != null && newURL != "")
+			                {
+			                    trace("The update link has been redirected to:" + newURL);
+			                    checkAndStartDownload(newURL, redirects + 1);
+			                }
+			                else
+			                {
+			                    fatalError = true;
+			                    Application.current.window.alert("The update link was redirected but its Location header wasn't found.\nTry downloading the update manually from GitHub.");
+			                    FlxG.resetGame();
+			                }
+
+							case 404: // Not Found
+							trace('File not found at URL: ' + url);
 							fatalError = true;
 							Application.current.window.alert('Couldn\'t find the update file! The file may have been moved or doesn\'t exist for this version. Please check for a new version manually or report this issue.');
 							FlxG.resetGame();
-					} else { // Handle other HTTP errors
+
+							default: //Any other HTTP errors
 							trace('Unexpected HTTP status for URL check: ' + status);
 							fatalError = true;
 							Application.current.window.alert('An error occurred while checking for updates (Status: ' + status + '). Please try again later.');
@@ -234,6 +264,7 @@ class UpdateState extends MusicBeatState
 			}
 
 			httpCheck.onError = function(msg:String):Void {
+					if (requestFinished) return;
 					trace('HTTP Error during URL check: ' + msg);
 					fatalError = true;
 					Application.current.window.alert('A network error occurred while checking for updates: ' + msg + '. Please check your internet connection.');

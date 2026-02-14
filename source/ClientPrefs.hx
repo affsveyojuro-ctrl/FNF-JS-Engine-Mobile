@@ -1,7 +1,6 @@
 package;
 
 import Controls;
-import flixel.graphics.FlxGraphic;
 import flixel.input.keyboard.FlxKey;
 
 class ClientPrefs { //default settings if it can't find a save file containing your current settings
@@ -185,6 +184,7 @@ class ClientPrefs { //default settings if it can't find a save file containing y
 	public static var disableAprilFools:Bool = false;
 	public static var rainbowTime:Float = 5.0;
 	public static var autosaveCharts:Bool = true;
+	public static var autosaveTime:Int = 240;
 
 	//Gameplay Modifiers
 	public static var gameplaySettings:Map<String, Dynamic> = [
@@ -223,11 +223,11 @@ class ClientPrefs { //default settings if it can't find a save file containing y
 
 	//Gameplay Offset and Window stuff
 	public static var ratingOffset:Int = 0;
-	public static var perfectWindow:Int = 15;
-	public static var sickWindow:Int = 45;
-	public static var goodWindow:Int = 90;
-	public static var badWindow:Int = 135;
-	public static var safeFrames:Float = 10;
+	public static var perfectWindow:Float = 15.0;
+	public static var sickWindow:Float = 45.0;
+	public static var goodWindow:Float = 90.0;
+	public static var badWindow:Float = 135.0;
+	public static var safeFrames:Float = 10.0;
 	public static var comboOffset:Array<Int> = [0, 0, 0, 0];
 	public static var noteOffset:Int = 0;
 
@@ -256,7 +256,7 @@ class ClientPrefs { //default settings if it can't find a save file containing y
 
 		'debug_1'		=> [SEVEN, NONE],
 		'debug_2'		=> [EIGHT, NONE],
-		'qt_taunt'		=> [SPACE, NONE]
+		'taunt'		    => [SPACE, NONE]
 	];
 	public static var defaultKeys:Map<String, Array<FlxKey>> = null;
 
@@ -359,7 +359,7 @@ class ClientPrefs { //default settings if it can't find a save file containing y
 	}
 
 	inline public static function getGameplaySetting(name:String, defaultValue:Dynamic):Dynamic {
-		return /*PlayState.isStoryMode ? defaultValue : */ (gameplaySettings.exists(name) ? gameplaySettings.get(name) : defaultValue);
+		return (gameplaySettings.exists(name) ? gameplaySettings.get(name) : defaultValue);
 	}
 
 	public static function reloadControls() {
@@ -388,3 +388,4 @@ class ClientPrefs { //default settings if it can't find a save file containing y
 		return copiedArray;
 	}
 }
+

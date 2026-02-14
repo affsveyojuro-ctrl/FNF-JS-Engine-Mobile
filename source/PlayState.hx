@@ -4,8 +4,6 @@ import Achievements;
 import Character.Boyfriend;
 import Conductor.Rating;
 import DialogueBoxPsych;
-import Note.EventNote;
-import Note.PreloadedChartNote;
 import Note;
 import Section.SwagSection;
 import Shaders;
@@ -16,16 +14,14 @@ import editors.ChartingState;
 import flixel.input.keyboard.FlxKey;
 import flixel.ui.FlxBar;
 import flixel.util.FlxSort;
-import lime.system.System;
 import objects.*;
 import openfl.events.KeyboardEvent;
+import openfl.system.System;
 import play.objects.*;
 #if SHADERS_ALLOWED
-import openfl.filters.BitmapFilter;
 import openfl.filters.ShaderFilter;
 import shaders.ErrorHandledShader;
 #end
-
 
 class PlayState extends MusicBeatState
 {
@@ -42,10 +38,6 @@ class PlayState extends MusicBeatState
 	public static var ratingStuff:Array<Dynamic> = [];
 
 	private var tauntKey:Array<FlxKey>;
-
-	public var camGameShaders:Array<ShaderEffect> = [];
-	public var camHUDShaders:Array<ShaderEffect> = [];
-	public var camOtherShaders:Array<ShaderEffect> = [];
 
 	var lastUpdateTime:Float = 0.0;
 
@@ -290,7 +282,7 @@ class PlayState extends MusicBeatState
 
 	var EngineWatermark:FlxText;
 
-	public static var screenshader:Shaders.PulseEffectAlt = new PulseEffectAlt();
+	public static var screenshader:Shaders.PulseEffectAlt;
 
 	var disableTheTripper:Bool = false;
 	var disableTheTripperAt:Int;
@@ -452,7 +444,7 @@ class PlayState extends MusicBeatState
 		inline Paths.clearStoredMemory();
 
 		#if sys
-		openfl.system.System.gc();
+		System.gc();
 		#end
 
 		// for lua
@@ -472,11 +464,13 @@ class PlayState extends MusicBeatState
 		);
 		#end
 
+		screenshader = new PulseEffectAlt();
+
 		debugKeysChart = ClientPrefs.copyKey(ClientPrefs.keyBinds.get('debug_1'));
 		debugKeysCharacter = ClientPrefs.copyKey(ClientPrefs.keyBinds.get('debug_2'));
 		PauseSubState.songName = null; //Reset to default
 		playbackRate = ClientPrefs.getGameplaySetting('songspeed', 1);
-		tauntKey = ClientPrefs.copyKey(ClientPrefs.keyBinds.get('qt_taunt'));
+		tauntKey = ClientPrefs.copyKey(ClientPrefs.keyBinds.get('taunt'));
 
 		keysArray = [];
 
@@ -494,8 +488,7 @@ class PlayState extends MusicBeatState
 		screenshader.waveAmplitude = 1;
 		screenshader.waveFrequency = 2;
 		screenshader.waveSpeed = 1;
-		screenshader.shader.uTime.value[0] = new flixel.math.FlxRandom().float(-100000, 100000);
-		screenshader.shader.uampmul.value[0] = 0;
+		screenshader.shader.time = new flixel.math.FlxRandom().float(-100000, 100000);
 
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
@@ -1528,7 +1521,7 @@ class PlayState extends MusicBeatState
 		startingTime = haxe.Timer.stamp();
 	}
 
-	#if (SHADERS_ALLOWED)
+	#if SHADERS_ALLOWED
 	public var runtimeShaders:Map<String, Array<String>> = new Map<String, Array<String>>();
 	public function createRuntimeShader(shaderName:String):ErrorHandledRuntimeShader
 	{
@@ -1629,17 +1622,17 @@ class PlayState extends MusicBeatState
 	inline function set_polyphony(value:Float, which:Int):Float
 	{
 		switch (which) {
-			case 0:
+		    case 0:
+		        polyphonyOppo = value;
+		        polyphonyBF = value;
+		    case 1:
+		        polyphonyOppo = value;
+		    case 2:
+		        polyphonyBF = value;
+		    // just in case, as an anti-crash prevention maybe?
+		    default:
 				polyphonyOppo = value;
-				polyphonyBF = value;
-			case 1:
-				polyphonyOppo = value;
-			case 2:
-				polyphonyBF = value;
-			// just in case, as an anti-crash prevention maybe?
-			default:
-						polyphonyOppo = value;
-				polyphonyBF = value;
+		        polyphonyBF = value;
 		}
 		return value;
 	}
@@ -1738,31 +1731,16 @@ class PlayState extends MusicBeatState
 	}
 
 	public function addShaderToCamera(cam:String,effect:Dynamic){//STOLE FROM ANDROMEDA	// actually i got it from old psych engine
-		#if SHADERS_ALLOWED
-		if (!ClientPrefs.shaders)
-			return;
 		switch(cam.toLowerCase()) {
 			case 'camhud' | 'hud':
-				camHUDShaders.push(effect);
-				var newCamEffects:Array<BitmapFilter>=[]; // IT SHUTS HAXE UP IDK WHY BUT WHATEVER IDK WHY I CANT JUST ARRAY<SHADERFILTER>
-				for(i in camHUDShaders){
-					newCamEffects.push(new ShaderFilter(i.shader));
-				}
-				camHUD.filters = newCamEffects;
+				if (camHUD.filters == null) camHUD.filters = [];
+				camHUD.filters?.push(new ShaderFilter(effect.shader));
 			case 'camother' | 'other':
-				camOtherShaders.push(effect);
-				var newCamEffects:Array<BitmapFilter>=[]; // IT SHUTS HAXE UP IDK WHY BUT WHATEVER IDK WHY I CANT JUST ARRAY<SHADERFILTER>
-				for(i in camOtherShaders){
-					newCamEffects.push(new ShaderFilter(i.shader));
-				}
-				camOther.filters = newCamEffects;
+				if (camOther.filters == null) camOther.filters = [];
+				camOther.filters?.push(new ShaderFilter(effect.shader));
 			case 'camgame' | 'game':
-				camGameShaders.push(effect);
-				var newCamEffects:Array<BitmapFilter>=[]; // IT SHUTS HAXE UP IDK WHY BUT WHATEVER IDK WHY I CANT JUST ARRAY<SHADERFILTER>
-				for(i in camGameShaders){
-					newCamEffects.push(new ShaderFilter(i.shader));
-				}
-				camGame.filters = newCamEffects;
+				if (camGame.filters == null) camGame.filters = [];
+				camGame.filters?.push(new ShaderFilter(effect.shader));
 			default:
 				if(modchartSprites.exists(cam)) {
 					Reflect.setProperty(modchartSprites.get(cam),"shader",effect.shader);
@@ -1773,64 +1751,40 @@ class PlayState extends MusicBeatState
 					Reflect.setProperty(OBJ,"shader", effect.shader);
 				}
 		}
-		#end
-  }
+ 	}
 
-  public function removeShaderFromCamera(cam:String,effect:ShaderEffect){
-	#if SHADERS_ALLOWED
-	if (!ClientPrefs.shaders)
-		return;
-	switch(cam.toLowerCase()) {
-		case 'camhud' | 'hud':
-			camHUDShaders.remove(effect);
-			var newCamEffects:Array<BitmapFilter>=[];
-			for(i in camHUDShaders){
-				newCamEffects.push(new ShaderFilter(i.shader));
+	public function removeShaderFromCamera(cam:String,effect:Dynamic){
+		var filter = new ShaderFilter(effect.shader);
+		switch(cam.toLowerCase()) {
+			case 'camhud' | 'hud':
+				camHUD.filters?.remove(filter);
+			case 'camother' | 'other':
+				camOther.filters?.remove(filter);
+			case 'camgame' | 'game':
+				camGame.filters?.remove(filter);
+			default:
+				if(modchartSprites.exists(cam)) {
+					Reflect.setProperty(modchartSprites.get(cam),"shader",null);
+				} else if(modchartTexts.exists(cam)) {
+					Reflect.setProperty(modchartTexts.get(cam),"shader",null);
+				} else {
+					var OBJ = Reflect.getProperty(PlayState.instance,cam);
+					Reflect.setProperty(OBJ,"shader", null);
+				}
 			}
-			camHUD.filters = newCamEffects;
-		case 'camother' | 'other':
-			camOtherShaders.remove(effect);
-			var newCamEffects:Array<BitmapFilter>=[];
-			for(i in camOtherShaders){
-				newCamEffects.push(new ShaderFilter(i.shader));
-			}
-			camOther.filters = newCamEffects;
-		default:
-			if(modchartSprites.exists(cam)) {
-				Reflect.setProperty(modchartSprites.get(cam),"shader",null);
-			} else if(modchartTexts.exists(cam)) {
-				Reflect.setProperty(modchartTexts.get(cam),"shader",null);
-			} else {
-				var OBJ = Reflect.getProperty(PlayState.instance,cam);
-				Reflect.setProperty(OBJ,"shader", null);
-			}
-		}
-	#end
-  }
-  public function clearShaderFromCamera(cam:String){
-	#if SHADERS_ALLOWED
-	if (!ClientPrefs.shaders)
-		return;
-	switch(cam.toLowerCase()) {
-		case 'camhud' | 'hud':
-			camHUDShaders = [];
-			var newCamEffects:Array<BitmapFilter>=[];
-			camHUD.filters = newCamEffects;
-		case 'camother' | 'other':
-			camOtherShaders = [];
-			var newCamEffects:Array<BitmapFilter>=[];
-			camOther.filters = newCamEffects;
-		case 'camgame' | 'game':
-			camGameShaders = [];
-			var newCamEffects:Array<BitmapFilter>=[];
-			camGame.filters = newCamEffects;
-		default:
-			camGameShaders = [];
-			var newCamEffects:Array<BitmapFilter>=[];
-			camGame.filters = newCamEffects;
 	}
-	#end
-  }
+	public function clearShaderFromCamera(cam:String){
+		switch(cam.toLowerCase()) {
+			case 'camhud' | 'hud':
+				camHUD.filters = [];
+			case 'camother' | 'other':
+				camOther.filters = [];
+			case 'camgame' | 'game':
+				camGame.filters = [];
+			default:
+				camGame.filters = [];
+		}
+	}
 
 	public function getLuaObject(tag:String, text:Bool=true):FlxSprite {
 		if(modchartSprites.exists(tag)) return modchartSprites.get(tag);
@@ -2463,6 +2417,10 @@ class PlayState extends MusicBeatState
 			if (cpuControlled) detailsText = detailsText + ' (using a bot)';
 			// Updating Discord Rich Presence (with Time Left)
 			DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconP2.getCharacter(), true, songLength);
+			if (ffmpegMode) {
+				detailsText = 'Rendering a Song';
+				DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconP2.getCharacter(), true, songLength);
+			}
 		}
 		#end
 		setOnLuas('songLength', songLength);
@@ -2494,7 +2452,7 @@ class PlayState extends MusicBeatState
 	private function generateSong(?startingPoint:Float = 0):Void
 	{
 		var offsetStart = (startingPoint > 0 ? 500 : 0);
-	   	final startTime = haxe.Timer.stamp();
+		final startTime = haxe.Timer.stamp();
 
 		songSpeedType = ClientPrefs.getGameplaySetting('scrolltype','multiplicative');
 
@@ -2811,7 +2769,7 @@ class PlayState extends MusicBeatState
 
 		final endTime = haxe.Timer.stamp();
 
-		openfl.system.System.gc();
+		System.gc();
 
 		final elapsedTime = endTime - startTime;
 
@@ -3005,7 +2963,7 @@ class PlayState extends MusicBeatState
 	override public function onFocusLost():Void
 	{
 		#if DISCORD_ALLOWED
-		try {if (health > 0 && !paused && autoUpdateRPC) DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + storyDifficultyText + ")", iconP2.getCharacter());}
+		try {if (health > 0 && !paused && autoUpdateRPC && FlxG.autoPause) DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + storyDifficultyText + ")", iconP2.getCharacter());}
 		catch(e) {};
 		#end
 
@@ -3094,16 +3052,21 @@ class PlayState extends MusicBeatState
 	override public function update(elapsed:Float)
 	{
 		if (ffmpegMode) elapsed = 1 / ClientPrefs.targetFPS;
-		if (screenshader.Enabled)
+		if (screenshader.enabled)
 		{
 			if(disableTheTripperAt <= curStep || isDead)
 				disableTheTripper = true;
 
-			FlxG.camera.filters = [new ShaderFilter(screenshader.shader)];
-			screenshader.update(elapsed);
 			if(disableTheTripper)
 			{
-				screenshader.shader.uampmul.value[0] -= (elapsed / 2);
+				screenshader.shader.waveAmplitude -= (elapsed / 2);
+			}
+
+			if (screenshader?.shader?.waveAmplitude > 0)
+				screenshader.update(elapsed);
+			else {
+				removeShaderFromCamera('camGame', screenshader);
+				screenshader.enabled = false;
 			}
 		}
 
@@ -3311,7 +3274,7 @@ class PlayState extends MusicBeatState
 						PlayState.SONG = Song.loadFromJson(SONG.event7Value + (CoolUtil.difficultyString() == 'NORMAL' ? '' : '-' + CoolUtil.difficulties[storyDifficulty]), SONG.event7Value);
 				LoadingState.loadAndSwitchState(PlayState.new);
 				case "Close Game":
-					openfl.system.System.exit(0);
+					System.exit(0);
 				case "Play Video":
 					updateTime = false;
 					FlxG.sound.music.volume = 0;
@@ -3566,7 +3529,7 @@ class PlayState extends MusicBeatState
 					catch (e) {}
 				}
 			}
-			if (ClientPrefs.renderGCRate > 0 && (frameCaptured / targetFPS) % ClientPrefs.renderGCRate == 0) openfl.system.System.gc();
+			if (ClientPrefs.renderGCRate > 0 && (frameCaptured / targetFPS) % ClientPrefs.renderGCRate == 0) System.gc();
 			frameCaptured++;
 		}
 	}
@@ -4144,26 +4107,16 @@ class PlayState extends MusicBeatState
 			}
 
 			case 'Rainbow Eyesore':
-				#if (linux && LUA_ALLOWED)
-				addTextToDebug('Rainbow shader does not work on Linux right now!', FlxColor.RED);
-				return;
-				#elseif linux
-				trace('Rainbow shader does not work on Linux right now!');
-				return;
-				#end
 				#if SHADERS_ALLOWED
-				if(ClientPrefs.flashing && ClientPrefs.shaders) {
-					var timeRainbow:Int = Std.parseInt(value1);
-					var speedRainbow:Float = Std.parseFloat(value2);
+				if(ClientPrefs.flashing && ClientPrefs.shaders && curStep < Std.parseInt(value1)) {
 					disableTheTripper = false;
-					disableTheTripperAt = timeRainbow;
+					disableTheTripperAt = Std.parseInt(value1);
 					FlxG.camera.filters = [new ShaderFilter(screenshader.shader)];
 					screenshader.waveAmplitude = 1;
 					screenshader.waveFrequency = 2;
-					screenshader.waveSpeed = speedRainbow * playbackRate;
-					screenshader.shader.uTime.value[0] = new flixel.math.FlxRandom().float(-100000, 100000);
-					screenshader.shader.uampmul.value[0] = 1;
-					screenshader.Enabled = true;
+					screenshader.waveSpeed = Std.parseFloat(value2) * playbackRate;
+					screenshader.shader.time = new flixel.math.FlxRandom().float(-1e3, 1e3);
+					screenshader.enabled = true;
 				}
 				#end
 			case 'Popup':
@@ -4256,7 +4209,7 @@ class PlayState extends MusicBeatState
 				"Windows 7" => 7,
 			];
 
-			var platformLabel = System.platformLabel;
+			var platformLabel = lime.system.System.platformLabel;
 			var words = platformLabel.split(" ");
 			var windowsIndex = words.indexOf("Windows");
 			var result = "";
@@ -4309,50 +4262,56 @@ class PlayState extends MusicBeatState
 
 		if (gf != null && SONG.notes[curSection].gfSection)
 		{
-			moveCameraToGirlfriend();
+			moveCamera('gf');
 			callOnLuas('onMoveCamera', ['gf']);
 			return;
 		}
 
 		if (!SONG.notes[curSection].mustHitSection)
 		{
-			moveCamera(true);
+			moveCamera('dad');
 			callOnLuas('onMoveCamera', ['dad']);
 		}
 		else
 		{
-			moveCamera(false);
+			moveCamera('bf');
 			callOnLuas('onMoveCamera', ['boyfriend']);
 		}
 	}
 
-	public function moveCameraToGirlfriend()
-	{
-		camFollow.set(gf.getMidpoint().x, gf.getMidpoint().y);
-		camFollow.x += gf.cameraPosition[0] + girlfriendCameraOffset[0];
-		camFollow.y += gf.cameraPosition[1] + girlfriendCameraOffset[1];
-		tweenCamIn();
-	}
-
 	var cameraTwn:FlxTween;
-	public function moveCamera(isDad:Bool)
+	public function moveCamera(focus:String = "bf")
 	{
-		if(isDad)
+		var char:Character = null;
+		var charCamOffset:Array<Float> = [0, 0];
+		switch (focus)
 		{
-			if(dad == null) return;
-			camFollow.set(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
-			camFollow.x += dad.cameraPosition[0] + opponentCameraOffset[0];
-			camFollow.y += dad.cameraPosition[1] + opponentCameraOffset[1];
-			tweenCamIn();
-		}
-		else
-		{
-			if(boyfriend == null) return;
-			camFollow.set(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100);
-			camFollow.x -= boyfriend.cameraPosition[0] - boyfriendCameraOffset[0];
-			camFollow.y += boyfriend.cameraPosition[1] + boyfriendCameraOffset[1];
+			case 'gf' if (gf != null):
+				char = gf;
+				charCamOffset = girlfriendCameraOffset;
 
-			if (songName == 'tutorial' && cameraTwn == null && FlxG.camera.zoom != 1)
+			case 'dad' if (dad != null):
+				char = dad;
+				charCamOffset = opponentCameraOffset;
+
+			case 'bf' if (boyfriend != null):
+				char = boyfriend;
+				charCamOffset = boyfriendCameraOffset;
+
+			default:
+				return;
+		}
+		if (char != null) {
+			final mid = char.getMidpoint();
+			camFollow.set(
+				mid.x - (char == gf ? 0 : char == boyfriend ? 100 : -150),
+				mid.y - (char == gf ? 0 : 100)
+			);
+			camFollow.x += (char == boyfriend ? -1 : 1) * char.cameraPosition[0] + charCamOffset[0];
+			camFollow.y += char.cameraPosition[1] + charCamOffset[1];
+			if (char == dad || char == gf) tweenCamIn();
+
+			if (char == boyfriend && songName == 'tutorial' && cameraTwn == null && FlxG.camera.zoom != 1)
 			{
 				cameraTwn = FlxTween.tween(FlxG.camera, {zoom: 1}, (Conductor.stepCrochet * 4 / 1000), {ease: FlxEase.elasticInOut, onComplete:
 					function (twn:FlxTween)

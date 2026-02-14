@@ -9,7 +9,6 @@ import openfl.display.Sprite;
 #if (linux && !debug)
 import hxgamemode.GamemodeClient;
 #end
-
 #if (linux || mac)
 import lime.graphics.Image;
 #end
@@ -26,37 +25,46 @@ import lime.graphics.Image;
 #include <winuser.h>
 ')
 #end
+class Main extends Sprite
+{
+  final game =
+    {
+      width: 1280,
+      height: 720,
+      initialState: InitState.new,
+      zoom: -1.0,
+      framerate: 60,
+      skipSplash: true,
+      startFullscreen: false
+    };
 
-class Main extends Sprite {
-	final game = {
-		width: 1280,
-		height: 720,
-		initialState: InitState.new,
-		zoom: -1.0,
-		framerate: 60,
-		skipSplash: true,
-		startFullscreen: false
-	};
+  public static var fpsVar:FPSCounter;
+  public static var instance:Main;
 
-	public static var fpsVar:FPSCounter;
-	public static var instance:Main;
+  public static final superDangerMode:Bool = Sys.args().contains("-troll");
 
-	public static final superDangerMode:Bool = Sys.args().contains("-troll");
+  // You can pretty much ignore everything from here on - your code should go in your states.
 
-	// You can pretty much ignore everything from here on - your code should go in your states.
+  @:noCompletion
+  private static function __init__():Void
+  {
+    #if (linux && !debug)
+    // Request we start game mode
+    if (GamemodeClient.request_start() != 0)
+    {
+      Sys.println('Failed to request gamemode start: ${GamemodeClient.error_string()}...');
+      openfl.system.System.exit(1);
+    } else
+    {
+      Sys.println('Succesfully requested gamemode to start...');
+    }
+    #end
+  }
 
-	@:noCompletion
-	private static function __init__():Void {
-		#if (linux && !debug)
-		// Request we start game mode
-		if (GamemodeClient.request_start() != 0) {
-			Sys.println('Failed to request gamemode start: ${GamemodeClient.error_string()}...');
-			openfl.system.System.exit(1);
-		} else {
-			Sys.println('Succesfully requested gamemode to start...');
-		}
-		#end
-	}
+  public static function main():Void
+  {
+    Lib.current.addChild(new Main());
+  }
 
 	public static function main():Void {
 		Lib.current.addChild(new Main());
@@ -89,85 +97,103 @@ class Main extends Sprite {
 	public static function isPlayState():Bool
 		return Type.getClassName(Type.getClass(FlxG.state)) == 'PlayState';
 
-	private function setupGame():Void {
-		#if (openfl <= "9.2.0")
-		var stageWidth:Int = Lib.current.stage.stageWidth;
-		var stageHeight:Int = Lib.current.stage.stageHeight;
+	private function setupGame():Void
+  {
+    var stageWidth:Int = Lib.current.stage.stageWidth;
+    var stageHeight:Int = Lib.current.stage.stageHeight;
+    #if (openfl <= "9.2.0")
+    if (game.zoom == -1.0)
+    {
+      var ratioX:Float = stageWidth / game.width;
+      var ratioY:Float = stageHeight / game.height;
+      game.zoom = Math.min(ratioX, ratioY);
+      game.width = Math.ceil(stageWidth / game.zoom);
+      game.height = Math.ceil(stageHeight / game.zoom);
+    };
+    #end
+    ClientPrefs.loadDefaultStuff();
+    #if ACHIEVEMENTS_ALLOWED Achievements.load(); #end
 
-		if (game.zoom == -1.0) {
-			var ratioX:Float = stageWidth / game.width;
-			var ratioY:Float = stageHeight / game.height;
-			game.zoom = Math.min(ratioX, ratioY);
-			game.width = Math.ceil(stageWidth / game.zoom);
-			game.height = Math.ceil(stageHeight / game.zoom);
-		};
-		#end
+    final funkinGame:FlxGame = new FlxGame(game.width, game.height, #if (mobile && MODS_ALLOWED) CopyState.checkExistingFiles() ? game.initialState : CopyState #else game.initialState #end, #if (flixel < "5.0.0") game.zoom, #end game.framerate, game.framerate,
+      game.skipSplash, game.startFullscreen);
+    // Literally just from Vanilla FNF but I implemented it my own way. -Torch
+    // torch is my friend btw :3 -moxie
+    @:privateAccess {
+      final soundFrontEnd:flixel.system.frontEnds.SoundFrontEnd = new objects.CustomSoundTray.CustomSoundFrontEnd();
+      FlxG.sound = soundFrontEnd;
+      funkinGame._customSoundTray = objects.CustomSoundTray.CustomSoundTray;
+    }
 
-		ClientPrefs.loadDefaultStuff();
-		#if ACHIEVEMENTS_ALLOWED Achievements.load(); #end
+    addChild(funkinGame);
 
-		final funkinGame:FlxGame = new FlxGame(game.width, game.height, #if (mobile && MODS_ALLOWED) CopyState.checkExistingFiles() ? game.initialState : CopyState #else game.initialState #end, #if (flixel < "5.0.0") game.zoom, #end game.framerate, game.framerate, game.skipSplash, game.startFullscreen);
+    fpsVar = new FPSCounter(3, 3, 0x00FFFFFF);
+    addChild(fpsVar);
 
-		// Literally just from Vanilla FNF but I implemented it my own way. -Torch
-		// torch is my friend btw :3 -moxie
-		@:privateAccess {
-			final soundFrontEnd:flixel.system.frontEnds.SoundFrontEnd = new objects.CustomSoundTray.CustomSoundFrontEnd();
-			FlxG.sound = soundFrontEnd;
-			funkinGame._customSoundTray = objects.CustomSoundTray.CustomSoundTray;
-		}
+    if (fpsVar != null)
+    {
+      fpsVar.visible = ClientPrefs.showFPS;
+    }
 
-		addChild(funkinGame);
+    #if !web
+    FlxG.plugins.addIfUniqueType(new ScreenShotPlugin());
+    #end
 
-		fpsVar = new FPSCounter(3, 3, 0x00FFFFFF);
-		addChild(fpsVar);
+    FlxG.autoPause = false;
+    #if android FlxG.android.preventDefaultKeys = [BACK]; #end
 
-		if (fpsVar != null) {
-			fpsVar.visible = ClientPrefs.showFPS;
-		}
+    #if (linux || mac)
+    var icon = Image.fromFile("icon.png");
+    Lib.current.stage.window.setIcon(icon);
+    #end
 
-		#if !web
-		FlxG.plugins.addIfUniqueType(new ScreenShotPlugin());
-		#end
+    #if windows
+    WindowColorMode.setDarkMode();
+    if (CoolUtil.hasVersion("Windows 10")) WindowColorMode.redrawWindowHeader();
+    #end
 
-		FlxG.autoPause = false;
-		trace('called');
-		#if android FlxG.android.preventDefaultKeys = [BACK]; #end
-		trace('called');
+    #if DISCORD_ALLOWED DiscordClient.prepare(); #end
 
-		#if (linux || mac)
-		var icon = Image.fromFile("icon.png");
-		Lib.current.stage.window.setIcon(icon);
-		#end
+    // shader coords fix
+    FlxG.signals.gameResized.add(function(w, h) {
+      if (FlxG.cameras != null)
+      {
+        for (cam in FlxG.cameras.list)
+        {
+          if (cam != null && cam.filters != null) resetSpriteCache(cam.flashSprite);
+        }
+      }
 
-		#if windows
-		WindowColorMode.setDarkMode();
-		if (CoolUtil.hasVersion("Windows 10"))
-			WindowColorMode.redrawWindowHeader();
-		#end
+      if (FlxG.game != null) resetSpriteCache(FlxG.game);
+    });
+  }
 
-		#if DISCORD_ALLOWED DiscordClient.prepare(); #end
+  public static function getTime():Float
+  {
+    #if flash
+    return flash.Lib.getTimer();
+    #elseif ((js && !nodejs) || electron)
+    return js.Browser.window.performance.now();
+    #elseif sys
+    return Sys.time() * 1000;
+    #elseif (lime_cffi && !macro) @:privateAccess
+    return cast lime._internal.backend.native.NativeCFFI.lime_system_get_timer();
+    #elseif cpp
+    return untyped __global__.__time_stamp() * 1000;
+    #else
+    return 0;
+    #end
+  }
 
-		// shader coords fix
-		FlxG.signals.gameResized.add(function(w, h) {
-			if (FlxG.cameras != null) {
-			  	for (cam in FlxG.cameras.list) {
-			   		if (cam != null && cam.filters != null)
-				   		resetSpriteCache(cam.flashSprite);
-			  	}
-		   	}
+  static function resetSpriteCache(sprite:Sprite):Void
+  {
+    @:privateAccess {
+      sprite.__cacheBitmap = null;
+      sprite.__cacheBitmapData = null;
+    }
+  }
 
-		   if (FlxG.game != null) resetSpriteCache(FlxG.game);
-	   });
-	}
-
-	static function resetSpriteCache(sprite:Sprite):Void {
-		@:privateAccess {
-		  sprite.__cacheBitmap = null;
-			sprite.__cacheBitmapData = null;
-		}
-	}
-
-	public static function changeFPSColor(color:FlxColor) {
-		fpsVar.textColor = color;
-	}
+  public static function changeFPSColor(color:FlxColor)
+  {
+    fpsVar.textColor = color;
+  }
 }

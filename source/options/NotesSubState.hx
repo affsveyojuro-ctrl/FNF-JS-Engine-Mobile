@@ -737,7 +737,7 @@ class NotesSubState extends MusicBeatSubstate
 	override function destroy()
 	{
 		Note.globalRgbShaders = [];
-		super.destroy(); //why tf js engine doesn't have this
+		super.destroy();
 	}
 
 	function setShaderColor(value:FlxColor) dataArray[curSelectedNote][curSelectedMode] = value;

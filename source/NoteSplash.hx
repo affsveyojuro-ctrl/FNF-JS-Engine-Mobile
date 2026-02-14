@@ -1,7 +1,7 @@
 package;
 
-import flixel.graphics.frames.FlxFrame.FlxFrameAngle;
 import backend.FlxFixedShader;
+import flixel.graphics.frames.FlxFrame.FlxFrameAngle;
 import shaders.RGBPalette.RGBShaderReference;
 import shaders.RGBPalette;
 
