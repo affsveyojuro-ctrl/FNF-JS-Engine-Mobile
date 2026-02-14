@@ -2665,13 +2665,12 @@ class ChartingState extends MusicBeatState
     {
       if (touch.x > gridBG.x
         && touch.x < gridBG.x + gridBG.width
-        && touch.x > gridBG.y
-        && touch.x < gridBG.y + (GRID_SIZE * getSectionBeats() * 4) * zoomList[curZoom])
+        && touch.y > gridBG.y
+        && touch.y < gridBG.y + (GRID_SIZE * getSectionBeats() * 4) * zoomList[curZoom])
       {
         selectionNote.visible = true;
         selectionNote.x = Math.floor(touch.x / GRID_SIZE) * GRID_SIZE;
-        if (FlxG.keys.pressed.SHIFT || mobileButtonPressed('Y'))
-          selectionNote.y = touch.y;
+        if (FlxG.keys.pressed.SHIFT || mobileButtonPressed('Y')) selectionNote.y = touch.y;
         else
         {
           var gridmult = GRID_SIZE / (quantization / 16);
@@ -2714,8 +2713,7 @@ class ChartingState extends MusicBeatState
               if (mobileButtonPressed('F'))
               {
                 selectNote(note);
-              } else
-              {
+              } else {
                 selectionNote.playAnim('pressed' + selectionNote.noteData, true);
                 // trace('tryin to delete note...');
                 deleteNote(note);
@@ -2932,7 +2930,7 @@ class ChartingState extends MusicBeatState
         }
       }
 
-      if (#if MOBILE_CONTROLS_ALLOWED mobileButtonJustPressed('B') || #end FlxG.keys.justPressed.BACKSPACE) {
+      if (#if MOBILE_CONTROLS_ALLOWED mobileButtonJustPressed('B') || #end FlxG.keys.justPressed.BACKSPACE)
       {
         if (!unsavedChanges)
         {
@@ -2951,10 +2949,10 @@ class ChartingState extends MusicBeatState
             function() FlxG.switchState(editors.MasterEditorMenu.new), null, ignoreWarnings));
       }
 
-      if (#if MOBILE_CONTROLS_ALLOWED mobileButtonJustPressed('Z') || #end (FlxG.keys.justPressed.Z && FlxG.keys.pressed.CONTROL)) {
+      if (#if MOBILE_CONTROLS_ALLOWED mobileButtonJustPressed('Z') || #end (FlxG.keys.justPressed.Z && FlxG.keys.pressed.CONTROL))
         undo();
 
-      if(#if MOBILE_CONTROLS_ALLOWED mobileButtonJustPressed('V') || #end FlxG.keys.justPressed.Z && curZoom > 0 && !FlxG.keys.pressed.CONTROL)
+      if (#if MOBILE_CONTROLS_ALLOWED mobileButtonJustPressed('V') || #end FlxG.keys.justPressed.Z && curZoom > 0 && !FlxG.keys.pressed.CONTROL)
       {
         --curZoom;
         updateZoom();
