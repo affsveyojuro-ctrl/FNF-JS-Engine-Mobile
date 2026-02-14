@@ -66,38 +66,34 @@ class Main extends Sprite
     Lib.current.addChild(new Main());
   }
 
-	public static function main():Void {
-		Lib.current.addChild(new Main());
-	}
+  public function new() {
+    super();
+    #if mobile
+    #if android
+    StorageUtil.initExternalStorageDirectory(); //do not make this jobs everytime
+    StorageUtil.requestPermissions();
+    StorageUtil.copySpesificFileFromAssets('mobile/storageModes.txt', StorageUtil.getCustomStoragePath());
+    #end
+    Sys.setCwd(StorageUtil.getStorageDirectory());
+    #end
+    CrashHandler.init();
+    instance = this;
+    #if (cpp && windows)
+    untyped __cpp__("
+        SetProcessDPIAware(); // allows for more crisp visuals
+        SetConsoleOutputCP(CP_UTF8);
+        DisableProcessWindowsGhosting() // lets you move the window and such if it's not responding
+    ");
+    #end
+    setupGame();
+  }
 
-	public function new() {
-		super();
-		#if mobile
-		#if android
-		StorageUtil.initExternalStorageDirectory(); //do not make this jobs everytime
-		StorageUtil.requestPermissions();
-		StorageUtil.copySpesificFileFromAssets('mobile/storageModes.txt', StorageUtil.getCustomStoragePath());
-		#end
-		Sys.setCwd(StorageUtil.getStorageDirectory());
-		#end
-		CrashHandler.init();
-		instance = this;
-		#if (cpp && windows)
-		untyped __cpp__("
-				SetProcessDPIAware(); // allows for more crisp visuals
-				SetConsoleOutputCP(CP_UTF8);
-				DisableProcessWindowsGhosting() // lets you move the window and such if it's not responding
-		");
-		#end
-		setupGame();
-	}
+  public static var askedToUpdate:Bool = false;
 
-	public static var askedToUpdate:Bool = false;
+  public static function isPlayState():Bool
+    return Type.getClassName(Type.getClass(FlxG.state)) == 'PlayState';
 
-	public static function isPlayState():Bool
-		return Type.getClassName(Type.getClass(FlxG.state)) == 'PlayState';
-
-	private function setupGame():Void
+  private function setupGame():Void
   {
     var stageWidth:Int = Lib.current.stage.stageWidth;
     var stageHeight:Int = Lib.current.stage.stageHeight;
