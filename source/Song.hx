@@ -50,7 +50,7 @@ class Song
 			{
 				songJson.gfVersion = songJson.player3;
 				if (Reflect.hasField(songJson, 'player3'))
-         public var song:String;
+    public var song:String;
 	public var notes:Array<SwagSection>;
 	public var events:Array<Dynamic>;
 	public var bpm:Float;
@@ -157,4 +157,5 @@ class Song
 		return cast Json.parse(rawJson).song;
 	}
 }
+
 
