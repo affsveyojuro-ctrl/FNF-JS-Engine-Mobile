@@ -3,6 +3,7 @@ package;
 import Achievements;
 import backend.HaxeCommit;
 import editors.MasterEditorMenu;
+import flixel.addons.display.FlxRuntimeShader;
 import flixel.effects.FlxFlicker;
 import flixel.input.keyboard.FlxKey;
 import lime.app.Application;
@@ -51,7 +52,8 @@ class MainMenuState extends MusicBeatState
   var canDoTips:Bool = true; // in case the tips don't exist lol
 
   var funnycatperson:FlxSprite;
-
+  var shader:FlxRuntimeShader;
+  
   override function create()
   {
     MusicBeatState.windowNameSuffix = " - Main Menu";
@@ -111,6 +113,69 @@ class MainMenuState extends MusicBeatState
     bg.screenCenter();
     bg.antialiasing = ClientPrefs.globalAntialiasing;
     add(bg);
+    // Cria o shader com o código GLSL que você forneceu
+shader = new FlxRuntimeShader("
+    #pragma header
+    uniform float uTime;
+    
+    const int EFFECT_TYPE_DREAMY = 1;
+    const int EFFECT_TYPE_WAVY = 2;
+    const int EFFECT_TYPE_HEAT_WAVE_HORIZONTAL = 3;
+    const int EFFECT_TYPE_HEAT_WAVE_VERTICAL = 4;
+    const int EFFECT_TYPE_FLAG = 0;
+    
+    uniform int effectType;
+    uniform float uSpeed;
+    uniform float uFrequency;
+    uniform float uWaveAmplitude;
+
+    vec2 sineWave(vec2 pt)
+    {
+        float x = 0.0;
+        float y = 0.0;
+        
+        if (effectType == EFFECT_TYPE_DREAMY) 
+        {
+            float offsetX = sin(pt.y * uFrequency + uTime * uSpeed) * uWaveAmplitude;
+            pt.x += offsetX;
+        }
+        else if (effectType == EFFECT_TYPE_WAVY) 
+        {
+            float offsetY = sin(pt.x * uFrequency + uTime * uSpeed) * uWaveAmplitude;
+            pt.y += offsetY;
+        }
+        else if (effectType == EFFECT_TYPE_HEAT_WAVE_HORIZONTAL)
+        {
+            x = sin(pt.x * uFrequency + uTime * uSpeed) * uWaveAmplitude;
+        }
+        else if (effectType == EFFECT_TYPE_HEAT_WAVE_VERTICAL)
+        {
+            y = sin(pt.y * uFrequency + uTime * uSpeed) * uWaveAmplitude;
+        }
+        else if (effectType == EFFECT_TYPE_FLAG)
+        {
+            y = sin(pt.y * uFrequency + 10.0 * pt.x + uTime * uSpeed) * uWaveAmplitude;
+            x = sin(pt.x * uFrequency + 5.0 * pt.y + uTime * uSpeed) * uWaveAmplitude;
+        }
+        
+        return vec2(pt.x + x, pt.y + y);
+    }
+
+    void main()
+    {
+        vec2 uv = sineWave(openfl_TextureCoordv);
+        gl_FragColor = texture2D(bitmap, uv);
+    }
+");
+
+// Define os parâmetros do efeito (você pode ajustar esses valores)
+shader.setInt('effectType', 2);          // 2 = WAVY (o efeito clássico)
+shader.setFloat('uSpeed', 2.0);           // Velocidade da onda
+shader.setFloat('uFrequency', 5.0);       // Frequência da onda
+shader.setFloat('uWaveAmplitude', 0.02);  // Intensidade da ondulação (comece com 0.02)
+
+// Aplica o shader ao sprite de fundo (substitua 'bg' pelo nome correto da variável)
+menuBG.shader = shader;
 
     camFollow = new FlxObject(0, 0, 1, 1);
     camFollowPos = new FlxObject(0, 0, 1, 1);
@@ -276,6 +341,15 @@ class MainMenuState extends MusicBeatState
   }
 
   override function update(elapsed:Float)
+{
+    super.update(elapsed);
+    
+    if (shader != null)
+    {
+        var currentTime:Float = shader.getFloat('uTime') + elapsed;
+        shader.setFloat('uTime', currentTime);
+    }
+}
   {
     FlxG.camera.followLerp = 7.5;
     if (tipTextScrolling)
