@@ -119,20 +119,20 @@ class Scanline extends FlxShader
 {
   @:glFragmentSource('
 		#pragma header
-		const float scale = 1.0;
-	uniform bool lockAlpha = false;
-		void main()
-		{
-			if (mod(floor(openfl_TextureCoordv.y * openfl_TextureSize.y / scale), 2.0) == 0.0 ){
-				float bitch = 1.0;
+const float scale = 1.0;
+uniform bool lockAlpha;
 
-				vec4 texColor = texture2D(bitmap, openfl_TextureCoordv);
-				if (lockAlpha) bitch = texColor.a;
-				gl_FragColor = vec4(0.0, 0.0, 0.0, bitch);
-			}else{
-				gl_FragColor = texture2D(bitmap, openfl_TextureCoordv);
-			}
-		}')
+void main()
+{
+    if (mod(floor(openfl_TextureCoordv.y * openfl_TextureSize.y / scale), 2.0) == 0.0) {
+        float bitch = 1.0;
+        vec4 texColor = texture2D(bitmap, openfl_TextureCoordv);
+        if (lockAlpha) bitch = texColor.a;
+        gl_FragColor = vec4(0.0, 0.0, 0.0, bitch);
+    } else {
+        gl_FragColor = texture2D(bitmap, openfl_TextureCoordv);
+    }
+}')
   public function new()
   {
     super();
@@ -606,6 +606,7 @@ class VCRDistortionShader extends FlxShader // https://www.shadertoy.com/view/ld
     if(curUV.x < 0.0 || curUV.x > 1.0 || curUV.y < 0.0 || curUV.y > 1.0){
       gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
    }
+}
   ')
   public function new()
   {
