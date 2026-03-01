@@ -33,7 +33,7 @@ class Main extends Sprite
       height: 720,
       initialState: InitState.new,
       zoom: -1.0,
-      framerate: 60,
+      framerate: 120,
       skipSplash: true,
       startFullscreen: false
     };
@@ -193,3 +193,4 @@ class Main extends Sprite
     fpsVar.textColor = color;
   }
 }
+
