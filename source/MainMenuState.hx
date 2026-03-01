@@ -3,7 +3,6 @@ package;
 import Achievements;
 import backend.HaxeCommit;
 import editors.MasterEditorMenu;
-import flixel.addons.display.FlxRuntimeShader;
 import flixel.effects.FlxFlicker;
 import flixel.input.keyboard.FlxKey;
 import lime.app.Application;
@@ -52,7 +51,6 @@ class MainMenuState extends MusicBeatState
   var canDoTips:Bool = true; // in case the tips don't exist lol
 
   var funnycatperson:FlxSprite;
-  var shader:FlxRuntimeShader;
   
   override function create()
   {
@@ -279,7 +277,6 @@ class MainMenuState extends MusicBeatState
 
   override function update(elapsed:Float)
 {
-  {
     FlxG.camera.followLerp = 7.5;
     if (tipTextScrolling)
     {
