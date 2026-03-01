@@ -58,7 +58,7 @@ class FPSCounter extends TextField
     defaultTextFormat = new TextFormat("VCR OSD Mono", 14, color);
     autoSize = LEFT;
     multiline = true;
-    text = "FPS: ";
+    text = "currentFPS: ";
 
     _previousTime = Main.getTime();
 
@@ -164,8 +164,8 @@ class FPSCounter extends TextField
 
   public dynamic function updateText():Void // so people can override it in hscript
   {
-    text = "FPS: " + (ClientPrefs.ffmpegMode ? ClientPrefs.targetFPS : Math.round(currentFPS));
-    if (ClientPrefs.ffmpegMode) text += " (Rendering Mode)";
+    text = "currentFPS: " + (ClientPrefs.ffmpegMode ? ClientPrefs.targetFPS : Math.round(currentFPS));
+    if (ClientPrefs.ffmpegMode) text += " (Redenring Chart)";
 
     if (ClientPrefs.showRamUsage) text += "\nMemory: "
       + FlxStringUtil.formatBytes(memory)
