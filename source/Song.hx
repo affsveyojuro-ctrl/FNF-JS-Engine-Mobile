@@ -41,7 +41,16 @@ typedef SwagSong =
 
 class Song
 {
-	public var song:String;
+	
+
+	private static function onLoadJson(songJson:Dynamic) // Convert old charts to newest format
+	{
+		try {
+			if(songJson.gfVersion == null)
+			{
+				songJson.gfVersion = songJson.player3;
+				if (Reflect.hasField(songJson, 'player3'))
+         public var song:String;
 	public var notes:Array<SwagSection>;
 	public var events:Array<Dynamic>;
 	public var bpm:Float;
@@ -58,15 +67,7 @@ class Song
 	public var player1:String = 'bf';
 	public var player2:String = 'dad';
 	public var gfVersion:String = 'gf';
-
-	private static function onLoadJson(songJson:Dynamic) // Convert old charts to newest format
-	{
-		try {
-			if(songJson.gfVersion == null)
-			{
-				songJson.gfVersion = songJson.player3;
-				if (Reflect.hasField(songJson, 'player3'))
-                    Reflect.deleteField(songJson, 'player3');
+	public var format:String = 'psych_v1';
 			}	
 		}
 		catch(e:Dynamic){
@@ -156,3 +157,4 @@ class Song
 		return cast Json.parse(rawJson).song;
 	}
 }
+
