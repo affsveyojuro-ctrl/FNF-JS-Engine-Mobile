@@ -41,15 +41,6 @@ typedef SwagSong =
 
 class Song
 {
-	
-
-	private static function onLoadJson(songJson:Dynamic) // Convert old charts to newest format
-	{
-		try {
-			if(songJson.gfVersion == null)
-			{
-				songJson.gfVersion = songJson.player3;
-				if (Reflect.hasField(songJson, 'player3'))
     public var song:String;
 	public var notes:Array<SwagSection>;
 	public var events:Array<Dynamic>;
@@ -157,5 +148,6 @@ class Song
 		return cast Json.parse(rawJson).song;
 	}
 }
+
 
 
