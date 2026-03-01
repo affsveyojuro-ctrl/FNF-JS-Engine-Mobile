@@ -214,7 +214,7 @@ class Project extends HXProject
 
 		// Configure the window.
 		// Automatically configure FPS.
-		this.window.fps = 60;
+		this.window.fps = 120;
 		// Set the window size.
 		this.window.width = 1280;
 		this.window.height = 720;
