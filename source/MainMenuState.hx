@@ -175,7 +175,7 @@ shader.setFloat('uFrequency', 5.0);       // Frequência da onda
 shader.setFloat('uWaveAmplitude', 0.02);  // Intensidade da ondulação (comece com 0.02)
 
 // Aplica o shader ao sprite de fundo (substitua 'bg' pelo nome correto da variável)
-menuBG.shader = shader;
+bg.shader = shader;
 
     camFollow = new FlxObject(0, 0, 1, 1);
     camFollowPos = new FlxObject(0, 0, 1, 1);
