@@ -48,11 +48,20 @@ class TitleState extends MusicBeatState
 
   var mustUpdate:Bool = false;
 
+  var bg:FlxSprite;
+
   public static var titleJSON:TitleData;
 
   public static var updateVersion:String = '';
 
   override public function create():Void
+  { 
+bg = new FlxSprite(0, 0);
+bg.loadGraphic(Paths.image('menu/introBG')); // Substitua pelo caminho da sua imagem
+bg.screenCenter(); // Centraliza na tela
+bg.antialiasing = true;
+add(bg); // Adiciona ao stage (por baixo de tudo)
+  }
   {
     Paths.clearStoredMemory();
     Paths.clearUnusedMemory();
@@ -529,3 +538,4 @@ class TitleState extends MusicBeatState
     }
   }
 }
+
