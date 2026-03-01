@@ -349,8 +349,7 @@ menuBG.shader = shader;
         var currentTime:Float = shader.getFloat('uTime') + elapsed;
         shader.setFloat('uTime', currentTime);
     }
-}
-  {
+  
     FlxG.camera.followLerp = 7.5;
     if (tipTextScrolling)
     {
