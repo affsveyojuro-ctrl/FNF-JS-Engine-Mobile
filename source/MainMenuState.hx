@@ -162,19 +162,19 @@ shader = new FlxRuntimeShader("
     }
 
     void main()
-    {
+    {.  float dummy = uTime;
         vec2 uv = sineWave(openfl_TextureCoordv);
         gl_FragColor = texture2D(bitmap, uv);
     }
 ");
 
 // Define os parâmetros do efeito (você pode ajustar esses valores)
-shader.setInt('effectType', 2);          // 2 = WAVY (o efeito clássico)
-shader.setFloat('uSpeed', 2.0);           // Velocidade da onda
-shader.setFloat('uFrequency', 5.0);       // Frequência da onda
-shader.setFloat('uWaveAmplitude', 0.02);  // Intensidade da ondulação (comece com 0.02)
+// Define os parâmetros do efeito
+shader.setInt('effectType', 2);
+shader.setFloat('uSpeed', 2.0);
+shader.setFloat('uFrequency', 5.0);
+shader.setFloat('uWaveAmplitude', 0.02);
 
-// Aplica o shader ao sprite de fundo (substitua 'bg' pelo nome correto da variável)
 bg.shader = shader;
 
     camFollow = new FlxObject(0, 0, 1, 1);
