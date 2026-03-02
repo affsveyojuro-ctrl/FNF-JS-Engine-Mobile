@@ -192,10 +192,10 @@ class Tiltshift extends FlxShader
 
 		// I am hardcoding the constants like a jerk
 
-		uniform float bluramount  = 1.0;
-		uniform float center      = 1.0;
-		const float stepSize    = 0.004;
-		const float steps       = 3.0;
+		uniform float bluramount;
+		uniform float center;
+		const float stepSize;
+		const float steps;
 
 		const float minOffs     = (float(steps-1.0)) / -2.0;
 		const float maxOffs     = (float(steps-1.0)) / +2.0;
@@ -307,7 +307,7 @@ class Grain extends FlxShader
 		*/
 		uniform float uTime;
 
-		const float permTexUnit = 1.0/256.0;        // Perm texture texel-size
+		const float permTexUnit = 1.5/256.0;        // Perm texture texel-size
 		const float permTexUnitHalf = 0.5/256.0;    // Half perm texture texel-size
 
 		float width = openfl_TextureSize.x;
