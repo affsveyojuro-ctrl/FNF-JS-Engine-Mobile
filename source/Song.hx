@@ -156,3 +156,4 @@ class Song
 		return cast Json.parse(rawJson).song;
 	}
 }
+
