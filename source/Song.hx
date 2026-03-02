@@ -41,7 +41,7 @@ typedef SwagSong =
 
 class Song
 {
-    public var song:String;
+	public var song:String;
 	public var notes:Array<SwagSection>;
 	public var events:Array<Dynamic>;
 	public var bpm:Float;
@@ -58,7 +58,7 @@ class Song
 	public var player1:String = 'bf';
 	public var player2:String = 'dad';
 	public var gfVersion:String = 'gf';
-	public var format:String = 'psych_v1';
+	
 			}	
 		}
 		catch(e:Dynamic){
@@ -148,6 +148,7 @@ class Song
 		return cast Json.parse(rawJson).song;
 	}
 }
+
 
 
 
