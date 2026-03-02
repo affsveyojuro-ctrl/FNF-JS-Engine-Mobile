@@ -10,7 +10,7 @@ class FreeplayState extends MusicBeatState
 {
 	var songs:Array<SongMetadata> = [];
 
-	private static var curSelected:Int = 0;
+	private static var curSelected:Int = 4;
 	var curDifficulty:Int = -1;
 	private static var lastDifficultyName:String = '';
 
@@ -901,3 +901,4 @@ class SongMetadata
 		if(this.folder == null) this.folder = '';
 	}
 }
+
