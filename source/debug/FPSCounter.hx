@@ -165,7 +165,7 @@ class FPSCounter extends TextField
   public dynamic function updateText():Void // so people can override it in hscript
   {
     text = "currentFPS: " + (ClientPrefs.ffmpegMode ? ClientPrefs.targetFPS : Math.round(currentFPS));
-    if (ClientPrefs.ffmpegMode) text += " (Redenring Chart)";
+    if (ClientPrefs.ffmpegMode) text += " (Redering Chart)";
 
     if (ClientPrefs.showRamUsage) text += "\nMemory: "
       + FlxStringUtil.formatBytes(memory)
