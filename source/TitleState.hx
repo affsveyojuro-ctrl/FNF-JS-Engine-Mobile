@@ -58,11 +58,7 @@ class TitleState extends MusicBeatState
 // Adiciona ao stage (por baixo de tudo)
   {
     bg = new FlxSprite(0, 0);
-bg.loadGraphic(Paths.image('menu/introBG')); // Substitua pelo caminho da sua imagem
-bg.screenCenter(); // Centraliza na tela
-bg.antialiasing = true;
-add(bg); 
-    
+
     Paths.clearStoredMemory();
     Paths.clearUnusedMemory();
 
@@ -538,5 +534,6 @@ add(bg);
     }
   }
 }
+
 
 
