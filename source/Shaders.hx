@@ -194,8 +194,8 @@ class Tiltshift extends FlxShader
 
 		uniform float bluramount;
 		uniform float center;
-		const float stepSize;
-		const float steps;
+		const float stepSize = 1.0;
+		const float steps = 2.0;
 
 		const float minOffs     = (float(steps-1.0)) / -2.0;
 		const float maxOffs     = (float(steps-1.0)) / +2.0;
@@ -723,10 +723,10 @@ class ThreeDShader extends FlxShader
 {
   @:glFragmentSource('
 	#pragma header
-	uniform float xrot = 0.0;
-	uniform float yrot = 0.0;
-	uniform float zrot = 0.0;
-	uniform float dept = 0.0;
+	uniform float xrot;
+	uniform float yrot;
+	uniform float zrot;
+	uniform float dept;
 	float alph = 0;
 float plane( in vec3 norm, in vec3 po, in vec3 ro, in vec3 rd ) {
     float de = dot(norm, rd);
@@ -887,8 +887,8 @@ class FuckingTriangle extends FlxShader
 
 		const vec3 cameraPos = vec3(0., 0.3, 2.);
 
-			uniform float rotX = -25.;
-			uniform float rotY = 45.;
+			uniform float rotX;
+			uniform float rotY;
 		vec4 pixel(in vec2 ndc, in float aspect, inout float depth, in int vertexIndex) {
 
 
