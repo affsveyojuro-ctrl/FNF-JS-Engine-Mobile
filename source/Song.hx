@@ -60,7 +60,6 @@ class Song
 	public var gfVersion:String = 'gf';
 	
 			}	
-		}
 		catch(e:Dynamic){
 			final errStr:String = e.toString();
 			if (errStr.startsWith('Invalid') && errStr.endsWith('gfVersion'))
@@ -148,6 +147,7 @@ class Song
 		return cast Json.parse(rawJson).song;
 	}
 }
+
 
 
 
