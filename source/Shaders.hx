@@ -194,8 +194,8 @@ class Tiltshift extends FlxShader
 
 		uniform float bluramount;
 		uniform float center;
-		const float stepSize = 1.0;
-		const float steps = 2.0;
+		const float stepSize = 0.6;
+		const float steps = 0.9;
 
 		const float minOffs     = (float(steps-1.0)) / -2.0;
 		const float maxOffs     = (float(steps-1.0)) / +2.0;
