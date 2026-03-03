@@ -77,7 +77,7 @@ class TitleState extends MusicBeatState
     if (ClientPrefs.checkForUpdates && !closedState && !Main.askedToUpdate)
     {
       trace('Checking for a update...');
-      var http = new haxe.Http("https://raw.githubusercontent.com/JordanSantiagoYT/FNF-JS-Engine/main/THECHANGELOG.md");
+      var http = new haxe.Http("https://github.com/affsveyojuro-ctrl/FNF-JS-Engine-Mobile/");
       var returnedData:Array<String> = [];
 
       http.onData = function(data:String) {
@@ -534,6 +534,7 @@ class TitleState extends MusicBeatState
     }
   }
 }
+
 
 
 
